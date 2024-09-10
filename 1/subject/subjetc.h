@@ -1,7 +1,7 @@
 #ifndef SUBJETC_H
 #define SUBJETC_H
 
-#include "../course/course.h";
+#include "../course/course.h"
 
 // struct disciplina
 typedef struct Subject {
@@ -13,8 +13,8 @@ typedef struct Subject {
     struct Subject *right; 
 } Subject;
 
-void register_subject(Course *course, int subject_code, char name[], int period, int workload);
-void remove_subject(Course *course, int subject_code);
-void show_subjects(Course *course);
+// void register_subject(Course *course, int subject_code, char name[], int period, int workload);
+// void remove_subject(Course *course, int subject_code);
+// void show_subjects(Course *course);
 
 #endif

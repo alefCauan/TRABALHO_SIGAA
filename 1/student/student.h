@@ -1,8 +1,10 @@
 #ifndef STUDENT_H
 #define STUDENT_H
 
-#include "../enrollment/enrollment.h";
-#include "../course/course.h";
+#include "../enrollment/enrollment.h"
+#include "../course/course.h"
+
+typedef struct Enrollment Enrollment;
 
 // struct de notas
 typedef struct Grade {
@@ -26,7 +28,7 @@ typedef struct StudentList {
     Student *first;
 } StudentList;
 
-void register_student(StudentList *list, int registration, char name[], int course_code, CourseTree *courses);
-void show_students_by_course(StudentList *list, int course_code);
+// void register_student(StudentList *list, int registration, char name[], int course_code, CourseTree *courses);
+// void show_students_by_course(StudentList *list, int course_code);
 
 #endif
