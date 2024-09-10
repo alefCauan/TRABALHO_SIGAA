@@ -1,4 +1,3 @@
-# TRABALHO_SIGAA
 # Sistema Acadêmico de Cursos e Disciplinas
 
 Este projeto implementa um sistema acadêmico para gerenciar cursos, disciplinas e informações de alunos em uma universidade. As principais funcionalidades incluem:
