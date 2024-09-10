@@ -37,10 +37,10 @@ if [ ! -f "$SRC_MAIN" ]; then
 fi
 
 # Compilar os arquivos .c em .o
-gcc -c $SRC_SUBJECT -Icourse -o subject.o
-gcc -c $SRC_COURSE -Isubjetc -o course.o
 gcc -c $SRC_ENROLLMENT -Istudent -o enrollment.o
 gcc -c $SRC_STUDENT -Ienrollment -Icourse -o student.o
+gcc -c $SRC_COURSE -Isubjetc -o course.o
+gcc -c $SRC_SUBJECT -Icourse -o subject.o
 gcc -c $SRC_MAIN -o sigaa.o
 
 # Linkar os arquivos .o em um executável

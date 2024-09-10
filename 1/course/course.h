@@ -1,26 +1,17 @@
 #ifndef COURSE_H
 #define COURSE_H
 
-#include "../subject/subjetc.h"
+// #include "../subject/subjetc.h"
 
-typedef struct Subject Subject;
+// typedef struct Subject Subject;
 
 // struct curso
-typedef struct Course {
-    int course_code;
-    char course_name[100];
-    int num_periods;
-    Subject *subject_tree;
-    struct Course *left;
-    struct Course *right; 
-} Course;
+typedef struct Course  Course;
 // raiz de Course 
-typedef struct CourseTree {
-    Course *root;
-} CourseTree;
+typedef struct CourseTree CourseTree;
 
 
-// void register_course(CourseTree *tree, int course_code, char name[], int num_periods);
-// void show_courses(CourseTree *tree);
+void register_course(CourseTree *tree, int course_code, char name[], int num_periods);
+void show_courses(CourseTree *tree);
 
 #endif

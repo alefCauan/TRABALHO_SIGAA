@@ -2,6 +2,22 @@
 #include <stdlib.h>
 #include <string.h>
 #include "student.h"
+#include "../enrollment/enrollment.h"
+#include "../course/course.h"
+
+// struct de estudante
+typedef struct Student {
+    int registration;
+    char name[100];
+    int course_code;
+    Grade *grade_tree;
+    Enrollment *enrollment_tree;
+    struct Student *next;
+} Student;
+// raiz de student
+typedef struct StudentList {
+    Student *first;
+} StudentList;
 
 Student *allocate_student() 
 {

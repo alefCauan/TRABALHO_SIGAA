@@ -2,6 +2,20 @@
 #include <stdlib.h>
 #include <string.h>
 #include "course.h"
+#include "../subject/subjetc.h"
+
+typedef struct Course {
+    int course_code;
+    char course_name[100];
+    int num_periods;
+    Subject *subject_tree;
+    struct Course *left;
+    struct Course *right; 
+} Course;
+// raiz de Course 
+typedef struct CourseTree {
+    Course *root;
+} CourseTree;
 
 Course *allocate_course() 
 {
