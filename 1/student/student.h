@@ -1,11 +1,11 @@
 #ifndef STUDENT_H
 #define STUDENT_H
 
-// #include "../enrollment/enrollment.h"
 #include "../course/course.h"
+typedef struct Enrollment Enrollment;
 
 // Definindo a macro para obter o número de registro
-#define GET_REGISTRATION() (get_registration())
+#define GET_REGISTRATION() (get_registration() + 1)
 
 // struct de notas
 typedef struct Grade {
@@ -17,9 +17,18 @@ typedef struct Grade {
 } Grade;
 
 // struct de estudante
-typedef struct Student Student;
+typedef struct Student {
+    int registration;
+    char name[100];
+    int code;
+    Grade *grade_tree;
+    Enrollment *enrollment_tree;
+    struct Student *next;
+} Student;
 // raiz de student
-typedef struct StudentList StudentList;
+typedef struct StudentList {
+    Student *first;
+} StudentList;
 
 
 Grade *allocate_grade();
@@ -38,6 +47,6 @@ void printf_student(Student student);
 // Função que retorna um número incrementado a cada chamada
 int get_registration();
 void register_student(StudentList *list);
-void show_students_by_course(StudentList *list, Course_code course_code);
+void show_students_by_course(StudentList *list, int course_code);
 
 #endif

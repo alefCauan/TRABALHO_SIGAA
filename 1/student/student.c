@@ -6,20 +6,6 @@
 #include "../course/course.h"
 #include "../error.h"
 
-// struct de estudante
-typedef struct Student {
-    int registration;
-    char name[100];
-    Course_code code;
-    Grade *grade_tree;
-    Enrollment *enrollment_tree;
-    struct Student *next;
-} Student;
-// raiz de student
-typedef struct StudentList {
-    Student *first;
-} StudentList;
-
 Grade *allocate_grade() 
 {
     Grade *new_grade = (Grade*) malloc(sizeof(Grade));
@@ -75,6 +61,8 @@ void deallocate_student(Student *student)
 {
     if (student != NULL) {
         // Desalocar árvore de notas e árvore de matrículas, se necessário
+        if(student->grade_tree->semester != 0)
+            deallocate_grade(student->grade_tree);
         free(student);
     }
 }
@@ -97,9 +85,10 @@ void deallocate_student_list(StudentList *list)
 
 void printf_student(Student student)
 {
+    // TODO: more information
     printf("%s\n", student.name);
     printf("%d\n", student.code);
-    printf("%d\n", student.registration);
+    printf("%04d\n", student.registration);
 }
 
 // Função que retorna um número incrementado a cada chamada
@@ -111,6 +100,8 @@ int get_registration()
 
 void register_student(StudentList *list)
 {
+    char temp[100];
+    int code;
     if(!CHECK_ALL_TRUE(list, list->first))
     {
         print_error("register_student, Studentlist not valid or allocate");
@@ -119,11 +110,16 @@ void register_student(StudentList *list)
     
     Student *new = allocate_student(), *aux;
 
-    new->code = COURSE_COMPUTER_SCIENCE;
-    strcpy(new->name, "alef cauam");
+    // TODO: new->enrollment_tree;
+    // TODO: new->grade_tree;
+
+    setbuf(stdin, NULL);
+    scanf("%[^\n]", temp);
+    strcpy(new->name, temp);
+    new->code = 1; // TODO: new->code_course();
     new->registration = GET_REGISTRATION();
 
-    if(!list->first)
+    if(list->first->code == 0)
         list->first = new;
     else
     {
@@ -135,7 +131,7 @@ void register_student(StudentList *list)
     }
 }
 
-void show_students_by_course(StudentList *list, Course_code course_code)
+void show_students_by_course(StudentList *list, int course_code)
 {
     if(!CHECK_ALL_TRUE(list))
     {
@@ -149,6 +145,8 @@ void show_students_by_course(StudentList *list, Course_code course_code)
     {
         if(aux->code == course_code)
             printf_student(*aux);
+
+        aux = aux->next;
     }
     
 }

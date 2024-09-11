@@ -1,10 +1,10 @@
 #ifndef ERROR_H
 #define ERROR_H
 
-#include<stdio.h>
-#include<stdlib.h>
-#include<assert.h>
-#include<errno.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <assert.h>
+#include <errno.h>
 #include <string.h>
 #include <stdbool.h>
 #include <stdarg.h>
@@ -47,6 +47,10 @@ void print_error(const char *error_message)
 {
     ///////
     fprintf(stderr, "ERROR: in %s\n", error_message);
+}
+
+bool valid_answer(int min, int max, int answer) {
+    return answer >= min && answer <= max;
 }
 
 #endif
