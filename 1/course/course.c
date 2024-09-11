@@ -3,11 +3,14 @@
 #include <string.h>
 #include "course.h"
 // #include "../subject/subjetc.h"
+#include "../error.h"
 
 
 Course *allocate_course() 
 {
     Course *new_course = (Course*) malloc(sizeof(Course));
+    check_allocation(new_course, "allocate course");
+
     if (new_course != NULL) 
     {
         new_course->course_code = -1;
@@ -23,7 +26,8 @@ Course *allocate_course()
 CourseTree *create_course_tree() 
 {
     CourseTree *tree = (CourseTree*) malloc(sizeof(CourseTree));
-    
+    check_allocation(tree, "create couse tree");
+
     tree->root = allocate_course();
     
     return tree;
@@ -80,10 +84,12 @@ void register_course(Course **root)
 {
     // Aloca memória para um novo curso
     Course *new = allocate_course();
-    
+    check_allocation(new, "register course");
+
     // Recebe os dados do curso
     printf("Enter course code: ");
     scanf("%d", &new->course_code);
+    // new->course_code == GET_CODE(); 
     
     printf("Enter course name: ");
     setbuf(stdin, NULL);
@@ -100,6 +106,7 @@ void register_course(Course **root)
 
 void show_courses(Course *root)
 {
+    // print_error("show_course, root value invalid or not allocated");
     if (root == NULL)
         return;
 

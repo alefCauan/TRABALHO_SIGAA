@@ -42,9 +42,10 @@ gcc -c $SRC_STUDENT -Ienrollment -Icourse -o student.o
 gcc -c $SRC_COURSE -Isubjetc -o course.o
 gcc -c $SRC_SUBJECT -Icourse -o subject.o
 gcc -c $SRC_MAIN -o sigaa.o
+gcc -c error.c -o error.o
 
 # Linkar os arquivos .o em um executável
-gcc course.o enrollment.o student.o subject.o sigaa.o -o $OUT -g
+gcc course.o enrollment.o student.o subject.o sigaa.o error.o -o $OUT -g
 
 # Limpar os arquivos .o (opcional)
 rm *.o
