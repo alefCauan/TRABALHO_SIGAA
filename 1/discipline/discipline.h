@@ -26,17 +26,26 @@ typedef struct Discipline_Tree {
     Discipline *root;
 } Discipline_Tree;
 
+// aloca a arvore de disciplinas
 Discipline *allocate_discipline();
+// aloca a raiz da arvore de disciplinas
 Discipline_Tree *create_discipline_tree();
+// desaloca um node da arvore de disciplinas 
 void deallocate_discipline(Discipline *discipline);
+// desaloca toda a arvore de disciplinas 
 void deallocate_discipline_tree(Discipline_Tree *root);
+// auxilir de show disciplines 
 void printf_discipline(Discipline discipline);
-// Função que retorna um número incrementado a cada chamada
+// Função que retorna um codigo de disciplina 
 int get_code();
 
+// auxiliar de regirter discipline 
 Discipline *insert_discipline(Discipline *root, Discipline *new_discipline);
+// função de adicionar disciplinas 
 void register_discipline(Discipline **root, Course *course);
+// remove uma disciplina escolhida do curso 
 void remove_discipline(Course *course, int discipline_code);
+// mostra todas as disciplinas 
 void show_disciplines(Discipline *root);
 
 #endif

@@ -146,11 +146,11 @@ void remove_subject(Course *course, int discipline_code)
 void show_disciplines(Discipline *root)
 {
     // print_error("show_course, root value invalid or not allocated");
-    if (root == NULL)
-        return;
-
-    // Mostra os cursos em ordem (caminhamento em ordem)
-    show_disciplines(root->left);      
-    printf_discipline(*root);          
-    show_disciplines(root->right);     
+    if (root != NULL)
+    {
+        // Mostra os cursos em ordem (caminhamento em ordem)
+        show_disciplines(root->left);      
+        printf_discipline(*root);          
+        show_disciplines(root->right);     
+    }
 }

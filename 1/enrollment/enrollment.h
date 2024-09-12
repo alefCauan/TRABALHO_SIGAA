@@ -16,8 +16,9 @@ typedef struct Enrollment_Tree {
 
 Enrollment_Tree *create_enrollment_tree();
 
-int get_registration();
+// adiciona um nova matricula 
 void register_enrollment(Student *student);
+// remove uma matricula 
 void remove_enrollment(Student *student, int course_code);
 
 #endif

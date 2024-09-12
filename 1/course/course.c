@@ -63,18 +63,13 @@ Course *insert_course(Course *root, Course *new_course)
         return new_course;
 
 
-    if (root->course_code == new_course->course_code) 
-    {
-        printf("Course with code %d already exists!\n", root->course_code);
-        return root;
-    }
-
-
     // Compara o código do curso para posicioná-lo corretamente na árvore
     if (new_course->course_code < root->course_code) 
         root->left = insert_course(root->left, new_course);
     else if (new_course->course_code > root->course_code) 
         root->right = insert_course(root->right, new_course);
+    else
+        printf("Course with code %d already exists!\n", root->course_code);
     
     return root;
 }

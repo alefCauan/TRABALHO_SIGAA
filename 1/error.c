@@ -27,7 +27,7 @@ int check_all_true(void *first, ...)
     return result;
 }
 
-// Checa a alocação de memoria 
+// Checa a alocação de memoria de um ponteiro 
 void check_allocation(void *pointer, const char *mensage) 
 {
     if(!pointer) 
@@ -44,6 +44,7 @@ void print_error(const char *error_message)
     fprintf(stderr, "ERROR: in %s\n", error_message);
 }
 
+// valida uma resposta dentro de um intervalo 
 bool valid_answer(int min, int max, int answer) 
 {
     // TODO: error mensage
