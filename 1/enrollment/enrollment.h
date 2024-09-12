@@ -5,13 +5,19 @@
 
 // struct de matricula
 typedef struct Enrollment {
-    int subject_code;
+    int course_code;
     struct Enrollment *left; 
     struct Enrollment *right; 
 } Enrollment;
 
-void register_enrollment(Student *student, int subject_code);
-void remove_enrollment(Student *student, int subject_code);
-void register_grade(Student *student, int subject_code, int semester, float final_grade);
+typedef struct Enrollment_Tree {
+    Enrollment *root;
+} Enrollment_Tree;
+
+Enrollment_Tree *create_enrollment_tree();
+
+int get_registration();
+void register_enrollment(Student *student);
+void remove_enrollment(Student *student, int course_code);
 
 #endif

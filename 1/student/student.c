@@ -91,13 +91,6 @@ void printf_student(Student student)
     printf("%04d\n", student.registration);
 }
 
-// Função que retorna um número incrementado a cada chamada
-int get_registration() 
-{
-    static int registration_number = 0; // Variável estática para manter o estado
-    return registration_number++;
-}
-
 void register_student(StudentList *list)
 {
     char temp[100];
@@ -117,7 +110,8 @@ void register_student(StudentList *list)
     scanf("%[^\n]", temp);
     strcpy(new->name, temp);
     new->code = 1; // TODO: new->code_course();
-    new->registration = GET_REGISTRATION();
+
+    // new->registration = X // TODO: matricula opcional 
 
     if(list->first->code == 0)
         list->first = new;

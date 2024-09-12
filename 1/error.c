@@ -44,7 +44,9 @@ void print_error(const char *error_message)
     fprintf(stderr, "ERROR: in %s\n", error_message);
 }
 
-bool valid_answer(int min, int max, int answer) {
+bool valid_answer(int min, int max, int answer) 
+{
+    // TODO: error mensage
     return answer >= min && answer <= max;
 }
 

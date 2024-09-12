@@ -4,9 +4,6 @@
 #include "../course/course.h"
 typedef struct Enrollment Enrollment;
 
-// Definindo a macro para obter o número de registro
-#define GET_REGISTRATION() (get_registration() + 1)
-
 // struct de notas
 typedef struct Grade {
     int subject_code;
@@ -32,21 +29,16 @@ typedef struct StudentList {
 
 
 Grade *allocate_grade();
-
 Student *allocate_student();
-
 StudentList *create_student_list();
 
 void deallocate_grade(Grade *grade);
-
 void deallocate_student(Student *student);
-
 void deallocate_student_list(StudentList *list);
-
 void printf_student(Student student);
 // Função que retorna um número incrementado a cada chamada
-int get_registration();
 void register_student(StudentList *list);
 void show_students_by_course(StudentList *list, int course_code);
+void register_grade(Student *student, int subject_code, int semester, float final_grade);
 
 #endif

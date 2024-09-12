@@ -16,7 +16,7 @@ Course *allocate_course()
         new_course->course_code = -1;
         strcpy(new_course->course_name, "");
         new_course->num_periods = 0;
-        new_course->subject_tree = NULL;
+        new_course->subject_tree = NULL; // TODO: ALLOC TREE
         new_course->left = NULL;
         new_course->right = NULL;
     }
@@ -49,13 +49,6 @@ void deallocate_course_tree(CourseTree *tree)
     }
 }
 
-// Função que retorna um número incrementado a cada chamada
-int get_code() 
-{
-    static int code_number = 0; // Variável estática para manter o estado
-    return code_number++;
-}
-
 void printf_course(Course course)
 {
     printf("Name:    %s\n", course.course_name);
@@ -69,13 +62,19 @@ Course *insert_course(Course *root, Course *new_course)
     if (root == NULL) 
         return new_course;
 
+
+    if (root->course_code == new_course->course_code) 
+    {
+        printf("Course with code %d already exists!\n", root->course_code);
+        return root;
+    }
+
+
     // Compara o código do curso para posicioná-lo corretamente na árvore
     if (new_course->course_code < root->course_code) 
         root->left = insert_course(root->left, new_course);
     else if (new_course->course_code > root->course_code) 
         root->right = insert_course(root->right, new_course);
-    else 
-        printf("Course with code %d already exists!\n", new_course->course_code);
     
     return root;
 }
@@ -95,11 +94,16 @@ void register_course(Course **root)
     setbuf(stdin, NULL);
     scanf(" %[^\n]", new->course_name); 
     
-    printf("Enter number of periods: ");
-    scanf("%d", &new->num_periods);
+    do {
+        printf("Enter number of periods: ");
+        scanf("%d", &new->num_periods);
+    } 
+    while(!valid_answer(1, 12, new->num_periods));
     
+    // TODO: add discipline tree 
+
     // Insere o curso na árvore de cursos
-    *root = insert_course(*root, new);
+    (root == NULL) ? insert_course(*root, new) : (*root = new);
     
     printf("Course successfully registered!\n");
 }
