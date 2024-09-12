@@ -3,7 +3,7 @@
 // #include "sigaa.h"
 // #include "student/student.h"
 #include "course/course.h"
-#include "subject/subjetc.h"
+#include "discipline/discipline.h"
 
 int main()
 {
@@ -24,11 +24,11 @@ int main()
     // DISCIPLINE EXAMPLE
     // CourseTree *tree = create_course_tree();
     // register_course(&tree->root);
-    // Subject_Tree *discipline = create_subject_tree();
-    // register_subject(&discipline->root, tree->root);
-    // show_subjects(discipline->root);
+    // Discipline_Tree *discipline = create_discipline_tree();
+    // register_discipline(&discipline->root, tree->root);
+    // show_disciplines(discipline->root);
     // deallocate_course_tree(tree);
-    // deallocate_subject_tree(discipline);
+    // deallocate_discipline_tree(discipline);
 
     return 0;
 }

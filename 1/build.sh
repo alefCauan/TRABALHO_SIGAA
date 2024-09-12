@@ -4,7 +4,7 @@
 SRC_COURSE="course/course.c"
 SRC_ENROLLMENT="enrollment/enrollment.c"
 SRC_STUDENT="student/student.c"
-SRC_SUBJECT="subject/subjetc.c"
+SRC_DISC="discipline/discipline.c"
 SRC_MAIN="sigaa.c"
 
 # Nome do arquivo de saída
@@ -26,8 +26,8 @@ if [ ! -f "$SRC_STUDENT" ]; then
     exit 1
 fi
 
-if [ ! -f "$SRC_SUBJECT" ]; then
-    echo "Erro: Arquivo $SRC_SUBJECT não encontrado!"
+if [ ! -f "$SRC_DISC" ]; then
+    echo "Erro: Arquivo $SRC_DISC não encontrado!"
     exit 1
 fi
 
@@ -40,12 +40,12 @@ fi
 gcc -c $SRC_ENROLLMENT -Istudent -o enrollment.o
 gcc -c $SRC_STUDENT -Ienrollment -Icourse -o student.o
 gcc -c $SRC_COURSE -Isubjetc -o course.o
-gcc -c $SRC_SUBJECT -Icourse -o subject.o
+gcc -c $SRC_DISC -Icourse -o discipline.o
 gcc -c $SRC_MAIN -o sigaa.o
 gcc -c error.c -o error.o
 
 # Linkar os arquivos .o em um executável
-gcc course.o enrollment.o student.o subject.o sigaa.o error.o -o $OUT -g
+gcc course.o enrollment.o student.o discipline.o sigaa.o error.o -o $OUT -g
 
 # Limpar os arquivos .o (opcional)
 rm *.o
