@@ -12,13 +12,12 @@ int check_all_true(void *first, ...)
     va_list args;
     va_start(args, first);
 
-    int result = 1; // Assume que todos são verdadeiros
+    int result = 1; // Define que todos são verdadeiros
     void *current = first;
 
     while (current != NULL) {
         if (!current) {
-            result = 0; // Se algum parâmetro for falso, retorna 0
-            break;
+            result = 0; // Se algum for falso, muda o resultado pra false
         }
         current = va_arg(args, void *);
     }
