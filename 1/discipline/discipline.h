@@ -3,7 +3,7 @@
 
 #include "../course/course.h"
 // gera um codigo da disciplina 
-#define GET_DISCIPLINE_CODE() (get_code() + 1)
+#define GET_DISCIPLINE_CODE(course_code) (get_code(course_code) + 1)
 
 // enum para a carga horaria 
 typedef enum {
@@ -47,5 +47,7 @@ void register_discipline(Discipline **root, Course *course);
 void remove_discipline(Course *course, int discipline_code);
 // mostra todas as disciplinas 
 void show_disciplines(Discipline *root);
+// função de buscar disciplina
+Discipline* find_discipline(Discipline *root, const char *name);
 
 #endif

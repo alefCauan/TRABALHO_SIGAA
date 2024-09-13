@@ -54,13 +54,11 @@ void printf_discipline(Discipline discipline)
 }
 
 // Função que retorna um número incrementado a cada chamada
-int get_code() 
-{
+int get_code(int course_code) {
     static int discipline_code = 0; 
-    // char str[20];
-    // sprintf(str, "%d%d%04d"); // TODO: course code + static value  
-
-    return discipline_code++;
+    char str[20];
+    sprintf(str, "%d%04d", course_code, discipline_code++); 
+    return atoi(str); // Transforma a string gerada em número
 }
 
 Discipline* insert_discipline(Discipline *root, Discipline *new_subject) {
@@ -79,7 +77,7 @@ Discipline* insert_discipline(Discipline *root, Discipline *new_subject) {
 
         root->right = insert_discipline(root->right, new_subject);
     }
-    
+
     return result;
 }
 
@@ -156,7 +154,7 @@ void register_discipline(Discipline **root, Course *course)
         check_allocation(new, "register discipline");
 
         strcpy(new->discipline_name, discipline_name);
-        new->discipline_code = GET_DISCIPLINE_CODE();
+        new->discipline_code = GET_DISCIPLINE_CODE(course->course_code);
 
         do
         {
