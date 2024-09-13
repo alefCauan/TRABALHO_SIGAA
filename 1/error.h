@@ -10,7 +10,7 @@ int check_all_true(void *first, ...);
 void check_allocation(void *pointer, const char *mensage);
 
 // função simples para relatar um "erro" ou ação invalida
-void print_error(const char *error_message);
+void print_error(const char *error_message); // TODO: trocar para log_error
 
 bool valid_answer(int min, int max, int answer);
 

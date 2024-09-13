@@ -30,5 +30,7 @@ int main()
     // deallocate_course_tree(tree);
     // deallocate_discipline_tree(discipline);
 
+    // TODO: Test enrollment 
+
     return 0;
 }

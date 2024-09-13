@@ -4,21 +4,17 @@
 #include "discipline.h"
 #include "../error.h"
 
-// TODO: change all names 
 Discipline *allocate_discipline() 
 {
     Discipline *new_subject = (Discipline*) malloc(sizeof(Discipline));
     check_allocation(new_subject, "allocate discipline\n");
     
-    if (new_subject != NULL) 
-    {
-        new_subject->discipline_code = 0;
-        strcpy(new_subject->discipline_name, "");
-        new_subject->period = 0;
-        new_subject->workload = 0;
-        new_subject->left = NULL;
-        new_subject->right = NULL;
-    }
+    new_subject->discipline_code = 0;
+    strcpy(new_subject->discipline_name, "");
+    new_subject->period = 0;
+    new_subject->workload = 0;
+    new_subject->left = NULL;
+    new_subject->right = NULL;
 
     return new_subject;
 }

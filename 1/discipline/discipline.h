@@ -15,7 +15,7 @@ typedef enum {
 // struct disciplina
 typedef struct Discipline {
     int     discipline_code;        // codigo da disciplina
-    char    discipline_name[100];   // nome da disciplina
+    char    discipline_name[50];   // nome da disciplina
     int     period;                 // periodo dessa disciplina
     int     workload;               // carga horaria 
     struct  Discipline *left;   

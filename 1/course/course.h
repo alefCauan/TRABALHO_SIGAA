@@ -3,13 +3,14 @@
 
 // #include "../subject/subjetc.h"
 // Definindo a macro para obter o número de registro
-typedef struct Subject Subject;
+typedef struct Discipline Discipline;
+typedef struct Discipline_Tree Discipline_Tree;
 
 typedef struct Course {
     int course_code;
     char course_name[50];
     int num_periods;
-    Subject *subject_tree;
+    Discipline_Tree *tree;
     struct Course *left;
     struct Course *right; 
 } Course;

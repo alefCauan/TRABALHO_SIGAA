@@ -16,7 +16,7 @@ Course *allocate_course()
         new_course->course_code = -1;
         strcpy(new_course->course_name, "");
         new_course->num_periods = 0;
-        new_course->subject_tree = NULL; // TODO: ALLOC TREE
+        new_course->tree = NULL; // TODO: ALLOC TREE
         new_course->left = NULL;
         new_course->right = NULL;
     }

@@ -3,6 +3,7 @@
 
 #include "../course/course.h"
 typedef struct Enrollment Enrollment;
+typedef struct Enrollment_Tree Enrollment_Tree;
 
 // struct de notas
 typedef struct Grade {
@@ -13,13 +14,16 @@ typedef struct Grade {
     struct Grade *right;
 } Grade;
 
+typedef struct Grade_Tree {
+   Grade *root;
+} Grade_Tree;
 // struct de estudante
 typedef struct Student {
     int registration;
-    char name[100];
+    char name[50];
     int code;
-    Grade *grade_tree;
-    Enrollment *enrollment_tree;
+    Grade_Tree *grade_tree;
+    Enrollment_Tree *enrol_tree;
     struct Student *next;
 } Student;
 // raiz de student
@@ -48,5 +52,12 @@ void register_student(StudentList *list);
 void show_students_by_course(StudentList *list, int course_code);
 // adiciona notas de estudantes 
 void register_grade(Student *student, int subject_code, int semester, float final_grade);
+// mostra a nota de uma disciplina de um aluno
+void show_grade(Student *student);
+// mostrar as notas de disciplinas de um aluno no periodo
+void show_period_grades(Student *student);
+// Mostrar o histórico de um determinado aluno, organizadas
+// pelo período que a disciplina está cadastrada no curso.
+void show_history(Student *student);
 
 #endif

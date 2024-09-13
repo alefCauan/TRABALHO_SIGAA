@@ -8,18 +8,21 @@
 
 Grade *allocate_grade() 
 {
-    Grade *new_grade = (Grade*) malloc(sizeof(Grade));
+    Grade *new_grade = (Grade *) malloc(sizeof(Grade));
     check_allocation(new_grade, "allocate grade");
 
-    if (new_grade != NULL) 
-    {
-        new_grade->subject_code = 0;
-        new_grade->semester = 0;
-        new_grade->final_grade = 0.0;
-        new_grade->left = NULL;
-        new_grade->right = NULL;
-    }
+    new_grade->subject_code = 0;
+    new_grade->semester = 0;
+    new_grade->final_grade = 0.0;
+    new_grade->left = NULL;
+    new_grade->right = NULL;
+    
     return new_grade;
+}
+
+Grade_Tree *create_grade_tree()
+{
+    Grade_Tree *new = (Grade_Tree *)malloc(sizeof(Grade_Tree));
 }
 
 Student *allocate_student() 
@@ -33,8 +36,8 @@ Student *allocate_student()
         strcpy(new_student->name, "");
         new_student->code = 0;
         new_student->code = 0;
-        new_student->grade_tree = allocate_grade();
-        new_student->enrollment_tree = NULL;
+        new_student->grade_tree = create_grade_tree();
+        new_student->enrol_tree = NULL;
         new_student->next = NULL;
     }
     return new_student;
@@ -57,12 +60,23 @@ void deallocate_grade(Grade *grade)
     }
 }
 
+void deallocate_grade_tree(Grade *root)
+{
+    if(root != NULL)
+    {
+        deallocate_grade_tree(root->left);
+        deallocate_grade_tree(root->right);
+        
+        deallocate_grade(root);
+    }
+}
+
 void deallocate_student(Student *student) 
 {
     if (student != NULL) {
         // Desalocar árvore de notas e árvore de matrículas, se necessário
-        if(student->grade_tree->semester != 0)
-            deallocate_grade(student->grade_tree);
+        if(student->grade_tree->root->semester != 0)
+            deallocate_grade_tree(student->grade_tree->root);
         free(student);
     }
 }
@@ -95,6 +109,7 @@ void register_student(StudentList *list)
 {
     char temp[100];
     int code;
+
     if(!CHECK_ALL_TRUE(list, list->first))
     {
         print_error("register_student, Studentlist not valid or allocate");
