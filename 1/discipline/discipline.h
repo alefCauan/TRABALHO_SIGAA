@@ -34,11 +34,12 @@ Discipline_Tree *create_discipline_tree();
 void deallocate_discipline(Discipline *discipline);
 // desaloca toda a arvore de disciplinas 
 void deallocate_discipline_tree(Discipline_Tree *root);
+// busca uma disciplina com um certo codigo e a retorna se encontrar 
+Discipline *search_discipline(Discipline *root, int code);
 // auxilir de show disciplines 
 void printf_discipline(Discipline discipline);
 // Função que retorna um codigo de disciplina 
 int get_code();
-
 // auxiliar de regirter discipline 
 Discipline *insert_discipline(Discipline *root, Discipline *new_discipline);
 // função de adicionar disciplinas 

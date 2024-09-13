@@ -4,6 +4,7 @@
 // #include "student/student.h"
 #include "course/course.h"
 #include "discipline/discipline.h"
+#include "enrollment/enrollment.h"
 
 int main()
 {
@@ -30,7 +31,23 @@ int main()
     // deallocate_course_tree(tree);
     // deallocate_discipline_tree(discipline);
 
-    // TODO: Test enrollment 
+    // TODO: Test enrollment and grade 
+    // CourseTree *tree = create_course_tree();
+    // StudentList *list = create_student_list();
+    // Discipline_Tree *discipline = create_discipline_tree();
+
+    // register_course(&tree->root);
+    
+    // register_discipline(&discipline->root, tree->root);
+    // register_discipline(&discipline->root, tree->root);
+    
+    // register_student(list, tree);
+    // register_student(list, tree);
+
+    // deallocate_student_list(list);
+    // deallocate_course_tree(tree);
+    // deallocate_discipline_tree(discipline);
+    
 
     return 0;
 }

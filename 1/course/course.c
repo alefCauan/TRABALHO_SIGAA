@@ -4,6 +4,7 @@
 #include "course.h"
 // #include "../subject/subjetc.h"
 #include "../error.h"
+#include "../discipline/discipline.h"
 
 
 Course *allocate_course() 
@@ -16,7 +17,7 @@ Course *allocate_course()
         new_course->course_code = -1;
         strcpy(new_course->course_name, "");
         new_course->num_periods = 0;
-        new_course->tree = NULL; // TODO: ALLOC TREE
+        new_course->discipline_tree = create_discipline_tree(); // TODO: ALLOC TREE
         new_course->left = NULL;
         new_course->right = NULL;
     }
@@ -49,6 +50,20 @@ void deallocate_course_tree(CourseTree *tree)
     }
 }
 
+Course *search_course_code(Course *root, int code)
+{
+    Course *result = NULL;
+
+    if(root == NULL || root->course_code == code)
+        result = root;
+    else if(code < root->course_code)
+        result = search_course_code(root->left, code);
+    else if(code > root->course_code)
+        result = search_course_code(root->right, code);
+
+    return result;
+}
+
 void printf_course(Course course)
 {
     printf("Name:    %s\n", course.course_name);
@@ -61,7 +76,6 @@ Course *insert_course(Course *root, Course *new_course)
     // Se a árvore estiver vazia, o novo curso se torna a raiz
     if (root == NULL) 
         return new_course;
-
 
     // Compara o código do curso para posicioná-lo corretamente na árvore
     if (new_course->course_code < root->course_code) 
@@ -93,10 +107,8 @@ void register_course(Course **root)
         printf("Enter number of periods: ");
         scanf("%d", &new->num_periods);
     } 
-    while(!valid_answer(1, 12, new->num_periods));
+    while(!valid_answer(1, 8, new->num_periods));
     
-    // TODO: add discipline tree 
-
     // Insere o curso na árvore de cursos
     (root == NULL) ? insert_course(*root, new) : (*root = new);
     

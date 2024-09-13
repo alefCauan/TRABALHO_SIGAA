@@ -45,6 +45,20 @@ void deallocate_discipline_tree(Discipline_Tree *root)
     }
 }
 
+Discipline *search_discipline(Discipline *root, int code)
+{
+    Discipline *result = NULL;
+
+    if(root->discipline_code == code || root == NULL)
+        result = root;
+    if(code < root->discipline_code)
+        result = search_discipline(root->left, code);
+    else if(code > root->discipline_code)
+        result = search_discipline(root->right, code);
+
+    return result;
+}
+
 void printf_discipline(Discipline discipline)
 {
     printf("%d\n", discipline.discipline_code);
@@ -98,8 +112,7 @@ void register_discipline(Discipline **root, Course *course)
 
     new->discipline_code = GET_DISCIPLINE_CODE();
 
-    do
-    {
+    do {
         printf("---------- WORKLOAD ----------\n1 - 30 hours\n2 - 60 hours\n3 - 90 hours\n");
         scanf("%d", &temp);
 
@@ -139,6 +152,7 @@ void remove_subject(Course *course, int discipline_code)
 
     // TODO: finish course fist
 }
+
 void show_disciplines(Discipline *root)
 {
     // print_error("show_course, root value invalid or not allocated");

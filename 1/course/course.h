@@ -10,7 +10,7 @@ typedef struct Course {
     int course_code;
     char course_name[50];
     int num_periods;
-    Discipline_Tree *tree;
+    Discipline_Tree *discipline_tree;
     struct Course *left;
     struct Course *right; 
 } Course;
@@ -27,7 +27,8 @@ CourseTree *create_course_tree();
 void deallocate_course(Course *course);
 // desaloca todos os elementos da arvore
 void deallocate_course_tree(CourseTree *tree);
-
+// busca o codigo de curso e retorna o curso com aquele codigo
+Course *search_course_code(Course *root, int code);
 // auxiliar de register course
 Course *insert_course(Course *root, Course *new_course);
 // adiciona um novo curso na arvore
