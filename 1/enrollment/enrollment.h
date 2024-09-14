@@ -21,10 +21,10 @@ Enrollment_Tree *create_enrollment_tree();
 void deallocate_enrollment(Enrollment *enrollment);
 void deallocate_enrollment_tree(Enrollment_Tree *root);
 // matricula o aluno em um perido 
-void enroll_period(Enrollment *root_enrol, Discipline *root_discipline, int period);
+void enroll_period(Enrollment **root_enrol, Discipline *root_discipline, int period);
 Enrollment *insert_enrol(Enrollment *root, Enrollment *new);
-void register_enrollment(Enrollment *root, int discipline_code);
-Enrollment *remove_enrollment(Enrollment *root, int discipline_code);
+void register_enrollment(Enrollment **root, int discipline_code);
+void remove_enrollment(Enrollment **head, int discipline_code);
 Enrollment  *search_enrollment(Enrollment *root, int discipline_code);
 // Função para mostrar todas as disciplinas de um determinado curso
 void show_all_disciplines(Discipline *root);

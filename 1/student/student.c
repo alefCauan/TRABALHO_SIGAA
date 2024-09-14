@@ -130,7 +130,7 @@ void printf_student(Student student)
 
 void register_student(StudentList *list, Course *courses)
 {
-    char temp[100];
+    char temp[50];
     int code;
 
     if(!CHECK_ALL_TRUE(list, list->first))
@@ -140,19 +140,19 @@ void register_student(StudentList *list, Course *courses)
 
         Student *new = allocate_student(), *aux;
 
+        setbuf(stdin, NULL);
+        printf("Student name: ");
+        scanf("%[^\n]", temp);
+        strcpy(new->name, temp);
+
         do {
             printf("course code: ");
             scanf("%d", &new->course_code);
         } 
         while(!search_course_code(courses, new->course_code));
 
-        setbuf(stdin, NULL);
-        scanf("%[^\n]", temp);
-        strcpy(new->name, temp);
-
         new->registration = GET_REGISTRATION(new->course_code);
-
-        enroll_period(new->enrol_tree->root, courses->discipline_tree->root, 1); // TODO: optional 
+        enroll_period(&new->enrol_tree->root, courses->discipline_tree->root, 1); // TODO: optional 
 
         if(list->first->course_code == 0)
             list->first = new;
@@ -189,60 +189,58 @@ void show_students_by_course(StudentList *list, int course_code)
     
 }
 
-Grade *insert_grade(Grade *root, Grade *new)
+Grade *insert_grade(Grade **root, Grade *new)
 {
-    Grade *result = NULL;
-
-    if(root == NULL)
-        result =  new;
-    else if(root->discipline_code < new->discipline_code)
-        result = insert_grade(root->left, new);
-    else if(root->discipline_code > new->discipline_code)
-        result = insert_grade(root->right, new);
+    if (*root == NULL)
+        *root = new;
+    else if (new->discipline_code < (*root)->discipline_code)
+        insert_grade(&(*root)->left, new);
+    else if (new->discipline_code > (*root)->discipline_code)
+        insert_grade(&(*root)->right, new);
     else 
         print_error("insert grade, discipline code already inserted");
 
-    return result;
+    return *root; 
 }
+
 
 Grade *search_grade(Grade *root, int discipline_code) 
 {
     Grade *result = NULL;  
 
-    if (root == NULL || root->discipline_code == discipline_code) 
-        result = root;
-    else if (discipline_code < root->discipline_code) 
-        result = search_grade(root->left, discipline_code);
-    else 
-        result = search_grade(root->right, discipline_code);
+    if (root != NULL)
+    {
+        if(root->discipline_code == discipline_code)
+            result = root;
+        else if (discipline_code < root->discipline_code) 
+            result = search_grade(root->left, discipline_code);
+        else 
+            result = search_grade(root->right, discipline_code);
+    }
     
     return result;  
 }
 
-void register_grade(Student *student)
+void register_grade(Student **student)
 {
     float score;
     int discipline_code, semester;
-
-    // Cadastrar Notas, permitir o cadastro de notas somente de disciplinas que estejam na árvore de
-    // matricula, e quando a nota for cadastrada a disciplina deve ser removida da árvore de matricula para
-    // árvore de notas.
 
     // TODO: verificação
     printf("discipline code: "), scanf("%d", &discipline_code);
     printf("score: "), scanf("%f", &score);
     printf("semester: "), scanf("%d", &semester);
-    
-    if (search_enrollment(student->enrol_tree->root, discipline_code)) 
+
+    if (search_enrollment((*student)->enrol_tree->root, discipline_code)) 
     {
         Grade *new = allocate_grade();
         new->discipline_code = discipline_code;
         new->final_grade = score;
         new->semester = semester;
 
-        insert_grade(student->grade_tree->root, new);
-        remove_enrollment(student->enrol_tree->root, discipline_code);
-        printf("Grade registered for discipline %d with score %.2f\n", discipline_code, score);
+        insert_grade(&(*student)->grade_tree->root, new);
+        remove_enrollment(&(*student)->enrol_tree->root, discipline_code);
+        printf("Grade registered for discipline [%d] with score %.2f\n", discipline_code, score);
     }
     else
         print_error("register grade, student has no enrol with this code");
@@ -285,10 +283,10 @@ void show_period_grade(Student *student, Discipline *discipline)
 // show student history
 void show_history(Student *student, Discipline *root, int period)
 {
-    Grade *show = search_grade(student->grade_tree->root, root->discipline_code);
-
     if(root != NULL)
     {
+        Grade *show = search_grade(student->grade_tree->root, root->discipline_code);
+        
         if(root->period == period)
             printf("[Score: %.2f, Descipline: %s]\n", show->final_grade, root->discipline_name);
 

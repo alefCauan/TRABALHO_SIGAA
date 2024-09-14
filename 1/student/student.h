@@ -56,7 +56,7 @@ void register_student(StudentList *list, Course *courses);
 // mostra todos os estudantes de um curso especifico
 void show_students_by_course(StudentList *list, int course_code);
 // adiciona notas de estudantes 
-void register_grade(Student *student);
+void register_grade(Student **student);
 // mostra a nota de uma disciplina de um aluno
 void show_grades(Student *student, Discipline *root, int period);
 // mostrar as notas de disciplinas de um aluno no periodo

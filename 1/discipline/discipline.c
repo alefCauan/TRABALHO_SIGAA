@@ -61,10 +61,10 @@ Discipline *search_discipline(Discipline *root, int code)
 
 void printf_discipline(Discipline discipline)
 {
-    printf("%d\n", discipline.discipline_code);
-    printf("%d\n", discipline.period);
-    printf("%d\n", discipline.workload);
-    printf("%s\n", discipline.discipline_name);
+    printf("code    %d\n", discipline.discipline_code);
+    printf("period  %d\n", discipline.period);
+    printf("worload %d\n", discipline.workload);
+    printf("name    %s\n", discipline.discipline_name);
 }
 
 // Função que retorna um número incrementado a cada chamada
@@ -79,24 +79,20 @@ int get_code()
 
 Discipline *insert_discipline(Discipline *root, Discipline *new_subject) 
 {
-    if(root == NULL)
-        return root;
+    if (root == NULL) 
+        return new_subject;
 
     // Compara o código da disciplina para determinar a posição
     if (strcmp(root->discipline_name, new_subject->discipline_name) == 0) 
-    {
         printf("Discipline with name %s already exists!\n", root->discipline_name);
-        return root;
-    }
-
-    // Inserção recursiva na subárvore da esquerda ou direita
-    if (new_subject->discipline_code < root->discipline_code) 
+    else if (new_subject->discipline_code < root->discipline_code) 
         root->left = insert_discipline(root->left, new_subject);
     else if (new_subject->discipline_code > root->discipline_code) 
         root->right = insert_discipline(root->right, new_subject);
 
     return root;
 }
+
 
 void register_discipline(Discipline **root, Course *course)
 {
@@ -134,13 +130,12 @@ void register_discipline(Discipline **root, Course *course)
     while(!valid_answer(1, course->num_periods, temp));
     new->period = temp;
 
-
     // Insere o curso na árvore de cursos 
     // TODO: make a better solution
-    if(root == NULL)
-        insert_discipline(*root, new);
-    else
+    if(*root == NULL || (*root)->discipline_code == 0)
         *root = new;
+    else
+        insert_discipline(*root, new);
     
     printf("Discipline successfully registered!\n");
 }

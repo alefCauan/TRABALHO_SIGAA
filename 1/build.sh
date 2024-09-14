@@ -37,15 +37,15 @@ if [ ! -f "$SRC_MAIN" ]; then
 fi
 
 # Compilar os arquivos .c em .o
-gcc -c $SRC_ENROLLMENT -Istudent -o enrollment.o
-gcc -c $SRC_STUDENT -Ienrollment -Icourse -o student.o
-gcc -c $SRC_COURSE -Isubjetc -o course.o
-gcc -c $SRC_DISC -Icourse -o discipline.o
-gcc -c $SRC_MAIN -o sigaa.o
-gcc -c error.c -o error.o
+gcc -g -c $SRC_ENROLLMENT -Istudent -o enrollment.o
+gcc -g -c $SRC_STUDENT -Ienrollment -Icourse -o student.o
+gcc -g -c $SRC_COURSE -Isubjetc -o course.o
+gcc -g -c $SRC_DISC -Icourse -o discipline.o
+gcc -g -c $SRC_MAIN -o sigaa.o
+gcc -g -c error.c -o error.o
 
 # Linkar os arquivos .o em um executável
-gcc course.o enrollment.o student.o discipline.o sigaa.o error.o -o $OUT -g
+gcc -g course.o enrollment.o student.o discipline.o sigaa.o error.o -o $OUT 
 
 # Limpar os arquivos .o (opcional)
 rm *.o
@@ -54,7 +54,8 @@ rm *.o
 echo "COMPILAÇÃO BEM SUCEDIDA"
 
 # Roda o programa
-./$OUT
+gdb ./$OUT
 
+# valgrind --leak-check=full ./sigaa_program
 # Remover o executável (opcional)
 # rm $OUT
