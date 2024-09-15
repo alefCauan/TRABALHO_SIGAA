@@ -3,6 +3,7 @@
 #include <stdbool.h>
 // Definindo a macro para verificar múltiplos parâmetros
 #define CHECK_ALL_TRUE(...) (check_all_true(__VA_ARGS__, NULL))
+#define RAISE_ERROR(message) (print_error(message))
 
 #define UNIMPLEMENTED \
     do { \

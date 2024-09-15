@@ -23,7 +23,7 @@ Enrollment_Tree *create_enrollment_tree();
 // Libera a memória de uma matrícula específica
 void deallocate_enrollment(Enrollment *enrollment);
 // Libera a memória da árvore de matrículas inteira
-void deallocate_enrollment_tree(Enrollment_Tree *root);
+void deallocate_enrollment_tree(Enrollment *root);
 // Matricula o aluno em todas as disciplinas de um determinado período
 void enroll_period(Enrollment **root_enrol, Discipline *root_discipline, int period);
 // Insere uma nova matrícula na árvore de matrículas

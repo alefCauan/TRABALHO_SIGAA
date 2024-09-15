@@ -29,17 +29,21 @@ Enrollment_Tree *create_enrollment_tree()
 
 void deallocate_enrollment(Enrollment *enrollment) 
 {
-    if (enrollment != NULL) {
+    if (enrollment != NULL) 
+    {
         free(enrollment);
+        enrollment = NULL;
     }
 }
 
-void deallocate_enrollment_tree(Enrollment_Tree *root) 
+void deallocate_enrollment_tree(Enrollment *root) 
 {
     if (root != NULL) 
     {
-        //
-        free(root);
+        deallocate_enrollment_tree(root->left);
+        deallocate_enrollment_tree(root->right);
+
+        deallocate_enrollment(root);
     }
 }
 
@@ -52,7 +56,7 @@ Enrollment *insert_enrol(Enrollment *root, Enrollment *new)
     else if (new->discipline_code > root->discipline_code) 
         root->right = insert_enrol(root->right, new);  // Insere à direita se o código for maior
     else 
-        print_error("insert enrol, code already inserted");  // Código já existe
+        RAISE_ERROR("insert enrol, code already inserted");  // Código já existe
 
     return root;  
 }

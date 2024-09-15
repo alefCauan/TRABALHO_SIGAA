@@ -36,17 +36,28 @@ CourseTree *create_course_tree()
 
 void deallocate_course(Course *course) 
 {
-    if (course != NULL) {
-        // Desalocar árvore de disciplinas, se necessário
-        free(course);
+    if (course != NULL) 
+    {
+        // Verifica se a árvore de disciplinas existe antes de desalocar
+        if (course->discipline_tree != NULL) 
+        {
+            deallocate_discipline_tree(course->discipline_tree->root);
+            course->discipline_tree = NULL;  
+        }
+        
+        free(course);  
+        course = NULL;  
     }
 }
 
-void deallocate_course_tree(CourseTree *tree) 
+void deallocate_course_tree(Course *root) 
 {
-    if (tree != NULL) {
-        // Desalocar árvore de cursos, se necessário
-        free(tree);
+    if (root != NULL) 
+    {
+        deallocate_course_tree(root->left);
+        deallocate_course_tree(root->right);
+
+        deallocate_course(root);
     }
 }
 

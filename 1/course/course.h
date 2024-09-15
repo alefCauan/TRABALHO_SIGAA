@@ -1,8 +1,7 @@
 #ifndef COURSE_H
 #define COURSE_H
 
-// #include "../subject/subjetc.h"
-// Definindo a macro para obter o número de registro
+// predefinição
 typedef struct Discipline Discipline;
 typedef struct Discipline_Tree Discipline_Tree;
 
@@ -26,7 +25,7 @@ CourseTree *create_course_tree();
 // desaloca 1 elemento de course
 void deallocate_course(Course *course);
 // desaloca todos os elementos da arvore
-void deallocate_course_tree(CourseTree *tree);
+void deallocate_course_tree(Course *tree);
 // busca o codigo de curso e retorna o curso com aquele codigo
 Course *search_course_code(Course *root, int code);
 // auxiliar de register course

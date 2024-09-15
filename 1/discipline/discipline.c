@@ -31,16 +31,21 @@ Discipline_Tree *create_discipline_tree()
 
 void deallocate_discipline(Discipline *discipline) 
 {
-    if (discipline != NULL) {
+    if (discipline != NULL) 
+    {
         free(discipline);
+        discipline = NULL;
     }
 }
 
-void deallocate_discipline_tree(Discipline_Tree *root) 
+void deallocate_discipline_tree(Discipline *root) 
 {
-    if (root != NULL) {
-        //
-        free(root);
+    if (root != NULL) 
+    {
+        deallocate_discipline_tree(root->left);
+        deallocate_discipline_tree(root->right);
+
+        deallocate_discipline(root);
     }
 }
 

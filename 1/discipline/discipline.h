@@ -33,7 +33,7 @@ Discipline_Tree *create_discipline_tree();
 // desaloca um node da arvore de disciplinas 
 void deallocate_discipline(Discipline *discipline);
 // desaloca toda a arvore de disciplinas 
-void deallocate_discipline_tree(Discipline_Tree *root);
+void deallocate_discipline_tree(Discipline *root);
 // busca uma disciplina com um certo codigo e a retorna se encontrar 
 Discipline *search_discipline(Discipline *root, int code);
 // auxilir de show disciplines 

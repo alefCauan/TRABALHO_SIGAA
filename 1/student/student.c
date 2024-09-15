@@ -59,8 +59,10 @@ StudentList *create_student_list()
 
 void deallocate_grade(Grade *grade) 
 {
-    if (grade != NULL) {
+    if (grade != NULL) 
+    {
         free(grade);
+        grade = NULL;
     }
 }
 
@@ -77,11 +79,14 @@ void deallocate_grade_tree(Grade *root)
 
 void deallocate_student(Student *student) 
 {
-    if (student != NULL) {
+    if (student != NULL) 
+    {
         // Desalocar árvore de notas e árvore de matrículas, se necessário
-        if(student->grade_tree->root->semester != 0)
-            deallocate_grade_tree(student->grade_tree->root);
+        deallocate_enrollment_tree(student->enrol_tree->root);
+        deallocate_grade_tree(student->grade_tree->root);
+
         free(student);
+        student = NULL;
     }
 }
 
@@ -89,17 +94,20 @@ void deallocate_student_list(StudentList *list)
 {
     if (list != NULL) 
     {
-        // Desalocar cada estudante individualmente
         Student *current = list->first;
         Student *next;
-        while (current != NULL) {
+
+        while (current != NULL) 
+        {
             next = current->next;
             deallocate_student(current);
             current = next;
         }
+        // Desaloca a estrutura da lista
         free(list);
     }
 }
+
 
 int get_current_year() 
 {
@@ -134,8 +142,9 @@ void register_student(StudentList *list, Course *courses)
     int code;
 
     if(!CHECK_ALL_TRUE(list, list->first))
-        print_error("register_student, Studentlist not valid or allocate");
-    else if(courses->course_code != 0)
+        RAISE_ERROR("register_student, Studentlist not valid or allocate");
+
+    else if(courses != NULL && courses->course_code != 0)
     {
 
         Student *new = allocate_student(), *aux;
@@ -166,26 +175,77 @@ void register_student(StudentList *list, Course *courses)
         }
     }
     else
-        print_error("register student, there is no courses in the campus");
+        RAISE_ERROR("register student, there is no courses in the campus");
+
 }
+
+// void register_student(StudentList *list, Course *courses)
+// {
+//     char temp[50];
+//     int code;
+
+//     if(!CHECK_ALL_TRUE(list, list->first))
+//         RAISE_ERROR("register_student, Studentlist not valid or allocate");
+
+//     else if(courses != NULL && courses->course_code != 0)
+//     {
+//         Student *new = allocate_student();
+//         Student *prev = NULL, *current = list->first;
+
+//         setbuf(stdin, NULL);
+//         printf("Student name: ");
+//         scanf("%[^\n]", temp);
+//         strcpy(new->name, temp);
+
+//         do {
+//             printf("course code: ");
+//             scanf("%d", &new->course_code);
+//         } 
+//         while(!search_course_code(courses, new->course_code));
+
+//         new->registration = GET_REGISTRATION(new->course_code);
+//         enroll_period(&new->enrol_tree->root, courses->discipline_tree->root, 1); // TODO: optional
+
+//         // Se a lista estiver vazia, o novo aluno é o primeiro
+//         if (list->first == NULL || strcmp(new->name, list->first->name) < 0) 
+//         {
+//             new->next = list->first;
+//             list->first = new;
+//         }
+//         else 
+//         {
+//             // Percorrer a lista até encontrar a posição correta
+//             while (current != NULL && strcmp(new->name, current->name) > 0) 
+//             {
+//                 prev = current;
+//                 current = current->next;
+//             }
+
+//             // Inserir o novo aluno na posição encontrada
+//             prev->next = new;
+//             new->next = current;
+//         }
+//     }
+//     else
+//         RAISE_ERROR("register student, there is no courses in the campus");
+// }
 
 void show_students_by_course(StudentList *list, int course_code)
 {
-    if(!CHECK_ALL_TRUE(list))
+    if(CHECK_ALL_TRUE(list))
     {
-        print_error("show_students_by_course, Studentlist not valid or allocate");
-        return;
+        Student *aux = list->first;
+
+        while(aux)
+        {
+            if(aux->course_code == course_code)
+                printf_student(*aux);
+
+            aux = aux->next;
+        }
     }
-
-    Student *aux = list->first;
-
-    while(aux)
-    {
-        if(aux->course_code == course_code)
-            printf_student(*aux);
-
-        aux = aux->next;
-    }
+    else
+        RAISE_ERROR("show_students_by_course, Studentlist not valid or allocate");
     
 }
 
@@ -198,7 +258,7 @@ Grade *insert_grade(Grade **root, Grade *new)
     else if (new->discipline_code > (*root)->discipline_code)
         insert_grade(&(*root)->right, new);
     else 
-        print_error("insert grade, discipline code already inserted");
+        RAISE_ERROR("insert grade, discipline code already inserted");
 
     return *root; 
 }
@@ -242,7 +302,7 @@ void register_grade(Student **student)
         printf("Grade registered for discipline [%d] with score %.2f\n", discipline_code, score);
     }
     else
-        print_error("register grade, student has no enrol with this code");
+        RAISE_ERROR("register grade, student has no enrol with this code");
 }
 
 // Mostrar todas as notas de disciplinas de um determinado período de um determinado aluno.
@@ -276,7 +336,7 @@ void show_period_grade(Student *student, Discipline *discipline)
         printf("Workload: %d\n", discipline->workload);
     }
     else
-        print_error("show period grades, the student has not completed or enrolled in this subject");
+        RAISE_ERROR("show period grades, the student has not completed or enrolled in this subject");
 }
 
 // show student history
