@@ -7,7 +7,7 @@
 Discipline *allocate_discipline() 
 {
     Discipline *new_subject = (Discipline*) malloc(sizeof(Discipline));
-    check_allocation(new_subject, "allocate discipline\n");
+    ASSERT_ALLOC(new_subject, "allocate discipline\n");
     
     new_subject->discipline_code = 0;
     strcpy(new_subject->discipline_name, "");
@@ -22,7 +22,7 @@ Discipline *allocate_discipline()
 Discipline_Tree *create_discipline_tree()
 {
     Discipline_Tree *new = (Discipline_Tree *)malloc(sizeof(Discipline_Tree));
-    check_allocation(new, "create discipline tree");
+    ASSERT_ALLOC(new, "create discipline tree");
 
     new->root = allocate_discipline();
 
@@ -105,7 +105,7 @@ void register_discipline(Discipline **root, Course *course)
 
     // Aloca memória para um novo curso
     Discipline *new = allocate_discipline();
-    check_allocation(new, "register discipline");
+    ASSERT_ALLOC(new, "register discipline");
     
     printf("Enter discipline name: ");
     setbuf(stdin, NULL);

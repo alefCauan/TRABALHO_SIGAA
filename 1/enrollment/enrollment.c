@@ -8,7 +8,7 @@
 Enrollment *allocate_enrollment() 
 {
     Enrollment *new_enrollment = (Enrollment*) malloc(sizeof(Enrollment));
-    check_allocation(new_enrollment, "allocate enrollment");
+    ASSERT_ALLOC(new_enrollment, "allocate enrollment");
 
     new_enrollment->discipline_code = 0;
     new_enrollment->left = NULL;
@@ -20,7 +20,7 @@ Enrollment *allocate_enrollment()
 Enrollment_Tree *create_enrollment_tree()
 {
     Enrollment_Tree *new = (Enrollment_Tree *)malloc(sizeof(Enrollment_Tree));
-    check_allocation(new, "create enrollment tree");
+    ASSERT_ALLOC(new, "create enrollment tree");
 
     new->root = allocate_enrollment();
 

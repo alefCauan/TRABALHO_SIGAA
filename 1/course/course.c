@@ -10,14 +10,14 @@
 Course *allocate_course() 
 {
     Course *new_course = (Course*) malloc(sizeof(Course));
-    check_allocation(new_course, "allocate course");
+    ASSERT_ALLOC(new_course, "allocate course");
 
     if (new_course != NULL) 
     {
         new_course->course_code = -1;
         strcpy(new_course->course_name, "");
         new_course->num_periods = 0;
-        new_course->discipline_tree = create_discipline_tree(); // TODO: ALLOC TREE
+        new_course->discipline_tree = create_discipline_tree(); 
         new_course->left = NULL;
         new_course->right = NULL;
     }
@@ -27,7 +27,7 @@ Course *allocate_course()
 CourseTree *create_course_tree() 
 {
     CourseTree *tree = (CourseTree*) malloc(sizeof(CourseTree));
-    check_allocation(tree, "create couse tree");
+    ASSERT_ALLOC(tree, "create couse tree");
 
     tree->root = allocate_course();
     
@@ -103,7 +103,7 @@ void register_course(Course **root)
 {
     // Aloca memória para um novo curso
     Course *new = allocate_course();
-    check_allocation(new, "register course");
+    ASSERT_ALLOC(new, "register course");
 
     // Recebe os dados do curso
     printf("Enter course code: ");

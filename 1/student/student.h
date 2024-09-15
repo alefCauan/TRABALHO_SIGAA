@@ -29,34 +29,36 @@ typedef struct Student {
     struct Student *next;
 } Student;
 // raiz de student
-typedef struct StudentList {
+typedef struct Student_list {
     Student *first;
-} StudentList;
+} Student_list;
 
 // aloca a arvore de notas 
 Grade *allocate_grade();
 // aloca a arvore de estudante 
 Student *allocate_student();
 // aloca o root da arvore de estudante 
-StudentList *create_student_list();
+Student_list *create_student_list();
 // desaloca um node de notas 
 void deallocate_grade(Grade *grade);
 // desaloca um node de estudante 
 void deallocate_student(Student *student);
 // desaloca toda a lista de estudantes 
-void deallocate_student_list(StudentList *list);
+void deallocate_student_list(Student_list *list);
 // retorna o ano atual
 int get_current_year();
 // gerar a matricula do aluno
 int get_registration(int course_code);
-// auxilir de show students 
-void printf_student(Student student);
-// adiciona um novo estudante na lista de estudantes 
-void register_student(StudentList *list, Course *courses);
-// mostra todos os estudantes de um curso especifico
-void show_students_by_course(StudentList *list, int course_code);
+// retorna um node de grade que possui um codigo de disciplina especifico, se houver
+Grade *search_grade(Grade *root, int discipline_code);
+// auxiliar de regirster grade
+Grade *insert_grade(Grade **root, Grade *new);
 // adiciona notas de estudantes 
 void register_grade(Student **student);
+// adiciona um novo estudante na lista de estudantes 
+void register_student(Student_list *list, Course *courses);
+// mostra todos os estudantes de um curso especifico
+void show_students_by_course(Student_list *list, int course_code);
 // mostra a nota de uma disciplina de um aluno
 void show_grades(Student *student, Discipline *root, int period);
 // mostrar as notas de disciplinas de um aluno no periodo

@@ -11,7 +11,7 @@
 Grade *allocate_grade() 
 {
     Grade *new_grade = (Grade *) malloc(sizeof(Grade));
-    check_allocation(new_grade, "allocate grade");
+    ASSERT_ALLOC(new_grade, "allocate grade");
 
     new_grade->discipline_code = 0;
     new_grade->semester = 0;
@@ -25,7 +25,7 @@ Grade *allocate_grade()
 Grade_Tree *create_grade_tree()
 {
     Grade_Tree *new = (Grade_Tree *)malloc(sizeof(Grade_Tree));
-    check_allocation(new, "create grade tree");
+    ASSERT_ALLOC(new, "create grade tree");
 
     new->root = allocate_grade();
 
@@ -35,7 +35,7 @@ Grade_Tree *create_grade_tree()
 Student *allocate_student() 
 {
     Student *new_student = (Student*) malloc(sizeof(Student));
-    check_allocation(new_student, "student node");
+    ASSERT_ALLOC(new_student, "student node");
 
     new_student->registration = 0;
     strcpy(new_student->name, "");
@@ -47,10 +47,10 @@ Student *allocate_student()
     return new_student;
 }
 
-StudentList *create_student_list() 
+Student_list *create_student_list() 
 {
-    StudentList *list = (StudentList*) malloc(sizeof(StudentList));
-    check_allocation(list, "create student");
+    Student_list *list = (Student_list*) malloc(sizeof(Student_list));
+    ASSERT_ALLOC(list, "create student");
 
     list->first = allocate_student();
     
@@ -90,7 +90,7 @@ void deallocate_student(Student *student)
     }
 }
 
-void deallocate_student_list(StudentList *list) 
+void deallocate_student_list(Student_list *list) 
 {
     if (list != NULL) 
     {
@@ -107,7 +107,6 @@ void deallocate_student_list(StudentList *list)
         free(list);
     }
 }
-
 
 int get_current_year() 
 {
@@ -128,15 +127,7 @@ int get_registration(int course_code)
     return atoi(str); 
 }
 
-void printf_student(Student student)
-{
-    // TODO: more information
-    printf("%s\n", student.name);
-    printf("%d\n", student.course_code);
-    printf("%04d\n", student.registration);
-}
-
-void register_student(StudentList *list, Course *courses)
+void register_student(Student_list *list, Course *courses)
 {
     char temp[50];
     int code;
@@ -179,7 +170,8 @@ void register_student(StudentList *list, Course *courses)
 
 }
 
-// void register_student(StudentList *list, Course *courses)
+//TODO: verify 
+// void register_student(Student_list *list, Course *courses)
 // {
 //     char temp[50];
 //     int code;
@@ -230,37 +222,27 @@ void register_student(StudentList *list, Course *courses)
 //         RAISE_ERROR("register student, there is no courses in the campus");
 // }
 
-void show_students_by_course(StudentList *list, int course_code)
-{
-    if(CHECK_ALL_TRUE(list))
+void show_students_by_course(Student_list *list, int course_code) // TODO: bring course
+{    
+    if(list != NULL && list->first != NULL)
     {
         Student *aux = list->first;
 
         while(aux)
         {
             if(aux->course_code == course_code)
-                printf_student(*aux);
-
+            {
+                line();
+                printf("NAME:.......... %s", aux->name);
+                printf("REGISTRATION... %d", aux->registration);
+                // printf("COURSE......... %d", aux->course_code);
+                line();
+            }
             aux = aux->next;
         }
     }
     else
         RAISE_ERROR("show_students_by_course, Studentlist not valid or allocate");
-    
-}
-
-Grade *insert_grade(Grade **root, Grade *new)
-{
-    if (*root == NULL)
-        *root = new;
-    else if (new->discipline_code < (*root)->discipline_code)
-        insert_grade(&(*root)->left, new);
-    else if (new->discipline_code > (*root)->discipline_code)
-        insert_grade(&(*root)->right, new);
-    else 
-        RAISE_ERROR("insert grade, discipline code already inserted");
-
-    return *root; 
 }
 
 Grade *search_grade(Grade *root, int discipline_code) 
@@ -280,31 +262,75 @@ Grade *search_grade(Grade *root, int discipline_code)
     return result;  
 }
 
-void register_grade(Student **student)
+Grade *insert_grade(Grade **root, Grade *new)
 {
-    float score;
-    int discipline_code, semester;
+    if (*root == NULL)
+        *root = new;
+    else if (new->discipline_code < (*root)->discipline_code)
+        insert_grade(&(*root)->left, new);
+    else if (new->discipline_code > (*root)->discipline_code)
+        insert_grade(&(*root)->right, new);
+    else 
+        RAISE_ERROR("insert grade, discipline code already inserted");
 
-    // TODO: verificação
-    printf("discipline code: "), scanf("%d", &discipline_code);
-    printf("score: "), scanf("%f", &score);
-    printf("semester: "), scanf("%d", &semester);
-
-    if (search_enrollment((*student)->enrol_tree->root, discipline_code)) 
-    {
-        Grade *new = allocate_grade();
-        new->discipline_code = discipline_code;
-        new->final_grade = score;
-        new->semester = semester;
-
-        insert_grade(&(*student)->grade_tree->root, new);
-        remove_enrollment(&(*student)->enrol_tree->root, discipline_code);
-        printf("Grade registered for discipline [%d] with score %.2f\n", discipline_code, score);
-    }
-    else
-        RAISE_ERROR("register grade, student has no enrol with this code");
+    return *root; 
 }
 
+void register_grade(Student **student)
+{
+    Enrollment *check = NULL;
+    int discipline_code = 0, semester = 0;
+    float score = 0.0f;
+
+    // Loop até encontrar uma matrícula válida ou o usuário decidir sair
+    while (check == NULL || discipline_code != -1)
+    {
+        printf("Enter the discipline code (or -1 to exit): ");
+        scanf("%d", &discipline_code);
+
+        if (discipline_code == -1) 
+        {
+            line();
+            printf("leaving the register operation...\n");
+            line();
+        }
+        else 
+        {
+            check = search_enrollment((*student)->enrol_tree->root, discipline_code);
+
+            if (check == NULL) 
+                RAISE_ERROR("register grade, student has no enrol with this code");
+        }
+    }
+
+    if(discipline_code != -1)
+    {
+        // Validar a nota entre 0 e 10
+        do {
+            printf("Enter the score (0-10): ");
+            scanf("%f", &score);
+        } 
+        while (!valid_answer(0, 10, (int)score));
+
+        // Validar o semestre (entre 1 e 2, por exemplo)
+        do {
+            printf("Enter the semester (1 or 2): ");
+            scanf("%d", &semester);
+        } 
+        while (!valid_answer(1, 2, semester));
+
+        // A matrícula foi confirmada anteriormente, agora processar a nota
+        Grade *new_grade = allocate_grade();
+        new_grade->discipline_code = discipline_code;
+        new_grade->final_grade = score;
+        new_grade->semester = semester;
+
+        insert_grade(&(*student)->grade_tree->root, new_grade);  // Insere a nota na árvore de notas
+        remove_enrollment(&(*student)->enrol_tree->root, discipline_code);  // Remove a matrícula correspondente
+
+        printf("Grade registered for discipline [%d] with score %.2f\n", discipline_code, score);
+    }
+}
 // Mostrar todas as notas de disciplinas de um determinado período de um determinado aluno.
 void show_grades(Student *student, Discipline *root, int period)
 {
