@@ -203,7 +203,6 @@ Grade *insert_grade(Grade **root, Grade *new)
     return *root; 
 }
 
-
 Grade *search_grade(Grade *root, int discipline_code) 
 {
     Grade *result = NULL;  
@@ -287,10 +286,9 @@ void show_history(Student *student, Discipline *root, int period)
     {
         Grade *show = search_grade(student->grade_tree->root, root->discipline_code);
         
+        show_history(student, root->right, period);
         if(root->period == period)
             printf("[Score: %.2f, Descipline: %s]\n", show->final_grade, root->discipline_name);
-
-        show_history(student, root->right, period);
         show_history(student, root->left, period);
     }
 }

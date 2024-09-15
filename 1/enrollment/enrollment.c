@@ -171,11 +171,14 @@ void enroll_period(Enrollment **root_enrol, Discipline *root_discipline, int per
     }
 }
 
-// Função para mostrar todas as disciplinas de um determinado curso
-void show_all_disciplines(Discipline *root);
+void show_enrolled_disciplines(Enrollment *root, Discipline *disc_root)
+{
+    if(root != NULL)
+    {
+        Discipline *show = search_discipline(disc_root, root->discipline_code);
 
-// Função para mostrar todas as disciplinas de um determinado período de um curso
-void show_disciplines_by_period(Discipline *root, int period);
-
-// Função para mostrar todas as disciplinas que um determinado aluno está matriculado
-void show_enrolled_disciplines(Student *student, Enrollment *root);
+        show_enrolled_disciplines(root->left, disc_root);
+        printf("DISCIPLINE: %s\nCODE: %d\n", show->discipline_name, root->discipline_code);
+        show_enrolled_disciplines(root->right, disc_root);
+    }
+}

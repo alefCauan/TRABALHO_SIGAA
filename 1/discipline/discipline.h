@@ -45,8 +45,10 @@ Discipline *insert_discipline(Discipline *root, Discipline *new_discipline);
 // função de adicionar disciplinas 
 void register_discipline(Discipline **root, Course *course);
 // remove uma disciplina escolhida do curso 
-void remove_discipline(Course *course, int discipline_code);
+void remove_discipline(Discipline **root, int discipline_code);
 // mostra todas as disciplinas 
 void show_disciplines(Discipline *root);
+// Mostra todas as disciplinas de um determinado período de um curso
+void show_disciplines_by_period(Discipline *root, int period);
 
 #endif
