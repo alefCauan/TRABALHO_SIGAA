@@ -7,7 +7,7 @@
 #include <stdarg.h>
 #include "error.h"
 
-void line() { printf("-------------------------------------------\n"); }
+void line() { printf("---------------------------------------------------------------\n"); }
 
 int check_all_true(void *first, ...) 
 {
@@ -52,9 +52,28 @@ bool valid_answer(int min, int max, int answer)
 
     if(!result)
     {
+        line();
         (answer > max) ? 
             RAISE_ERROR("data input, input greater than maximum parameter") : 
             RAISE_ERROR("data input, input less than minimum parameter");
+        line();
+    }
+    
+    return result;
+}
+
+// (float) valida uma resposta dentro de um certo limite
+bool validf_answer(float min, float max, float answer)
+{
+    bool result = (answer >= min && answer <= max);
+
+    if(!result)
+    {
+        line();
+        (answer > max) ? 
+            RAISE_ERROR("data input, input greater than maximum parameter") : 
+            RAISE_ERROR("data input, input less than minimum parameter");
+        line();
     }
     
     return result;

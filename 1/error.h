@@ -21,6 +21,8 @@ void check_allocation(void *pointer, const char *mensage);
 void print_error(const char *error_message); // TODO: trocar para log_error
 // valida uma resposta dentro de um certo limite
 bool valid_answer(int min, int max, int answer);
+// (float) valida uma resposta dentro de um certo limite
+bool validf_answer(float min, float max, float answer);
 
 #endif
 

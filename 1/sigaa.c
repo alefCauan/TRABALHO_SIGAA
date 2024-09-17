@@ -27,13 +27,15 @@ int main()
     // deallocate_course_tree(tree);
     
     // DISCIPLINE EXAMPLE
-    // CourseTree *tree = create_course_tree();
-    // register_course(&tree->root);
-    // Discipline_Tree *discipline = create_discipline_tree();
-    // register_discipline(&discipline->root, tree->root);
-    // show_disciplines(discipline->root);
-    // deallocate_course_tree(tree);
-    // deallocate_discipline_tree(discipline);
+    CourseTree *tree = create_course_tree();
+    register_course(&tree->root);
+    Discipline_Tree *discipline = create_discipline_tree();
+    register_discipline(&discipline->root, tree->root);
+    register_discipline(&discipline->root, tree->root);
+    register_discipline(&discipline->root, tree->root);
+    show_disciplines(discipline->root);
+    deallocate_course_tree(tree->root);
+    deallocate_discipline_tree(discipline->root);
 
     // TODO: Test enrollment and grade 
     // CourseTree *tree = create_course_tree();

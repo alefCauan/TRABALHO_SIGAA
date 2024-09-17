@@ -47,6 +47,23 @@ void deallocate_enrollment_tree(Enrollment *root)
     }
 }
 
+Enrollment *search_enrollment(Enrollment *root, int discipline_code) 
+{
+    Enrollment *result = NULL;  
+
+    if (root != NULL) 
+    {
+        if(root->discipline_code == discipline_code)
+            result = root;
+        else if (discipline_code < root->discipline_code) 
+            result = search_enrollment(root->left, discipline_code);
+        else 
+            result = search_enrollment(root->right, discipline_code);
+    }
+
+    return result;  
+}
+
 Enrollment *insert_enrol(Enrollment *root, Enrollment *new)
 {
     if (root == NULL) 
@@ -146,23 +163,6 @@ void remove_enrollment(Enrollment **head, int discipline_code)
     }
 }
 
-Enrollment *search_enrollment(Enrollment *root, int discipline_code) 
-{
-    Enrollment *result = NULL;  
-
-    if (root != NULL) 
-    {
-        if(root->discipline_code == discipline_code)
-            result = root;
-        else if (discipline_code < root->discipline_code) 
-            result = search_enrollment(root->left, discipline_code);
-        else 
-            result = search_enrollment(root->right, discipline_code);
-    }
-
-    return result;  
-}
-
 void enroll_period(Enrollment **root_enrol, Discipline *root_discipline, int period)
 {
     if(root_discipline != NULL)
@@ -182,7 +182,9 @@ void show_enrolled_disciplines(Enrollment *root, Discipline *disc_root)
         Discipline *show = search_discipline(disc_root, root->discipline_code);
 
         show_enrolled_disciplines(root->left, disc_root);
+        line();
         printf("DISCIPLINE: %s\nCODE: %d\n", show->discipline_name, root->discipline_code);
+        line();
         show_enrolled_disciplines(root->right, disc_root);
     }
 }

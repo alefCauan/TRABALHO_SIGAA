@@ -307,10 +307,10 @@ void register_grade(Student **student)
     {
         // Validar a nota entre 0 e 10
         do {
-            printf("Enter the score (0-10): ");
+            printf("Enter the score: ");
             scanf("%f", &score);
         } 
-        while (!valid_answer(0, 10, (int)score));
+        while (!validf_answer(0, 10, score));
 
         // Validar o semestre (entre 1 e 2, por exemplo)
         do {
@@ -340,9 +340,9 @@ void show_grades(Student *student, Discipline *root, int period)
 
         if(root->period == period && show != NULL)
         {
-            printf("Code: %d\n", root->discipline_code);
             printf("Disciplina: %s\n", root->discipline_name);
-            printf("Score: %f\n", show->final_grade);
+            printf("Code:       %d\n", root->discipline_code);
+            printf("Score:      %f\n", show->final_grade);
         }
 
         show_grades(student, root->left, period);

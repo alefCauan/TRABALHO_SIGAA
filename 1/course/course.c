@@ -75,13 +75,6 @@ Course *search_course_code(Course *root, int code)
     return result;
 }
 
-void printf_course(Course course)
-{
-    printf("Name:    %s\n", course.course_name);
-    printf("Code:    %d\n", course.course_code);
-    printf("Periods: %d\n", course.num_periods);
-}
-
 Course *insert_course(Course *root, Course *new_course) 
 {
     // Se a árvore estiver vazia, o novo curso se torna a raiz
@@ -128,14 +121,16 @@ void register_course(Course **root)
 
 void show_courses(Course *root)
 {
-    // print_error("show_course, root value invalid or not allocated");
-    if (root == NULL)
-        return;
-
-    // Mostra os cursos em ordem (caminhamento em ordem)
-    show_courses(root->left);      // Primeiro mostra a subárvore da esquerda
-    if(root->course_code != -1) printf_course(*root);          // Mostra o curso atual
-    show_courses(root->right);     // Mostra a subárvore da direita
+    if (root != NULL)
+    {
+        show_courses(root->left);      
+        line();
+        printf("Name:    %s\n", root->course_name);
+        printf("Code:    %d\n", root->course_code);
+        printf("Periods: %d\n", root->num_periods);
+        line();
+        show_courses(root->right);    
+    }
 }
 
 

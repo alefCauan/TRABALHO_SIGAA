@@ -1,6 +1,7 @@
 #ifndef DISCIPLINE_H
 #define DISCIPLINE_H
 
+#include <stdbool.h>
 #include "../course/course.h"
 // gera um codigo da disciplina 
 #define GET_DISCIPLINE_CODE() (get_code() + 1)
@@ -34,10 +35,10 @@ Discipline_Tree *create_discipline_tree();
 void deallocate_discipline(Discipline *discipline);
 // desaloca toda a arvore de disciplinas 
 void deallocate_discipline_tree(Discipline *root);
+// verifica se a nova disciplina possui o nome de uma já existente
+bool search_disc_name(Discipline *root, const char *name);
 // busca uma disciplina com um certo codigo e a retorna se encontrar 
 Discipline *search_discipline(Discipline *root, int code);
-// auxilir de show disciplines 
-void printf_discipline(Discipline discipline);
 // Função que retorna um codigo de disciplina 
 int get_code();
 // auxiliar de regirter discipline 

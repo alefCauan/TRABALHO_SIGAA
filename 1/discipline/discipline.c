@@ -49,26 +49,40 @@ void deallocate_discipline_tree(Discipline *root)
     }
 }
 
+bool search_disc_name(Discipline *root, const char *name)
+{
+    bool result = false; 
+
+    if (root != NULL) 
+    {
+        if (strcmp(root->discipline_name, name) == 0)
+        {
+            RAISE_ERROR("input data, name already used in the course");
+            result = true;
+        }
+        else
+        {
+            result = search_disc_name(root->left, name);
+            (result) ? 
+                result : (result = search_disc_name(root->right, name));
+        }
+    }
+
+    return result;
+}
+
 Discipline *search_discipline(Discipline *root, int code)
 {
     Discipline *result = NULL;
 
     if(root->discipline_code == code || root == NULL)
         result = root;
-    if(code < root->discipline_code)
+    else if(code < root->discipline_code)
         result = search_discipline(root->left, code);
     else if(code > root->discipline_code)
         result = search_discipline(root->right, code);
 
     return result;
-}
-
-void printf_discipline(Discipline discipline)
-{
-    printf("code    %d\n", discipline.discipline_code);
-    printf("period  %d\n", discipline.period);
-    printf("worload %d\n", discipline.workload);
-    printf("name    %s\n", discipline.discipline_name);
 }
 
 // Função que retorna um número incrementado a cada chamada
@@ -83,13 +97,8 @@ int get_code()
 
 Discipline *insert_discipline(Discipline *root, Discipline *new_subject) 
 {
-    Discipline *result = NULL;
     if (root == NULL) 
-        return new_subject;
-
-    // Compara o código da disciplina para determinar a posição
-    if (strcmp(root->discipline_name, new_subject->discipline_name) == 0) 
-        printf("Discipline with name %s already exists!\n", root->discipline_name);
+        root = new_subject;
     else if (new_subject->discipline_code < root->discipline_code) 
         root->left = insert_discipline(root->left, new_subject);
     else if (new_subject->discipline_code > root->discipline_code) 
@@ -107,9 +116,13 @@ void register_discipline(Discipline **root, Course *course)
     Discipline *new = allocate_discipline();
     ASSERT_ALLOC(new, "register discipline");
     
-    printf("Enter discipline name: ");
-    setbuf(stdin, NULL);
-    scanf("%[^\n]", new->discipline_name);
+    do {
+        printf("Enter discipline name: ");
+        setbuf(stdin, NULL);
+        scanf("%[^\n]", new->discipline_name);
+    } 
+    while(search_disc_name((*root), new->discipline_name));
+    
 
     new->discipline_code = GET_DISCIPLINE_CODE();
 
@@ -128,9 +141,11 @@ void register_discipline(Discipline **root, Course *course)
     while(!valid_answer(1, 3, temp));
 
     do {
+        line();
         printf("The course %s has %d periods, where the %s discipline will be placed\n",
         course->course_name, course->num_periods, new->discipline_name);
         scanf("%d", &temp);
+        printf("\n");
     } 
     while(!valid_answer(1, course->num_periods, temp));
     new->period = temp;
@@ -226,7 +241,10 @@ void show_disciplines(Discipline *root)
     {
         // Mostra as disciplinas em ordem (caminhamento em ordem)
         show_disciplines(root->left);      
-        printf_discipline(*root);          
+        line();
+        printf("NAME: %s\n", root->discipline_name);          
+        printf("CODE: %d\n", root->discipline_code);                  
+        line();          
         show_disciplines(root->right);     
     }
 }
@@ -237,7 +255,14 @@ void show_disciplines_by_period(Discipline *root, int period)
     if(root != NULL)
     {
         show_disciplines_by_period(root->left, period);
-        if(root->period == period) printf_discipline(*root);
+        if(root->period == period)
+        {
+            line();
+            printf("NAME:   %s\n", root->discipline_name);          
+            printf("CODE:   %d\n", root->discipline_code);                  
+            printf("PERIOD: %d\n", root->period);                  
+            line();    
+        }
         show_disciplines_by_period(root->right, period);
     }
 }
