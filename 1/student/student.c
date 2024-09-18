@@ -123,22 +123,20 @@ int get_registration(int course_code)
     static int enrol_code = 0; 
     char str[20];
 
-    sprintf(str, "%4d%04d%04d", get_current_year(), course_code, enrol_code++); 
+    sprintf(str, "%d%d%d", get_current_year(), course_code, enrol_code++); 
     return atoi(str); 
 }
 
 void register_student(Student_list *list, Course *courses)
 {
     char temp[50];
-    int code;
 
     if(!CHECK_ALL_TRUE(list, list->first))
         RAISE_ERROR("register_student, Studentlist not valid or allocate");
 
     else if(courses != NULL && courses->course_code != 0)
     {
-
-        Student *new = allocate_student(), *aux;
+        Student *new = allocate_student(), *aux = list->first, *prev = NULL;
 
         setbuf(stdin, NULL);
         printf("Student name: ");
@@ -148,79 +146,40 @@ void register_student(Student_list *list, Course *courses)
         do {
             printf("course code: ");
             scanf("%d", &new->course_code);
-        } 
-        while(!search_course_code(courses, new->course_code));
+        } while(!search_course_code(courses, new->course_code));
 
         new->registration = GET_REGISTRATION(new->course_code);
-        enroll_period(&new->enrol_tree->root, courses->discipline_tree->root, 1); // TODO: optional 
+        enroll_period(&new->enrol_tree->root, courses->discipline_tree->root, 1); // TODO: optional
 
-        if(list->first->course_code == 0)
+        // Se a lista estiver vazia
+        if(list->first == NULL)
+        {
             list->first = new;
+            return;
+        }
+
+        // Inserção em ordem alfabética
+        while(aux != NULL && is_alphabetical(aux->name, new->name))
+        {
+            prev = aux;
+            aux = aux->next;
+        }
+
+        // Inserção no início
+        if(prev == NULL)
+        {
+            new->next = list->first;
+            list->first = new;
+        }
         else
         {
-            aux = list->first;
-            while(aux->next)
-                aux = aux->next;
-
-            aux->next = new;
+            new->next = aux;
+            prev->next = new;
         }
     }
     else
         RAISE_ERROR("register student, there is no courses in the campus");
-
 }
-
-//TODO: verify 
-// void register_student(Student_list *list, Course *courses)
-// {
-//     char temp[50];
-//     int code;
-
-//     if(!CHECK_ALL_TRUE(list, list->first))
-//         RAISE_ERROR("register_student, Studentlist not valid or allocate");
-
-//     else if(courses != NULL && courses->course_code != 0)
-//     {
-//         Student *new = allocate_student();
-//         Student *prev = NULL, *current = list->first;
-
-//         setbuf(stdin, NULL);
-//         printf("Student name: ");
-//         scanf("%[^\n]", temp);
-//         strcpy(new->name, temp);
-
-//         do {
-//             printf("course code: ");
-//             scanf("%d", &new->course_code);
-//         } 
-//         while(!search_course_code(courses, new->course_code));
-
-//         new->registration = GET_REGISTRATION(new->course_code);
-//         enroll_period(&new->enrol_tree->root, courses->discipline_tree->root, 1); // TODO: optional
-
-//         // Se a lista estiver vazia, o novo aluno é o primeiro
-//         if (list->first == NULL || strcmp(new->name, list->first->name) < 0) 
-//         {
-//             new->next = list->first;
-//             list->first = new;
-//         }
-//         else 
-//         {
-//             // Percorrer a lista até encontrar a posição correta
-//             while (current != NULL && strcmp(new->name, current->name) > 0) 
-//             {
-//                 prev = current;
-//                 current = current->next;
-//             }
-
-//             // Inserir o novo aluno na posição encontrada
-//             prev->next = new;
-//             new->next = current;
-//         }
-//     }
-//     else
-//         RAISE_ERROR("register student, there is no courses in the campus");
-// }
 
 void show_students_by_course(Student_list *list, int course_code) // TODO: bring course
 {    
@@ -233,10 +192,9 @@ void show_students_by_course(Student_list *list, int course_code) // TODO: bring
             if(aux->course_code == course_code)
             {
                 line();
-                printf("NAME:.......... %s", aux->name);
-                printf("REGISTRATION... %d", aux->registration);
+                printf("NAME:.......... %s\n", aux->name);
+                printf("REGISTRATION... %d\n", aux->registration);
                 // printf("COURSE......... %d", aux->course_code);
-                line();
             }
             aux = aux->next;
         }

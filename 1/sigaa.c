@@ -9,15 +9,18 @@
 int main()
 {
     // ESTUDENT EXAMPLE
-    // CourseTree *tree = create_course_tree();
-    // register_course(&tree->root);
-    // StudentList *list = create_student_list();
-    // register_student(list, tree->root);
-    // register_student(list, tree->root);
+    CourseTree *tree = create_course_tree();
+    register_course(&tree->root);
+    Student_list *list = create_student_list();
+    register_student(list, tree->root);
+    register_student(list, tree->root);
+    register_student(list, tree->root);
+    register_student(list, tree->root);
+    register_student(list, tree->root);
 
-    // show_students_by_course(list, 1234);
-    // deallocate_student_list(list);
-    // deallocate_course_tree(tree);
+    show_students_by_course(list, 1234);
+    deallocate_student_list(list);
+    deallocate_course_tree(tree->root);
 
     // COURSE EXAMPLE
     // CourseTree *tree = create_course_tree();
@@ -27,17 +30,16 @@ int main()
     // deallocate_course_tree(tree);
     
     // DISCIPLINE EXAMPLE
-    CourseTree *tree = create_course_tree();
-    register_course(&tree->root);
-    Discipline_Tree *discipline = create_discipline_tree();
-    register_discipline(&discipline->root, tree->root);
-    register_discipline(&discipline->root, tree->root);
-    register_discipline(&discipline->root, tree->root);
-    show_disciplines(discipline->root);
-    deallocate_course_tree(tree->root);
-    deallocate_discipline_tree(discipline->root);
+    // CourseTree *tree = create_course_tree();
+    // register_course(&tree->root);
+    // Discipline_Tree *discipline = create_discipline_tree();
+    // register_discipline(&discipline->root, tree->root);
+    // register_discipline(&discipline->root, tree->root);
+    // register_discipline(&discipline->root, tree->root);
+    // show_disciplines(discipline->root);
+    // deallocate_course_tree(tree->root);
+    // deallocate_discipline_tree(discipline->root);
 
-    // TODO: Test enrollment and grade 
     // CourseTree *tree = create_course_tree();
     // StudentList *list = create_student_list();
     // register_course(&tree->root);

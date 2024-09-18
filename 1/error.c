@@ -5,6 +5,7 @@
 #include <string.h>
 #include <stdbool.h>
 #include <stdarg.h>
+#include <ctype.h>
 #include "error.h"
 
 void line() { printf("---------------------------------------------------------------\n"); }
@@ -76,6 +77,33 @@ bool validf_answer(float min, float max, float answer)
         line();
     }
     
+    return result;
+}
+
+
+#define END_STRING(c) ((c != ' ' && c == '\0') ? (true) : false)
+
+bool is_alphabetical(char __string[], char __compare[])
+{
+    int i = 0, result = -1;
+
+    while(result == -1)
+    {
+        if(END_STRING(__string[i]))
+            result = true;
+        else if(END_STRING(__compare[i]))
+            result = false;
+        else 
+        {
+            if(tolower(__string[i]) < tolower(__compare[i]))
+                result = true;
+            else if(tolower(__string[i]) > tolower(__compare[i]))
+                result = false;
+            else 
+                i++;
+        }
+    }
+
     return result;
 }
 
