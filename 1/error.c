@@ -81,8 +81,6 @@ bool validf_answer(float min, float max, float answer)
 }
 
 
-#define END_STRING(c) ((c != ' ' && c == '\0') ? (true) : false)
-
 bool is_alphabetical(char __string[], char __compare[])
 {
     int i = 0, result = -1;

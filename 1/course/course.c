@@ -9,7 +9,7 @@
 
 Course *allocate_course() 
 {
-    Course *new_course = (Course*) malloc(sizeof(Course));
+    Course *new_course = (Course *) malloc(sizeof(Course));
     ASSERT_ALLOC(new_course, "allocate course");
 
     if (new_course != NULL) 
@@ -63,7 +63,8 @@ void deallocate_course_tree(Course *root)
 
 Course *search_course_code(Course *root, int code)
 {
-    Course *result = NULL;
+    Course *result;
+    result = NULL;
 
     if(root == NULL || root->course_code == code)
         result = root;
@@ -75,6 +76,7 @@ Course *search_course_code(Course *root, int code)
     return result;
 }
 
+// TODO: change
 Course *insert_course(Course *root, Course *new_course) 
 {
     // Se a árvore estiver vazia, o novo curso se torna a raiz
@@ -95,7 +97,8 @@ Course *insert_course(Course *root, Course *new_course)
 void register_course(Course **root) 
 {
     // Aloca memória para um novo curso
-    Course *new = allocate_course();
+    Course *new;
+    new = allocate_course();
     ASSERT_ALLOC(new, "register course");
 
     // Recebe os dados do curso
@@ -113,6 +116,7 @@ void register_course(Course **root)
     } 
     while(!valid_answer(1, 8, new->num_periods));
     
+    //TODO: change
     // Insere o curso na árvore de cursos
     (root == NULL) ? insert_course(*root, new) : (*root = new);
     

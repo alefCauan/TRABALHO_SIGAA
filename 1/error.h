@@ -5,7 +5,7 @@
 #define CHECK_ALL_TRUE(...) (check_all_true(__VA_ARGS__, NULL))
 #define RAISE_ERROR(message) (print_error(message))
 #define ASSERT_ALLOC(pointer, message) (check_allocation(pointer, message))
-#define END_STRING(c) ((c != ' ' && c == '\0') ? (true) : false)
+#define END_STRING(c) ((c != ' ' && c == '\0') ? (true) : (false))
 
 #define UNIMPLEMENTED \
     do { \

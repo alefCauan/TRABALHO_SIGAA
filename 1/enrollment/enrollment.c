@@ -66,6 +66,7 @@ Enrollment *search_enrollment(Enrollment *root, int discipline_code)
 
 Enrollment *insert_enrol(Enrollment *root, Enrollment *new)
 {
+    
     if (root == NULL) 
         root = new;  // Se a raiz estiver vazia, atribui o novo nó
     else if (new->discipline_code < root->discipline_code) 
@@ -80,6 +81,7 @@ Enrollment *insert_enrol(Enrollment *root, Enrollment *new)
 
 void register_enrollment(Enrollment **root, int discipline_code)
 {
+    // TODO: change
     Enrollment *new = allocate_enrollment();
     new->discipline_code = discipline_code;
 
@@ -91,8 +93,10 @@ void register_enrollment(Enrollment **root, int discipline_code)
 
 void remove_enrollment(Enrollment **head, int discipline_code)
 {
-    Enrollment *current = *head;
-    Enrollment *parent = NULL;
+    Enrollment *current; 
+    current = *head;
+    Enrollment *parent;
+    parent = NULL;
 
     // Procura o nó a ser removido
     while (current != NULL && current->discipline_code != discipline_code) 
@@ -105,62 +109,62 @@ void remove_enrollment(Enrollment **head, int discipline_code)
     }
 
     // Se o nó não for encontrado
-    if (current == NULL)
+    if (current != NULL)
     {
-        printf("Discipline code %d not found.\n", discipline_code);
-        return;
-    }
-
-    // Caso 1: Nó sem filhos
-    if (current->left == NULL && current->right == NULL)
-    {
-        if (parent == NULL) // Se é a raiz
-            *head = NULL;
-        else if (parent->right == current)
-            parent->right = NULL;
-        else
-            parent->left = NULL;
-
-        free(current);
-    }
-    // Caso 2: Nó com dois filhos
-    else if (current->left != NULL && current->right != NULL)
-    {
-        // Encontrar o sucessor (menor valor na subárvore direita)
-        Enrollment *successor = current->right;
-        Enrollment *successor_parent = current;
-
-        while (successor->left != NULL)
+        // Caso 1: Nó sem filhos
+        if (current->left == NULL && current->right == NULL)
         {
-            successor_parent = successor;
-            successor = successor->left;
+            if (parent == NULL) // Se é a raiz
+                *head = NULL;
+            else if (parent->right == current)
+                parent->right = NULL;
+            else
+                parent->left = NULL;
+
+            free(current);
         }
+        // Caso 2: Nó com dois filhos
+        else if (current->left != NULL && current->right != NULL)
+        {
+            // Encontrar o sucessor (menor valor na subárvore direita)
+            Enrollment *successor = current->right;
+            Enrollment *successor_parent = current;
 
-        // Copiar os dados do sucessor para o nó atual
-        current->discipline_code = successor->discipline_code;
+            while (successor->left != NULL)
+            {
+                successor_parent = successor;
+                successor = successor->left;
+            }
 
-        // Remover o sucessor da árvore
-        if (successor_parent->left == successor)
-            successor_parent->left = successor->right;
-        else
-            successor_parent->right = successor->right;
+            // Copiar os dados do sucessor para o nó atual
+            current->discipline_code = successor->discipline_code;
 
-        free(successor);
+            // Remover o sucessor da árvore
+            if (successor_parent->left == successor)
+                successor_parent->left = successor->right;
+            else
+                successor_parent->right = successor->right;
+
+            free(successor);
+        }
+        // Caso 3: Nó com um filho
+        else 
+        {
+            Enrollment *child = (current->left != NULL) ? 
+                current->left : current->right;
+
+            if (parent == NULL) // Se o nó é a raiz
+                *head = child;
+            else if (parent->right == current)
+                parent->right = child;
+            else
+                parent->left = child;
+
+            free(current);
+        }
     }
-    // Caso 3: Nó com um filho
-    else 
-    {
-        Enrollment *child = (current->left != NULL) ? current->left : current->right;
-
-        if (parent == NULL) // Se o nó é a raiz
-            *head = child;
-        else if (parent->right == current)
-            parent->right = child;
-        else
-            parent->left = child;
-
-        free(current);
-    }
+    else
+        RAISE_ERROR("remove enrol, discipline with this code has not found");
 }
 
 void enroll_period(Enrollment **root_enrol, Discipline *root_discipline, int period)

@@ -150,12 +150,7 @@ void register_discipline(Discipline **root, Course *course)
     while(!valid_answer(1, course->num_periods, temp));
     new->period = temp;
 
-    // Insere o curso na árvore de cursos 
-    // TODO: make a better solution
-    if(*root == NULL || (*root)->discipline_code == 0)
-        *root = new;
-    else
-        insert_discipline(*root, new);
+    insert_discipline(*root, new);
     
     printf("Discipline successfully registered!\n");
 }
@@ -163,8 +158,10 @@ void register_discipline(Discipline **root, Course *course)
 // TODO: verificar todos os alunos e ver se eles estão matriculados nessa disciplina
 void remove_discipline(Discipline **root, int discipline_code)
 {
-    Discipline *current = *root;
-    Discipline *parent = NULL;
+    Discipline *current;
+    current = *root;
+    Discipline *parent;
+    parent = NULL;
 
     // Procura o nó a ser removido
     while (current != NULL && current->discipline_code != discipline_code) 
@@ -177,62 +174,61 @@ void remove_discipline(Discipline **root, int discipline_code)
     }
 
     // Se o nó não for encontrado
-    if (current == NULL)
+    if (current != NULL)
     {
-        printf("Discipline code %d not found.\n", discipline_code);
-        return;
-    }
-
-    // Caso 1: Nó sem filhos
-    if (current->left == NULL && current->right == NULL)
-    {
-        if (parent == NULL) // Se é a raiz
-            *root = NULL;
-        else if (parent->right == current)
-            parent->right = NULL;
-        else
-            parent->left = NULL;
-
-        free(current);
-    }
-    // Caso 2: Nó com dois filhos
-    else if (current->left != NULL && current->right != NULL)
-    {
-        // Encontrar o sucessor (menor valor na subárvore direita)
-        Discipline *successor = current->right;
-        Discipline *successor_parent = current;
-
-        while (successor->left != NULL)
+        // Caso 1: Nó sem filhos
+        if (current->left == NULL && current->right == NULL)
         {
-            successor_parent = successor;
-            successor = successor->left;
+            if (parent == NULL) // Se é a raiz
+                *root = NULL;
+            else if (parent->right == current)
+                parent->right = NULL;
+            else
+                parent->left = NULL;
+
+            deallocate_discipline(current);
         }
+        // Caso 2: Nó com dois filhos
+        else if (current->left != NULL && current->right != NULL)
+        {
+            // Encontrar o sucessor (menor valor na subárvore direita)
+            Discipline *successor = current->right;
+            Discipline *successor_parent = current;
 
-        // Copiar os dados do sucessor para o nó atual
-        current->discipline_code = successor->discipline_code;
+            while (successor->left != NULL)
+            {
+                successor_parent = successor;
+                successor = successor->left;
+            }
 
-        // Remover o sucessor da árvore
-        if (successor_parent->left == successor)
-            successor_parent->left = successor->right;
-        else
-            successor_parent->right = successor->right;
+            // Copiar os dados do sucessor para o nó atual
+            current->discipline_code = successor->discipline_code;
 
-        free(successor);
+            // Remover o sucessor da árvore
+            if (successor_parent->left == successor)
+                successor_parent->left = successor->right;
+            else
+                successor_parent->right = successor->right;
+
+            deallocate_discipline(successor);
+        }
+        // Caso 3: Nó com um filho
+        else 
+        {
+            Discipline *child = (current->left != NULL) ? current->left : current->right;
+
+            if (parent == NULL) // Se o nó é a raiz
+                *root = child;
+            else if (parent->right == current)
+                parent->right = child;
+            else
+                parent->left = child;
+
+            deallocate_discipline(current);
+        }
     }
-    // Caso 3: Nó com um filho
-    else 
-    {
-        Discipline *child = (current->left != NULL) ? current->left : current->right;
-
-        if (parent == NULL) // Se o nó é a raiz
-            *root = child;
-        else if (parent->right == current)
-            parent->right = child;
-        else
-            parent->left = child;
-
-        free(current);
-    }
+    else
+        RAISE_ERROR("remove discipline, discipline code not found");
 }
 
 void show_disciplines(Discipline *root)

@@ -9,18 +9,18 @@
 int main()
 {
     // ESTUDENT EXAMPLE
-    CourseTree *tree = create_course_tree();
-    register_course(&tree->root);
-    Student_list *list = create_student_list();
-    register_student(list, tree->root);
-    register_student(list, tree->root);
-    register_student(list, tree->root);
-    register_student(list, tree->root);
-    register_student(list, tree->root);
+    // CourseTree *tree = create_course_tree();
+    // register_course(&tree->root);
+    // Student_list *list = create_student_list();
+    // register_student(list, tree->root);
+    // register_student(list, tree->root);
+    // register_student(list, tree->root);
+    // register_student(list, tree->root);
+    // register_student(list, tree->root);
 
-    show_students_by_course(list, 1234);
-    deallocate_student_list(list);
-    deallocate_course_tree(tree->root);
+    // show_students_by_course(list, 1234);
+    // deallocate_student_list(list);
+    // deallocate_course_tree(tree->root);
 
     // COURSE EXAMPLE
     // CourseTree *tree = create_course_tree();
@@ -47,7 +47,7 @@ int main()
     // register_discipline(&tree->root->discipline_tree->root, tree->root);
     // register_discipline(&tree->root->discipline_tree->root, tree->root);
     // register_student(list, tree->root);
-    // // register_student(list, tree);
+    // register_student(list, tree);
     // register_grade(&list->first);
     // register_grade(&list->first);
     // register_grade(&list->first);
@@ -59,6 +59,9 @@ int main()
     // show_history(list->first, tree->root->discipline_tree->root, 1);
     // deallocate_student_list(list);
     // deallocate_course_tree(tree);
+    
+
+    // enrol test
     
 
     return 0;

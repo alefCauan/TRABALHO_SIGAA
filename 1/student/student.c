@@ -131,57 +131,57 @@ void register_student(Student_list *list, Course *courses)
 {
     char temp[50];
 
-    if(!CHECK_ALL_TRUE(list, list->first))
-        RAISE_ERROR("register_student, Studentlist not valid or allocate");
-
-    else if(courses != NULL && courses->course_code != 0)
+    if(list && courses)
     {
-        Student *new = allocate_student(), *aux = list->first, *prev = NULL;
-
-        setbuf(stdin, NULL);
-        printf("Student name: ");
-        scanf("%[^\n]", temp);
-        strcpy(new->name, temp);
-
-        do {
-            printf("course code: ");
-            scanf("%d", &new->course_code);
-        } while(!search_course_code(courses, new->course_code));
-
-        new->registration = GET_REGISTRATION(new->course_code);
-        enroll_period(&new->enrol_tree->root, courses->discipline_tree->root, 1); // TODO: optional
-
-        // Se a lista estiver vazia
-        if(list->first == NULL)
+        if(courses != NULL && courses->course_code != 0)
         {
-            list->first = new;
-            return;
-        }
+            Student *new = allocate_student(), *aux = list->first, *prev = NULL;
 
-        // Inserção em ordem alfabética
-        while(aux != NULL && is_alphabetical(aux->name, new->name))
-        {
-            prev = aux;
-            aux = aux->next;
-        }
+            setbuf(stdin, NULL);
+            printf("Student name: ");
+            scanf("%[^\n]", temp);
+            strcpy(new->name, temp);
 
-        // Inserção no início
-        if(prev == NULL)
-        {
-            new->next = list->first;
-            list->first = new;
+            do {
+                printf("course code: ");
+                scanf("%d", &new->course_code);
+            } while(!search_course_code(courses, new->course_code));
+
+            new->registration = GET_REGISTRATION(new->course_code);
+            
+            enroll_period(&new->enrol_tree->root, courses->discipline_tree->root, 1); // TODO: optional
+
+            // Se a lista estiver vazia
+            if(list->first == NULL)
+            {
+                list->first = new;
+                return;
+            }
+            // Inserção em ordem alfabética
+            while(aux != NULL && is_alphabetical(aux->name, new->name))
+            {
+                prev = aux;
+                aux = aux->next;
+            }
+            // Inserção no início
+            if(prev == NULL)
+            {
+                new->next = list->first;
+                list->first = new;
+            }
+            else
+            {
+                new->next = aux;
+                prev->next = new;
+            }
         }
         else
-        {
-            new->next = aux;
-            prev->next = new;
-        }
+            RAISE_ERROR("register student, there is no courses in the campus");
     }
-    else
-        RAISE_ERROR("register student, there is no courses in the campus");
+
 }
 
-void show_students_by_course(Student_list *list, int course_code) // TODO: bring course
+void show_students_by_course(Student_list *list, int course_code)
 {    
     if(list != NULL && list->first != NULL)
     {
@@ -236,7 +236,9 @@ Grade *insert_grade(Grade **root, Grade *new)
 
 void register_grade(Student **student)
 {
-    Enrollment *check = NULL;
+    Enrollment *check;
+    check = NULL;
+
     int discipline_code = 0, semester = 0;
     float score = 0.0f;
 
@@ -270,7 +272,7 @@ void register_grade(Student **student)
         } 
         while (!validf_answer(0, 10, score));
 
-        // Validar o semestre (entre 1 e 2, por exemplo)
+        // Validar o semestre (entre 1 e 2)
         do {
             printf("Enter the semester (1 or 2): ");
             scanf("%d", &semester);
@@ -278,7 +280,9 @@ void register_grade(Student **student)
         while (!valid_answer(1, 2, semester));
 
         // A matrícula foi confirmada anteriormente, agora processar a nota
-        Grade *new_grade = allocate_grade();
+        Grade *new_grade;
+        new_grade =  allocate_grade();
+
         new_grade->discipline_code = discipline_code;
         new_grade->final_grade = score;
         new_grade->semester = semester;
