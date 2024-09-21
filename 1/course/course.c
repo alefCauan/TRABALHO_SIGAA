@@ -102,15 +102,18 @@ int get_course_code(Course *root)
 
 Course *insert_course(Course *root, Course *new_course) 
 {
-    if (root == NULL) 
+    if (root == NULL) {
         root = new_course;
-    if (new_course->course_code < root->course_code) 
+        printf("Course has been registered with code %d!\n", root->course_code);
+    
+    }
+    else if (new_course->course_code < root->course_code) 
         root->left = insert_course(root->left, new_course);
     else if (new_course->course_code > root->course_code) 
         root->right = insert_course(root->right, new_course);
-    else
+    else{
         printf("Course with code %d already exists!\n", root->course_code);
-    
+    }
     return root;
 }
 
@@ -124,7 +127,7 @@ void register_course(Course **root)
     // Recebe os dados do curso
     // printf("Enter course code: ");
     // scanf("%d", &new->course_code);
-    new->course_code == GET_COURSE_CODE(*root); 
+    new->course_code = GET_COURSE_CODE(*root); 
     
     printf("Enter course name: ");
     setbuf(stdin, NULL);

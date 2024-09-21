@@ -53,10 +53,4 @@ rm *.o
 # Mostrar mensagem de sucesso
 echo "COMPILAÇÃO BEM SUCEDIDA"
 
-# Roda o programa
-gdb ./$OUT
 
-# valgrind --leak-check=full ./sigaa_program
-# tui enable 
-# Remover o executável (opcional)
-# rm $OUT
