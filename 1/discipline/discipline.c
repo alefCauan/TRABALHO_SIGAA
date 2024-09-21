@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 #include "discipline.h"
 #include "../error.h"
 
@@ -24,7 +25,7 @@ Discipline_Tree *create_discipline_tree()
     Discipline_Tree *new = (Discipline_Tree *)malloc(sizeof(Discipline_Tree));
     ASSERT_ALLOC(new, "create discipline tree");
 
-    new->root = allocate_discipline();
+    new->root = NULL;
 
     return new;
 }
@@ -75,7 +76,9 @@ Discipline *search_discipline(Discipline *root, int code)
 {
     Discipline *result = NULL;
 
-    if(root->discipline_code == code || root == NULL)
+    if(root == NULL)
+        result = root;
+    else if(root->discipline_code == code)
         result = root;
     else if(code < root->discipline_code)
         result = search_discipline(root->left, code);
@@ -85,14 +88,19 @@ Discipline *search_discipline(Discipline *root, int code)
     return result;
 }
 
-// Função que retorna um número incrementado a cada chamada
-int get_code() 
+int get_disc_code(Discipline *root, int course_code)
 {
-    static int discipline_code = 0; 
-    // char str[20];
-    // sprintf(str, "%d%d%04d"); // TODO: course code + static value  
+    char str[20];
+    srand(time(0));
+    int random = 0;
 
-    return discipline_code++;
+    do {
+        random = rand() % 99;
+        sprintf(str, "%d%02d", course_code, random); 
+    } 
+    while(search_discipline(root, atoi(str)));
+
+    return atoi(str); 
 }
 
 Discipline *insert_discipline(Discipline *root, Discipline *new_subject) 
@@ -103,6 +111,8 @@ Discipline *insert_discipline(Discipline *root, Discipline *new_subject)
         root->left = insert_discipline(root->left, new_subject);
     else if (new_subject->discipline_code > root->discipline_code) 
         root->right = insert_discipline(root->right, new_subject);
+    else
+        RAISE_ERROR("insert discipline, this code already exists");
 
     return root;
 }
@@ -122,9 +132,8 @@ void register_discipline(Discipline **root, Course *course)
         scanf("%[^\n]", new->discipline_name);
     } 
     while(search_disc_name((*root), new->discipline_name));
-    
 
-    new->discipline_code = GET_DISCIPLINE_CODE();
+    new->discipline_code = GET_DISCIPLINE_CODE(*root, course->course_code);
 
     do {
         printf("---------- WORKLOAD ----------\n1 - 30 hours\n2 - 60 hours\n3 - 90 hours\n");
@@ -150,7 +159,7 @@ void register_discipline(Discipline **root, Course *course)
     while(!valid_answer(1, course->num_periods, temp));
     new->period = temp;
 
-    insert_discipline(*root, new);
+    *root = insert_discipline(*root, new);
     
     printf("Discipline successfully registered!\n");
 }

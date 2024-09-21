@@ -4,7 +4,7 @@
 #include <stdbool.h>
 #include "../course/course.h"
 // gera um codigo da disciplina 
-#define GET_DISCIPLINE_CODE() (get_code() + 1)
+#define GET_DISCIPLINE_CODE(root, code) (get_disc_code(root, code))
 
 // enum para a carga horaria 
 typedef enum {
@@ -40,7 +40,7 @@ bool search_disc_name(Discipline *root, const char *name);
 // busca uma disciplina com um certo codigo e a retorna se encontrar 
 Discipline *search_discipline(Discipline *root, int code);
 // Função que retorna um codigo de disciplina 
-int get_code();
+int get_disc_code(Discipline *root, int course_code);
 // auxiliar de regirter discipline 
 Discipline *insert_discipline(Discipline *root, Discipline *new_discipline);
 // função de adicionar disciplinas 

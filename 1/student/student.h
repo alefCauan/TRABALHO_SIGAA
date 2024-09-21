@@ -45,8 +45,6 @@ void deallocate_grade(Grade *grade);
 void deallocate_student(Student *student);
 // desaloca toda a lista de estudantes 
 void deallocate_student_list(Student_list *list);
-// retorna o ano atual
-int get_current_year();
 // gerar a matricula do aluno
 int get_registration(int course_code);
 // retorna um node de grade que possui um codigo de disciplina especifico, se houver

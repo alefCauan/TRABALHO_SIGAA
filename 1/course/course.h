@@ -5,6 +5,8 @@
 typedef struct Discipline Discipline;
 typedef struct Discipline_Tree Discipline_Tree;
 
+#define GET_COURSE_CODE(root) (get_course_code(root))
+
 typedef struct Course {
     int course_code;
     char course_name[50];
@@ -26,8 +28,12 @@ CourseTree *create_course_tree();
 void deallocate_course(Course *course);
 // desaloca todos os elementos da arvore
 void deallocate_course_tree(Course *tree);
+// retorna o ano atual
+int get_current_year();
 // busca o codigo de curso e retorna o curso com aquele codigo
 Course *search_course_code(Course *root, int code);
+// retorna um novo codigo de curso
+int get_course_code(Course *root);
 // auxiliar de register course
 Course *insert_course(Course *root, Course *new_course);
 // adiciona um novo curso na arvore

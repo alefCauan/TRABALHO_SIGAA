@@ -22,7 +22,7 @@ Enrollment_Tree *create_enrollment_tree()
     Enrollment_Tree *new = (Enrollment_Tree *)malloc(sizeof(Enrollment_Tree));
     ASSERT_ALLOC(new, "create enrollment tree");
 
-    new->root = allocate_enrollment();
+    new->root = NULL;
 
     return new;
 }
@@ -68,11 +68,11 @@ Enrollment *insert_enrol(Enrollment *root, Enrollment *new)
 {
     
     if (root == NULL) 
-        root = new;  // Se a raiz estiver vazia, atribui o novo nó
+        root = new;  
     else if (new->discipline_code < root->discipline_code) 
-        root->left = insert_enrol(root->left, new);  // Insere à esquerda se o código for menor
+        root->left = insert_enrol(root->left, new);  
     else if (new->discipline_code > root->discipline_code) 
-        root->right = insert_enrol(root->right, new);  // Insere à direita se o código for maior
+        root->right = insert_enrol(root->right, new);  
     else 
         RAISE_ERROR("insert enrol, code already inserted");  // Código já existe
 
@@ -81,14 +81,10 @@ Enrollment *insert_enrol(Enrollment *root, Enrollment *new)
 
 void register_enrollment(Enrollment **root, int discipline_code)
 {
-    // TODO: change
     Enrollment *new = allocate_enrollment();
     new->discipline_code = discipline_code;
 
-    if (*root == NULL || (*root)->discipline_code == 0)
-        *root = new;  // Atualiza a raiz corretamente
-    else
-        *root = insert_enrol(*root, new);
+    *root = insert_enrol(*root, new);
 }
 
 void remove_enrollment(Enrollment **head, int discipline_code)

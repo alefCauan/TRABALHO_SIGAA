@@ -1,11 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 #include "course.h"
 // #include "../subject/subjetc.h"
 #include "../error.h"
 #include "../discipline/discipline.h"
-
 
 Course *allocate_course() 
 {
@@ -26,10 +26,10 @@ Course *allocate_course()
 
 CourseTree *create_course_tree() 
 {
-    CourseTree *tree = (CourseTree*) malloc(sizeof(CourseTree));
+    CourseTree *tree = (CourseTree *) malloc(sizeof(CourseTree));
     ASSERT_ALLOC(tree, "create couse tree");
 
-    tree->root = allocate_course();
+    tree->root = NULL;
     
     return tree;
 }
@@ -61,6 +61,15 @@ void deallocate_course_tree(Course *root)
     }
 }
 
+int get_current_year() 
+{
+    time_t t = time(NULL);         
+    struct tm *tm_info = localtime(&t); 
+
+    int year = tm_info->tm_year + 1900; 
+    return year;
+}
+
 Course *search_course_code(Course *root, int code)
 {
     Course *result;
@@ -76,14 +85,25 @@ Course *search_course_code(Course *root, int code)
     return result;
 }
 
-// TODO: change
+int get_course_code(Course *root)
+{
+    char str[20];
+    srand(time(0));
+    int random = 0;
+
+    do {
+        random = rand() % 9999;
+        sprintf(str, "%d%04d", get_current_year()%100, random);
+    } 
+    while(search_course_code(root, atoi(str)));
+
+    return atoi(str); 
+}
+
 Course *insert_course(Course *root, Course *new_course) 
 {
-    // Se a árvore estiver vazia, o novo curso se torna a raiz
     if (root == NULL) 
-        return new_course;
-
-    // Compara o código do curso para posicioná-lo corretamente na árvore
+        root = new_course;
     if (new_course->course_code < root->course_code) 
         root->left = insert_course(root->left, new_course);
     else if (new_course->course_code > root->course_code) 
@@ -102,9 +122,9 @@ void register_course(Course **root)
     ASSERT_ALLOC(new, "register course");
 
     // Recebe os dados do curso
-    printf("Enter course code: ");
-    scanf("%d", &new->course_code);
-    // new->course_code == GET_CODE(); 
+    // printf("Enter course code: ");
+    // scanf("%d", &new->course_code);
+    new->course_code == GET_COURSE_CODE(*root); 
     
     printf("Enter course name: ");
     setbuf(stdin, NULL);
@@ -116,9 +136,7 @@ void register_course(Course **root)
     } 
     while(!valid_answer(1, 8, new->num_periods));
     
-    //TODO: change
-    // Insere o curso na árvore de cursos
-    (root == NULL) ? insert_course(*root, new) : (*root = new);
+    *root = insert_course(*root, new); 
     
     printf("Course successfully registered!\n");
 }
