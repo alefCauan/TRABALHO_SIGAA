@@ -24,9 +24,9 @@ Course *allocate_course()
     return new_course;
 }
 
-CourseTree *create_course_tree() 
+Course_tree *create_course_tree() 
 {
-    CourseTree *tree = (CourseTree *) malloc(sizeof(CourseTree));
+    Course_tree *tree = (Course_tree *) malloc(sizeof(Course_tree));
     ASSERT_ALLOC(tree, "create couse tree");
 
     tree->root = NULL;

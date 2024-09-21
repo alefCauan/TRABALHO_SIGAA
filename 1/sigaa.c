@@ -9,7 +9,7 @@
 int main()
 {
     // ESTUDENT EXAMPLE
-    // CourseTree *tree = create_course_tree();
+    // Course_tree *tree = create_course_tree();
     // register_course(&tree->root);
     // Student_list *list = create_student_list();
     // register_student(list, tree->root);
@@ -22,15 +22,15 @@ int main()
     // deallocate_student_list(list);
     // deallocate_course_tree(tree->root);
 
-    // COURSE EXAMPLE
-    // CourseTree *tree = create_course_tree();
+    /////////// COURSE EXAMPLE ///////////////
+    // Course_tree *tree = create_course_tree();
     // register_course(&tree->root);
     // register_course(&tree->root);
     // show_courses(tree->root);
-    // deallocate_course_tree(tree);
+    // deallocate_course_tree(tree->root);
     
-    // DISCIPLINE EXAMPLE
-    // CourseTree *tree = create_course_tree();
+    /////// DISCIPLINE EXAMPLE ////////////
+    // Course_tree *tree = create_course_tree();
     // register_course(&tree->root);
     // Discipline_Tree *discipline = create_discipline_tree();
     // register_discipline(&discipline->root, tree->root);
@@ -40,14 +40,16 @@ int main()
     // deallocate_course_tree(tree->root);
     // deallocate_discipline_tree(discipline->root);
 
-    // CourseTree *tree = create_course_tree();
-    // StudentList *list = create_student_list();
+
+    ////////// Grade example /////////////
+    // Course_tree *tree = create_course_tree();
+    // Student_list *list = create_student_list();
     // register_course(&tree->root);
     // register_discipline(&tree->root->discipline_tree->root, tree->root);
     // register_discipline(&tree->root->discipline_tree->root, tree->root);
     // register_discipline(&tree->root->discipline_tree->root, tree->root);
     // register_student(list, tree->root);
-    // register_student(list, tree);
+    // register_student(list, tree->root);
     // register_grade(&list->first);
     // register_grade(&list->first);
     // register_grade(&list->first);
@@ -58,11 +60,22 @@ int main()
     // printf("///////////////\n");
     // show_history(list->first, tree->root->discipline_tree->root, 1);
     // deallocate_student_list(list);
-    // deallocate_course_tree(tree);
+    // deallocate_course_tree(tree->root);
     
 
-    // enrol test
+    /////////// enrollment example //////////
+    // Enrollment_Tree *matriculas = create_enrollment_tree();
+
+    // int vet[] = {10, 6, 8, 1, 2, 5, 7};
+
+    // for(int i = 0; i < 7; i++)
+    //     register_enrollment(&matriculas->root, vet[i]);
+        
+    // show(matriculas->root);
+    // remove_enrollment(&matriculas->root, 10);
+    // show(matriculas->root);
     
+    // free(matriculas);
 
     return 0;
 }

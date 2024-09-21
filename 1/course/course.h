@@ -16,18 +16,18 @@ typedef struct Course {
     struct Course *right; 
 } Course;
 // raiz de Course 
-typedef struct CourseTree {
+typedef struct Course_tree {
     Course *root;
-} CourseTree;
+} Course_tree;
 
 // aloca memoria para a stuct course
 Course *allocate_course();
 // aloca memoria para a raiz da stuct course
-CourseTree *create_course_tree();
+Course_tree *create_course_tree();
 // desaloca 1 elemento de course
 void deallocate_course(Course *course);
 // desaloca todos os elementos da arvore
-void deallocate_course_tree(Course *tree);
+void deallocate_course_tree(Course *root);
 // retorna o ano atual
 int get_current_year();
 // busca o codigo de curso e retorna o curso com aquele codigo
