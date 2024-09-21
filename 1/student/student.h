@@ -49,6 +49,7 @@ void deallocate_student_list(Student_list *list);
 int get_registration(int course_code);
 // retorna um node de grade que possui um codigo de disciplina especifico, se houver
 Grade *search_grade(Grade *root, int discipline_code);
+Student *search_student_by_registration(Student *first, int registration);
 // auxiliar de regirster grade
 Grade *insert_grade(Grade **root, Grade *new);
 // adiciona notas de estudantes 

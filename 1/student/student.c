@@ -114,7 +114,7 @@ int get_registration(int course_code)
     static int enrol_code = 0; 
     char str[20];
 
-    sprintf(str, "%d%04d", course_code, enrol_code++); 
+    sprintf(str, "%d%d", course_code, enrol_code++); 
     return atoi(str); 
 }
 
@@ -205,6 +205,18 @@ Grade *search_grade(Grade *root, int discipline_code)
     }
     
     return result;  
+}
+Student *search_student_by_registration(Student *first, int registration) {
+    Student *found_student = NULL;
+
+    while (first != NULL) {
+        if (first->registration == registration) {
+            found_student = first; 
+        }
+        first = first->next; 
+    }
+
+    return found_student;
 }
 
 Grade *insert_grade(Grade **root, Grade *new)
