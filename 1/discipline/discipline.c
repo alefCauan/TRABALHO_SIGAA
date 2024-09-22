@@ -117,7 +117,6 @@ Discipline *insert_discipline(Discipline *root, Discipline *new_subject)
     return root;
 }
 
-
 void register_discipline(Discipline **root, Course *course)
 {
     int temp = 0;

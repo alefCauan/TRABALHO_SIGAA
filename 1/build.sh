@@ -50,6 +50,10 @@ gcc -g course.o enrollment.o student.o discipline.o sigaa.o error.o -o $OUT
 # Limpar os arquivos .o (opcional)
 rm *.o
 
+./$OUT
+
+# valgrind --leak-check=full ./sigaa_program
+# tui enable 
 # Mostrar mensagem de sucesso
 echo "COMPILAÇÃO BEM SUCEDIDA"
 

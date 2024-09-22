@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
-// #include "sigaa.h"
-// #include "student/student.h"
+#include "sigaa.h"
 #include "course/course.h"
+#include "error.h"
 #include "discipline/discipline.h"
 #include "enrollment/enrollment.h"
 
@@ -33,249 +33,265 @@
 // xv) Mostrar o histórico de um determinado aluno, contendo o nome do curso, as disciplinas e sua respectiva
 // nota organizadas pelo período que a disciplina está cadastrada no curso.[] 
 
-    void course_menu(Course_tree *course_tree);
-    void student_menu(Student_list *student_list, Course_tree *course_tree);
-    void discipline_menu(Course_tree *course_tree, Student_list *student_list);
 
-    void show_general_menu() {
-        printf("Menu Geral:\n");
-        printf("1. Gerenciar Cursos\n");
-        printf("2. Gerenciar Alunos\n");
-        printf("3. Gerenciar Disciplinas\n");
-        printf("4. Sair\n");
-    }
+int main() 
+{
+    Course_tree *course_tree = create_course_tree();
+    Student_list *student_list = create_student_list();
 
-    int main() {
-        Course_tree *course_tree = create_course_tree();
-        Student_list *student_list = create_student_list();
+    main_menu(course_tree, student_list);
 
-        int choice;
-        do {
-            show_general_menu();
-            printf("Escolha uma opção: ");
-            scanf("%d", &choice);
-
-            switch (choice) {
-                case 1:
-                    course_menu(course_tree);
-                    break;
-                case 2:
-                    student_menu(student_list, course_tree);
-                    break;
-                case 3:
-                    discipline_menu(course_tree, student_list);
-                    break;
-                case 4:
-                    printf("Saindo...\n");
-                    break;
-                default:
-                    printf("Opção inválida. Tente novamente.\n");
-            }
-        } while (choice != 4);
-
-        // Libere a memória aqui
-        deallocate_course_tree(course_tree->root);
-        deallocate_student_list(student_list);
-
-        return 0;
-    }
-
-    void course_menu(Course_tree *course_tree) {
-        int choice;
-        do {
-            printf("\nMenu de Cursos:\n");
-            printf("1. Cadastrar Curso\n");
-            printf("2. Mostrar Cursos\n");
-            printf("3. Retornar ao Menu Geral\n");
-            printf("Escolha uma opção: ");
-            scanf("%d", &choice);
-
-            switch (choice) {
-                case 1:
-                    register_course(&course_tree->root);
-                    break;
-                case 2:
-                    show_courses(course_tree->root);
-                    break;
-                case 3:
-                    printf("Retornando ao Menu Geral...\n");
-                    break;
-                default:
-                    printf("Opção inválida. Tente novamente.\n");
-            }
-        } while (choice != 3);
-    }
-    void student_menu(Student_list *student_list, Course_tree *course_tree) {
-        int choice;
-        do {
-            printf("\nMenu de Alunos:\n");
-            printf("1. Cadastrar Aluno\n");
-            printf("2. Mostrar Alunos por Curso\n");
-            printf("3. Matricular Aluno em Disciplina\n");
-            printf("4. Retornar ao Menu Geral\n");
-            printf("Escolha uma opção: ");
-            scanf("%d", &choice);
-
-            switch (choice) {
-                case 1: {
-                    int course_code;
-                    printf("Digite o código do curso: ");
-                    scanf("%d", &course_code);
-                    Course *course = search_course_code(course_tree->root, course_code);
-                    if (course) {
-                        register_student(student_list, course);
-                    } else {
-                        printf("Curso não encontrado.\n");
-                    }
-                    break;
-                }
-                case 2: {
-                    int course_code;
-                    printf("Digite o código do curso: ");
-                    scanf("%d", &course_code);
-                    show_students_by_course(student_list, course_code);
-                    break;
-                }
-                case 3: {
-                    int student_registration, course_code, discipline_code;
-                    
-                    printf("Digite a matrícula do aluno: ");
-                    scanf("%d", &student_registration);
-
-                    Student *student = search_student_by_registration(student_list->first, student_registration);
-                    if (student == NULL) {
-                        printf("Aluno não encontrado.\n");
-                        break;
-                    }
-
-                    printf("Digite o código do curso: ");
-                    scanf("%d", &course_code);
-                    Course *course = search_course_code(course_tree->root, course_code);
-                    if (course == NULL) {
-                        printf("Curso não encontrado.\n");
-                        break;
-                    }
-
-                    printf("Digite o código da disciplina: ");
-                    scanf("%d", &discipline_code);
-                    Discipline *discipline = search_discipline(course->discipline_tree->root, discipline_code);
-                    if (discipline == NULL) {
-                        printf("Disciplina não encontrada no curso.\n");
-                        break;
-                    }
-
-                    register_enrollment(&student->enrol_tree->root, discipline_code);
-                    printf("Aluno matriculado na disciplina com sucesso.\n");
-
-                    break;
-                }
-                case 4:
-                    printf("Retornando ao Menu Geral...\n");
-                    break;
-                default:
-                    printf("Opção inválida. Tente novamente.\n");
-            }
-        } while (choice != 4);
-    }
-
-    void discipline_menu(Course_tree *course_tree, Student_list *student_list) {
-        int choice;
-        do {
-            printf("\nMenu de Disciplinas:\n");
-            printf("1. Cadastrar Disciplina\n");
-            printf("2. Mostrar Disciplinas por Curso\n");
-            printf("3. Mostrar Disciplinas por Período\n");
-            printf("4. Mostrar Disciplinas de um Aluno\n");
-            printf("5. Mostrar Notas de Disciplinas de um Aluno\n");
-            printf("6. Mostrar Nota de uma Disciplina de um Aluno\n");
-            printf("7. Retornar ao Menu Geral\n");
-            printf("Escolha uma opção: ");
-            scanf("%d", &choice);
-
-            switch (choice) {
-                case 1: {
-                    int course_code;
-                    printf("Digite o código do curso: ");
-                    scanf("%d", &course_code);
-                    Course *course = search_course_code(course_tree->root, course_code);
-                    if (course) {
-                        register_discipline(&course->discipline_tree->root, course);
-                    } else {
-                        printf("Curso não encontrado.\n");
-                    }
-                    break;
-                }
-                case 2: {
-                    int course_code;
-                    printf("Digite o código do curso: ");
-                    scanf("%d", &course_code);
-                    Course *course = search_course_code(course_tree->root, course_code);
-                    if (course) {
-                        show_disciplines(course->discipline_tree->root);
-                    } else {
-                        printf("Curso não encontrado.\n");
-                    }
-                    break;
-                }
-                case 3: {
-                    int course_code, period;
-                    printf("Digite o código do curso: ");
-                    scanf("%d", &course_code);
-                    Course *course = search_course_code(course_tree->root, course_code);
-                    if (course) {
-                        printf("Digite o período: ");
-                        scanf("%d", &period);
-                        show_disciplines_by_period(course->discipline_tree->root, period);
-                    } else {
-                        printf("Curso não encontrado.\n");
-                    }
-                    break;
-                }
-                case 4: {
-                    int student_registration;
-                    printf("Digite a matrícula do aluno: ");
-                    scanf("%d", &student_registration);
-                    Student *student = search_student_by_registration(student_list->first, student_registration);
-                    if (student) {
-                        show_enrolled_disciplines(student->enrol_tree->root, student->grade_tree->root);
-                    } else {
-                        printf("Aluno não encontrado.\n");
-                    }
-                    break;
-                }
-                case 5: {
-                    int student_registration, period;
-                    printf("Digite a matrícula do aluno: ");
-                    scanf("%d", &student_registration);
-                    Student *student = search_student_by_registration(student_list->first, student_registration);
-                    if (student) {
-                        printf("Digite o período: ");
-                        scanf("%d", &period);
-                        show_grades(student, student->grade_tree->root, period);
-                    } else {
-                        printf("Aluno não encontrado.\n");
-                    }
-                    break;
-                }
-                case 6: {
-                    int student_registration, discipline_code;
-                    printf("Digite a matrícula do aluno: ");
-                    scanf("%d", &student_registration);
-                    printf("Digite o código da disciplina: ");
-                    scanf("%d", &discipline_code);
-                    Student *student = search_student_by_registration(student_list->first, student_registration);
-                    if (student) {
-                        show_grades(student, student->grade_tree->root, discipline_code);
-                    } else {
-                        printf("Aluno não encontrado.\n");
-                    }
-                    break;
-                }
-                case 7:
-                    printf("Retornando ao Menu Geral...\n");
-                    break;
-                default:
-                    printf("Opção inválida. Tente novamente.\n");
-            }
-        } while (choice != 7);
+    deallocate_course_tree(course_tree->root);
+    free(course_tree);
+    deallocate_student_list(student_list);
+    return 0;
 }
+
+void main_menu(Course_tree *course_tree, Student_list *student_list) 
+{
+    int option;
+    do {
+        printf("\n---- MAIN MENU ----\n");
+        printf("1 - Manage Courses\n");
+        printf("2 - Manage Students\n");
+        printf("3 - Exit\n");
+        printf("Enter choice -> ");
+        scanf("%d", &option);
+
+        switch (option) 
+        {
+            case 1: 
+                course_menu(course_tree); 
+                break;
+            case 2: 
+                student_menu(student_list, course_tree); 
+                break;
+            case 3: 
+                printf("\nExiting...\n"); 
+                break;
+            default: break;
+        }
+    } 
+    while(!valid_answer(1, 3, option) || option != 3);
+}
+
+void course_menu(Course_tree *course_tree) 
+{
+    int option;
+    do {
+        printf("\n---- COURSE MENU ----\n");
+        printf("1 - Register a Course\n");
+        printf("2 - Show All Courses\n");
+        printf("3 - Manage Disciplines\n");
+        printf("4 - Back to Main Menu\n");
+        printf("Enter choice -> ");
+        scanf("%d", &option);
+
+        switch (option) 
+        {
+            case 1: 
+                register_course(&course_tree->root); 
+                break;
+            case 2: 
+                show_courses(course_tree->root); 
+                break;
+            case 3: 
+                int course_code;
+
+                printf("Enter course code -> ");
+                scanf("%d", &course_code);
+
+                Course *course = search_course_code(course_tree->root, course_code);
+
+                if (course) 
+                    discipline_menu(course);
+                else 
+                    RAISE_ERROR("input data, course not found!");
+
+                break;
+            case 4: 
+                printf("\nReturning to Main Menu...\n"); 
+                break;
+            default: break;
+        }
+    } 
+    while(!valid_answer(1, 4, option) || option != 4);
+}
+
+void discipline_menu(Course *course) 
+{
+    int option;
+    do {
+        printf("\n---- DISCIPLINE MENU ----\n");
+        printf("1 - Register a Discipline\n");
+        printf("2 - Show All Disciplines\n");
+        printf("3 - Remove a Discipline\n");
+        printf("4 - Show Disciplines by Period\n");
+        printf("5 - Back to Course Menu\n");
+        printf("Enter choice -> ");
+        scanf("%d", &option);
+
+        switch (option) 
+        {
+            case 1:
+                register_discipline(&course->discipline_tree->root, course); 
+                break;
+            case 2:
+                show_disciplines(course->discipline_tree->root); 
+                break;
+            case 3: 
+                int discipline_code;
+
+                printf("Enter discipline code to remove -> ");
+                scanf("%d", &discipline_code);
+
+                remove_discipline(&course->discipline_tree->root, discipline_code);
+                break;
+            case 4: 
+                int period;
+
+                printf("Enter period -> ");
+                scanf("%d", &period);
+
+                show_disciplines_by_period(course->discipline_tree->root, period);
+                break;
+            case 5: 
+                printf("Returning to Course Menu...\n"); 
+                break;
+            default: break;
+        }
+    } 
+    while(!valid_answer(1, 5, option) || option != 5);
+}
+
+void student_menu(Student_list *student_list, Course_tree *course_tree) 
+{
+    int option;
+    do {
+        printf("\n--- STUDENT MENU ---\n");
+        printf("1. Register a Student\n");
+        printf("2. Show Students by Course\n");
+        printf("3. Register Grades\n");
+        printf("4. Show Student Grades\n");
+        printf("5. Show Enrollment History\n");
+        printf("6. Student enrollment\n");
+        printf("7. Back to Main Menu\n");
+        printf("Enter choice -> ");
+        scanf("%d", &option);
+
+        switch (option) 
+        {
+            case 1:
+                register_student(student_list, course_tree->root);
+                break;
+            case 2: 
+                int course_code;
+
+                printf("Enter course code -> ");
+                scanf("%d", &course_code);
+
+                show_students_by_course(student_list, course_code);
+                break;
+            case 3: 
+            {
+                int registration;
+
+                printf("Enter student registration -> ");
+                scanf("%d", &registration);
+
+                Student *student = search_student_by_registration(student_list->first, registration);
+
+                if (student) 
+                    register_grade(&student);
+                else 
+                    RAISE_ERROR("input data, student not found!");
+
+                break;
+            }
+            case 4: 
+            {
+                int registration, period;
+
+                printf("Enter student registration -> ");
+                scanf("%d", &registration);
+
+                Student *student = search_student_by_registration(student_list->first, registration);
+
+                if (student) 
+                {
+                    printf("enter enrollment period -> ");
+                    scanf("%d", &period);
+
+                    Course *course = search_course_code(course_tree->root, student->course_code);
+
+                    if (course) 
+                        show_grades(student, course->discipline_tree->root, period);
+                    else 
+                        RAISE_ERROR("input data, course not found!");
+                } 
+                else 
+                    RAISE_ERROR("input data, student not found!");
+                
+                break;
+            }
+            case 5: 
+            {
+                int registration;
+
+                printf("Enter student registration -> ");
+                scanf("%d", &registration);
+
+                Student *student = search_student_by_registration(student_list->first, registration);
+
+                if (student) 
+                {
+                    Course *course = search_course_code(course_tree->root, student->course_code);
+
+                    if (course) 
+                    {
+                        /////////////////////////////////////////////
+                        for(int i = 1; i <= course->num_periods; i++)
+                            show_history(student, course->discipline_tree->root, i);
+                    } 
+                    else 
+                        RAISE_ERROR("input data, course not found!");
+
+                } 
+                else 
+                    RAISE_ERROR("input data, student not found!");
+                break;
+            }
+            case 6: 
+            {
+                int registration;
+
+                printf("Enter student registration -> ");
+                scanf("%d", &registration);
+
+                Student *student = search_student_by_registration(student_list->first, registration);
+
+                if(student)
+                {
+                    Course *check = search_course_code(course_tree->root, student->course_code);
+
+                    if(check)
+                    {
+                        show_enrolled_disciplines(student->enrol_tree->root, check->discipline_tree->root);
+                    }
+                }
+                else
+                    RAISE_ERROR("input data, stduent not found!");
+                
+                break;
+            }
+            case 7:
+                printf("\nReturning to Main Menu...\n");
+                break;
+            default: break;
+        }
+    } 
+    while(!valid_answer(1, 7, option) || option != 7);
+}
+
+
+

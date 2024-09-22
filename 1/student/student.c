@@ -206,13 +206,16 @@ Grade *search_grade(Grade *root, int discipline_code)
     
     return result;  
 }
-Student *search_student_by_registration(Student *first, int registration) {
+
+Student *search_student_by_registration(Student *first, int registration) 
+{
     Student *found_student = NULL;
 
-    while (first != NULL) {
-        if (first->registration == registration) {
+    while (first != NULL) 
+    {
+        if (first->registration == registration) 
             found_student = first; 
-        }
+        
         first = first->next; 
     }
 
@@ -242,7 +245,7 @@ void register_grade(Student **student)
     float score = 0.0f;
 
     // Loop até encontrar uma matrícula válida ou o usuário decidir sair
-    while (check == NULL || discipline_code != -1)
+    while (discipline_code != -1 && check == NULL)
     {
         printf("Enter the discipline code (or -1 to exit): ");
         scanf("%d", &discipline_code);
@@ -333,9 +336,12 @@ void show_history(Student *student, Discipline *root, int period)
     {
         Grade *show = search_grade(student->grade_tree->root, root->discipline_code);
         
-        show_history(student, root->right, period);
-        if(root->period == period)
-            printf("[Score: %.2f, Descipline: %s]\n", show->final_grade, root->discipline_name);
-        show_history(student, root->left, period);
+        if(show)
+        {
+            show_history(student, root->right, period);
+            if(root->period == period)
+                printf("[Score: %.2f, Descipline: %s]\n", show->final_grade, root->discipline_name);
+            show_history(student, root->left, period);
+        }
     }
 }
