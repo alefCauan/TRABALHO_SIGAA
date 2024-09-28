@@ -255,7 +255,6 @@ void student_menu(Student_list *student_list, Course_tree *course_tree)
                     } 
                     else 
                         RAISE_ERROR("input data, course not found!");
-
                 } 
                 else 
                     RAISE_ERROR("input data, student not found!");

@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 
 typedef struct Node {
     int value;
@@ -88,7 +89,7 @@ Node *alloc_node()
     return new;
 }
 
-Node* insertNode(Node* root, int value) 
+Node *insertNode(Node* root, int value) 
 {
     Node *result = &(*root); 
 
@@ -117,9 +118,21 @@ Node* insertNode(Node* root, int value)
         // Caso Esquerda-Esquerda
         if (balance > 1 && value < root->left->value)
             result = rotate_right(root);
-        
-        if(balance < -1 && value > root->right->value)
+            
+        else if(balance < -1 && value > root->right->value)
             result = rotate_left(root);
+
+        else if (balance > 1 && value > root->left->value)
+        {
+            root->left = rotate_left(root->left);
+            result = rotate_right(root);
+        }
+        else if (balance < -1 && value < root->right->value)
+        {
+            root->right = rotate_right(root->right);
+            result = rotate_left(root);
+        }
+
     }
 
     return result;
@@ -130,7 +143,7 @@ int main()
 {
     AVL *tree = (AVL *)malloc(sizeof(AVL));
 
-    int values[] = {7,6, 5, 8, 9, 10};
+    int values[] = {7,5, 6, 8, 9, 10, 11, 12, 4, 20, 21};
     int size = sizeof(values)/sizeof(values[0]);
 
     for(int i = 0; i < size; i++)
