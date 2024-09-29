@@ -41,15 +41,44 @@ bool search_disc_name(Discipline *root, const char *name);
 Discipline *search_discipline(Discipline *root, int code);
 // Função que retorna um codigo de disciplina 
 int get_disc_code(Discipline *root, int course_code);
-// auxiliar de regirter discipline 
+
+// iii) Cadastrar disciplinas a qualquer momento em uma árvore de disciplinas de um determinado curso, ou
+// seja, um disciplina só pode ser cadastrada se o curso já estiver sido cadastrado, além disso, o período da
+// disciplina deve ser válido, ou seja, estar entre 1 e a quantidade máxima de períodos do curso. A carga
+// horária da disciplina deve ser múltiplo de 15, variando entre 30 e 90.
+// {
+
+// insere a nova disicplina da arvore de disciplinas de um curso 
 bool insert_discipline(Discipline **root, Discipline *new_discipline);
-// função de adicionar disciplinas 
+// pega os dados da nova disciplina e chama a inserção
 void register_discipline(Discipline **root, Course *course);
 // remove uma disciplina escolhida do curso 
-void remove_discipline(Discipline **root, int discipline_code);
+
+// } 
+
+// viii)Mostrar todas as disciplinas de um determinado curso.
+// {
+
 // mostra todas as disciplinas 
 void show_disciplines(Discipline *root);
+
+// }
+
+// ix) Mostrar todas as disciplinas de um determinado período de um curso.
+// {
+
 // Mostra todas as disciplinas de um determinado período de um curso
 void show_disciplines_by_period(Discipline *root, int period);
+
+// }
+
+// xiii)Remover uma disciplina de um determinado curso
+// desde que não tenha nenhum aluno matriculado na mesma.
+// {
+
+// remove a disciplina de um curso
+void remove_discipline(Discipline **root, int discipline_code);
+
+// }
 
 #endif

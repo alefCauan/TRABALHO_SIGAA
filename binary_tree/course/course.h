@@ -36,11 +36,25 @@ int get_current_year();
 Course *search_course_code(Course *root, int code);
 // retorna um novo codigo de curso
 int get_course_code(Course *root);
-// auxiliar de register course
+
+// ii) Cadastrar cursos a qualquer momento na árvore de curso, de forma que o usuário não precise cadastrar
+// as disciplinas para permitir o cadastro do curso.
+// {
+
+// insere o novo curso na arvore de curso
 bool insert_course(Course **root, Course *new_course);
-// adiciona um novo curso na arvore
+// pega os dados do novo curso e chama a inserção
 void register_course(Course **root); 
 // mostra todos os cursos
+
+// }
+
+// vii) Mostrar todos os cursos do Campus.
+// {
+
+// mostra todos os cursos cadastrados na arvore
 void show_courses(Course *root);
+
+// }
 
 #endif
