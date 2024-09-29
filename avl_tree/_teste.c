@@ -110,12 +110,8 @@ Node *insertNode(Node* root, int value)
         
         root->height = 1 + max(height(root->left), height(root->right));
 
-        // 3. Obtém o fator de balanceamento deste nó ancestral
         int balance = get_balance(root);
 
-        // 4. Se o nó se tornar desbalanceado, então existem 4 casos
-
-        // Caso Esquerda-Esquerda
         if (balance > 1 && value < root->left->value)
             result = rotate_right(root);
             

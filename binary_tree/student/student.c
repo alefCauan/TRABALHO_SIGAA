@@ -118,51 +118,61 @@ int get_registration(int course_code)
     return atoi(str); 
 }
 
-void register_student(Student_list *list, Course *courses)
+void insert_student(Student_list **list, Student *new_student)
 {
-    char temp[50];
+    Student *aux = (*list)->first;
+    Student *prev;
+    prev = NULL;
 
-    if(list && courses)
+    if ((*list)->first) 
     {
-        Student *new = allocate_student(), *aux = list->first, *prev = NULL;
-
-        setbuf(stdin, NULL);
-        printf("Student name: ");
-        scanf("%[^\n]", temp);
-        strcpy(new->name, temp);
-
-        do {
-            printf("course code: ");
-            scanf("%d", &new->course_code);
-        } while(!search_course_code(courses, new->course_code));
-
-        new->registration = GET_REGISTRATION(new->course_code);
-        
-        enroll_period(&new->enrol_tree->root, courses->discipline_tree->root, 1); // TODO: optional
-
-        // Se a lista estiver vazia
-        if(list->first == NULL)
-        {
-            list->first = new;
-            return;
-        }
         // Inserção em ordem alfabética
-        while(aux != NULL && is_alphabetical(aux->name, new->name))
+        while (aux != NULL && is_alphabetical(aux->name, new_student->name)) 
         {
             prev = aux;
             aux = aux->next;
         }
         // Inserção no início
-        if(prev == NULL)
+        if (prev == NULL) 
         {
-            new->next = list->first;
-            list->first = new;
-        }
-        else
+            new_student->next = (*list)->first;
+            (*list)->first = new_student;
+        } 
+        else 
         {
-            new->next = aux;
-            prev->next = new;
+            new_student->next = aux;
+            prev->next = new_student;
         }
+    }
+    else
+        (*list)->first = new_student;
+}
+
+void register_student(Student_list *list, Course *courses)
+{
+    char temp[50];
+
+    if (list && courses) 
+    {
+        Student *new_student = allocate_student();
+
+        setbuf(stdin, NULL);
+        printf("Student name: ");
+        scanf("%[^\n]", temp);
+        strcpy(new_student->name, temp);
+
+        do {
+            printf("course code: ");
+            scanf("%d", &new_student->course_code);
+        } 
+        while (!search_course_code(courses, new_student->course_code));
+
+        new_student->registration = GET_REGISTRATION(new_student->course_code);
+        
+        enroll_period(&new_student->enrol_tree->root, courses->discipline_tree->root, 1); // TODO: optional
+
+        // Use a função de inserção separada
+        insert_student(&list, new_student);
     }
     else
         RAISE_ERROR("register student, no student lists or course tree");
@@ -170,7 +180,7 @@ void register_student(Student_list *list, Course *courses)
 
 void show_students_by_course(Student_list *list, int course_code)
 {    
-    if(list != NULL && list->first != NULL)
+    if(list && list->first)
     {
         Student *aux = list->first;
 
@@ -222,18 +232,20 @@ Student *search_student_by_registration(Student *first, int registration)
     return found_student;
 }
 
-Grade *insert_grade(Grade **root, Grade *new)
+bool insert_grade(Grade **root, Grade *new)
 {
+    bool result = true;
+
     if (*root == NULL)
         *root = new;
     else if (new->discipline_code < (*root)->discipline_code)
-        insert_grade(&(*root)->left, new);
+        result = insert_grade(&(*root)->left, new);
     else if (new->discipline_code > (*root)->discipline_code)
-        insert_grade(&(*root)->right, new);
+        result = insert_grade(&(*root)->right, new);
     else 
-        RAISE_ERROR("insert grade, discipline code already inserted");
+        result = false;
 
-    return *root; 
+    return result; 
 }
 
 void register_grade(Student **student)
@@ -269,14 +281,14 @@ void register_grade(Student **student)
     {
         // Validar a nota entre 0 e 10
         do {
-            printf("Enter the score: ");
+            printf("Enter the score -> ");
             scanf("%f", &score);
         } 
         while (!validf_answer(0, 10, score));
 
         // Validar o semestre (entre 1 e 2)
         do {
-            printf("Enter the semester (1 or 2): ");
+            printf("Enter the semester (1 or 2) -> ");
             scanf("%d", &semester);
         } 
         while (!valid_answer(1, 2, semester));
@@ -289,8 +301,13 @@ void register_grade(Student **student)
         new_grade->final_grade = score;
         new_grade->semester = semester;
 
-        insert_grade(&(*student)->grade_tree->root, new_grade);  // Insere a nota na árvore de notas
-        remove_enrollment(&(*student)->enrol_tree->root, discipline_code);  // Remove a matrícula correspondente
+        if(!insert_grade(&(*student)->grade_tree->root, new_grade))
+        {
+            RAISE_ERROR("insert grade, discipline code already inserted");
+            deallocate_grade(new_grade);
+        }
+        else 
+            remove_enrollment(&(*student)->enrol_tree->root, discipline_code);  // Remove a matrícula correspondente
 
         printf("Grade registered for discipline [%d] with score %.2f\n", discipline_code, score);
     }

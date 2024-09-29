@@ -64,17 +64,18 @@ Enrollment *search_enrollment(Enrollment *root, int discipline_code)
     return result;  
 }
 
-Enrollment *insert_enrol(Enrollment *root, Enrollment *new)
+bool insert_enrol(Enrollment **root, Enrollment *new)
 {
-    
-    if (root == NULL) 
-        root = new;  
-    else if (new->discipline_code < root->discipline_code) 
-        root->left = insert_enrol(root->left, new);  
-    else if (new->discipline_code > root->discipline_code) 
-        root->right = insert_enrol(root->right, new);  
+    bool result = true;
+
+    if ((*root) == NULL)
+        (*root) = new;  
+    else if (new->discipline_code < (*root)->discipline_code) 
+        result = insert_enrol(&(*root)->left, new);  
+    else if (new->discipline_code > (*root)->discipline_code) 
+        result = insert_enrol(&(*root)->right, new);  
     else 
-        RAISE_ERROR("insert enrol, code already inserted");  // Código já existe
+        result = false;
 
     return root;  
 }
@@ -84,7 +85,11 @@ void register_enrollment(Enrollment **root, int discipline_code)
     Enrollment *new = allocate_enrollment();
     new->discipline_code = discipline_code;
 
-    *root = insert_enrol(*root, new);
+    if (!insert_enrol(root, new))
+    {
+        RAISE_ERROR("insert enrol, code already inserted"); 
+        deallocate_enrollment(new);
+    }
 }
 
 void remove_enrollment(Enrollment **head, int discipline_code)

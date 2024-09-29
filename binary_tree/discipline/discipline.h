@@ -42,7 +42,7 @@ Discipline *search_discipline(Discipline *root, int code);
 // Função que retorna um codigo de disciplina 
 int get_disc_code(Discipline *root, int course_code);
 // auxiliar de regirter discipline 
-Discipline *insert_discipline(Discipline *root, Discipline *new_discipline);
+bool insert_discipline(Discipline **root, Discipline *new_discipline);
 // função de adicionar disciplinas 
 void register_discipline(Discipline **root, Course *course);
 // remove uma disciplina escolhida do curso 

@@ -27,7 +27,7 @@ void deallocate_enrollment_tree(Enrollment *root);
 // Matricula o aluno em todas as disciplinas de um determinado período
 void enroll_period(Enrollment **root_enrol, Discipline *root_discipline, int period);
 // Insere uma nova matrícula na árvore de matrículas
-Enrollment *insert_enrol(Enrollment *root, Enrollment *new);
+bool insert_enrol(Enrollment **root, Enrollment *new);
 // Registra uma nova matrícula para um aluno com base no código da disciplina
 void register_enrollment(Enrollment **root, int discipline_code);
 // Remove uma matrícula específica da árvore de matrículas

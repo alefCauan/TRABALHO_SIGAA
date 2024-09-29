@@ -100,22 +100,25 @@ int get_course_code(Course *root)
     return atoi(str); 
 }
 
-Course *insert_course(Course *root, Course *new_course) 
+bool insert_course(Course **root, Course *new_course) 
 {
-    if (root == NULL) {
-        root = new_course;
-        printf("Course has been registered with code %d!\n", root->course_code);
-    
+    bool result = true;
+
+    if (*root == NULL) 
+    {
+        *root = new_course;
+        printf("Course has been registered with code %d!\n", (*root)->course_code);
     }
-    else if (new_course->course_code < root->course_code) 
-        root->left = insert_course(root->left, new_course);
-    else if (new_course->course_code > root->course_code) 
-        root->right = insert_course(root->right, new_course);
-    else{
-        printf("Course with code %d already exists!\n", root->course_code);
-    }
-    return root;
+    else if (new_course->course_code < (*root)->course_code) 
+        result = insert_course(&(*root)->left, new_course);
+    else if (new_course->course_code > (*root)->course_code) 
+        result = insert_course(&(*root)->right, new_course);
+    else
+        result = false;
+
+    return result;
 }
+
 
 void register_course(Course **root) 
 {
@@ -125,8 +128,6 @@ void register_course(Course **root)
     ASSERT_ALLOC(new, "register course");
 
     // Recebe os dados do curso
-    // printf("Enter course code: ");
-    // scanf("%d", &new->course_code);
     new->course_code = GET_COURSE_CODE(*root); 
     
     printf("Enter course name: ");
@@ -139,9 +140,11 @@ void register_course(Course **root)
     } 
     while(!valid_answer(1, 8, new->num_periods));
     
-    *root = insert_course(*root, new); 
-    
-    printf("Course successfully registered!\n");
+    if (!insert_course(root, new)) 
+    {
+        RAISE_ERROR("insert course, course with this code already exists");
+        deallocate_course(new); 
+    }
 }
 
 void show_courses(Course *root)

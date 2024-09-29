@@ -1,6 +1,8 @@
 #ifndef COURSE_H
 #define COURSE_H
 
+#include <stdbool.h>
+
 // predefinição
 typedef struct Discipline Discipline;
 typedef struct Discipline_Tree Discipline_Tree;
@@ -35,7 +37,7 @@ Course *search_course_code(Course *root, int code);
 // retorna um novo codigo de curso
 int get_course_code(Course *root);
 // auxiliar de register course
-Course *insert_course(Course *root, Course *new_course);
+bool insert_course(Course **root, Course *new_course);
 // adiciona um novo curso na arvore
 void register_course(Course **root); 
 // mostra todos os cursos

@@ -49,12 +49,15 @@ void deallocate_student_list(Student_list *list);
 int get_registration(int course_code);
 // retorna um node de grade que possui um codigo de disciplina especifico, se houver
 Grade *search_grade(Grade *root, int discipline_code);
+// busca estudante pela matricula
 Student *search_student_by_registration(Student *first, int registration);
 // auxiliar de regirster grade
-Grade *insert_grade(Grade **root, Grade *new);
+bool insert_grade(Grade **root, Grade *new);
 // adiciona notas de estudantes 
 void register_grade(Student **student);
-// adiciona um novo estudante na lista de estudantes 
+// insere um novo estudante na lista
+void insert_student(Student_list **list, Student *new_student);
+// pega os dados do novo estudante e chama a inserção 
 void register_student(Student_list *list, Course *courses);
 // mostra todos os estudantes de um curso especifico
 void show_students_by_course(Student_list *list, int course_code);
