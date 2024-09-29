@@ -106,7 +106,6 @@ Course *insert_course(Course *root, Course *new_course)
     if (root == NULL) {
         root = new_course;
 
-    
     }
     else if (new_course->course_code < root->course_code) 
         root->left = insert_course(root->left, new_course);
@@ -168,7 +167,6 @@ void shuffle_courses(Course *courses, int n) {
     }
 }
 
-// Função para medir o tempo de inserção na árvore de cursos
 void measure_insertion_time(Course_tree *course_tree) {
     int n;
     printf("Digite o número de cursos a serem inseridos para o teste: ");
@@ -179,16 +177,24 @@ void measure_insertion_time(Course_tree *course_tree) {
         return;
     }
 
+    // Alocar memória para o array de tempos de inserção
+    double *insertion_times = (double *)malloc(n * sizeof(double));
+    if (!insertion_times) {
+        printf("Falha na alocação de memória para os tempos de inserção.\n");
+        return;
+    }
+
     // Alocar memória para os cursos de teste
     Course *courses = (Course *)malloc(n * sizeof(Course));
     if (!courses) {
         printf("Falha na alocação de memória.\n");
+        free(insertion_times);
         return;
     }
 
     // Gerar cursos de teste com dados fictícios
     for (int i = 0; i < n; i++) {
-        courses[i].course_code = get_course_code(course_tree->root); 
+        courses[i].course_code = get_course_code(course_tree->root);
         sprintf(courses[i].course_name, "Curso_Teste_%d", i + 1);
         courses[i].num_periods = 8;  // Exemplo fixo; ajuste conforme necessário
         courses[i].discipline_tree = create_discipline_tree();
@@ -200,18 +206,14 @@ void measure_insertion_time(Course_tree *course_tree) {
     shuffle_courses(courses, n);
 
     // Medir o tempo de inserção
-    clock_t start, end;
-    start = clock();
-
+    double total_time = 0.0;
     for (int i = 0; i < n; i++) {
-        // Inserir cada curso na árvore
+        // Criar um novo curso
         Course *new_course = allocate_course();
         if (!new_course) {
-            printf("Falha na alocação de memória para o curso %d.\n", i + 1);
-            continue;
+            RAISE_ERROR("falha na alocação do curso");
         }
 
-        // Copiar dados do curso de teste para o novo curso
         new_course->course_code = courses[i].course_code;
         strcpy(new_course->course_name, courses[i].course_name);
         new_course->num_periods = courses[i].num_periods;
@@ -219,15 +221,26 @@ void measure_insertion_time(Course_tree *course_tree) {
         new_course->left = NULL;
         new_course->right = NULL;
 
-        // Inserir na árvore
+        // Medir o tempo de inserção
+        clock_t start = clock();
         course_tree->root = insert_course(course_tree->root, new_course);
+        clock_t end = clock();
+
+        // Armazenar o tempo de inserção em milissegundos
+        insertion_times[i] = ((double)(end - start)) / CLOCKS_PER_SEC * 1000; // Tempo em milissegundos
+        total_time += insertion_times[i]; // Acumular o tempo total
     }
 
-    end = clock();
+    // Exibir os tempos de inserção individuais 
+    // for (int i = 0; i < n; i++) {
+    //     printf("Tempo de inserção do curso %d: %f milissegundos\n", i + 1, insertion_times[i]);
+    // }
 
-    double time_spent = ((double)(end - start)) / CLOCKS_PER_SEC;
-    printf("Tempo total de inserção de %d cursos: %f segundos\n", n, time_spent);
+    // Calcular e exibir o tempo total e médio
+    printf("Tempo total de inserção de %d cursos: %f milissegundos\n", n, total_time);
+    printf("Tempo médio de inserção de cada elemento em milissegundos: %f\n", total_time / n);
 
-    // Liberar memória dos cursos de teste (árvores de disciplinas já estão associadas aos cursos na árvore de cursos)
+    // Liberar memória
+    free(insertion_times);
     free(courses);
 }
