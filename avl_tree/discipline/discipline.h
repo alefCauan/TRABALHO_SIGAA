@@ -49,8 +49,6 @@ Discipline *discipline_rotate_right(Discipline *ex_root);
 
 Discipline *discipline_rotate_left(Discipline *ex_root);
 
-bool insert_discipline(Discipline **root, Discipline *new_node);
-
 
 // Função que retorna um codigo de disciplina 
 int get_disc_code(Discipline *root, int course_code);
@@ -62,10 +60,9 @@ int get_disc_code(Discipline *root, int course_code);
 // {
 
 // insere a nova disicplina da arvore de disciplinas de um curso 
-bool insert_discipline(Discipline **root, Discipline *new_discipline);
+bool insert_discipline(Discipline **root, Discipline *new_node);
 // pega os dados da nova disciplina e chama a inserção
 void register_discipline(Discipline **root, Course *course);
-// remove uma disciplina escolhida do curso 
 
 // } 
 

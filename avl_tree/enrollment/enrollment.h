@@ -28,7 +28,6 @@ void deallocate_enrollment_tree(Enrollment *root);
 // Matricula o aluno em todas as disciplinas de um determinado período
 void enroll_period(Enrollment **root_enrol, Discipline *root_discipline, int period);
 
-
 int enrollment_height(Enrollment *root);
 
 int enrollment_get_balance(Enrollment *root);
@@ -37,15 +36,14 @@ Enrollment *enrollment_rotate_right(Enrollment *ex_root);
 
 Enrollment *enrollment_rotate_left(Enrollment *ex_root);
 
-bool insert_enrol(Enrollment **root, Enrollment *new_node);
-
+Enrollment *balance_enroll(Enrollment *root);
 
 // iv) Cadastrar uma matrícula, onde a mesma é uma árvore organizada e contendo somente um código de
 // uma disciplina do curso do aluno.
 // {
 
 // Insere uma nova matrícula na árvore de matrículas
-bool insert_enrol(Enrollment **root, Enrollment *new);
+bool insert_enrol(Enrollment **root, Enrollment *new_node);
 // Registra uma nova matrícula para um aluno com base no código da disciplina
 void register_enrollment(Enrollment **root, int discipline_code);
 
