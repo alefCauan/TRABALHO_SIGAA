@@ -11,12 +11,17 @@ int main() {
     // Inicializa a árvore de cursos
     Course_tree *course_tree = create_course_tree();  // Cria a árvore de cursos vazia
 
+ int insertion_order[30] = {
+        16, 8, 24, 4, 12, 20, 28,
+        2, 6, 10, 14, 18, 22, 26, 30,
+        1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25, 27, 29
+    };
     // Pré-aloca 30 cursos fictícios e os insere na árvore em ordem
     for (int i = 0; i < 30; i++) {
         Course *new_course = allocate_course();  // Aloca memória para o novo curso
 
         // Gera um código sequencial de acordo com o índice
-        new_course->course_code = generate_sequential_course_code(i);
+        new_course->course_code = generate_sequential_course_code(insertion_order[i]);
         printf("%d\n", new_course->course_code);
         // Define um nome fictício para o curso
         sprintf(new_course->course_name, "Curso_%d", i + 1);
