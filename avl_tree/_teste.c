@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include "error.h"
 
 typedef struct Node {
     int value;
@@ -13,6 +14,8 @@ typedef struct AVL {
     Node *root;
 } AVL;
 
+int max(int a, int b) { return (a > b) ? a : b; }
+
 void show(Node *root)
 {
     if(root)
@@ -22,8 +25,6 @@ void show(Node *root)
         show(root->right);
     }
 }
-
-int max(int a, int b) { return (a > b) ? a : b; }
 
 int height(Node *root)
 {
@@ -112,23 +113,26 @@ Node *insertNode(Node* root, int value)
 
         int balance = get_balance(root);
 
-        if (balance > 1 && value < root->left->value)
-            result = rotate_right(root);
-            
-        else if(balance < -1 && value > root->right->value)
-            result = rotate_left(root);
-
-        else if (balance > 1 && value > root->left->value)
+        if(balance > 1)
         {
-            root->left = rotate_left(root->left);
+            if (get_balance(root->right) < 0)
+            {
+                root->left = rotate_left(root->left);
+                // result = rotate_right(root);
+            }
+
             result = rotate_right(root);
         }
-        else if (balance < -1 && value < root->right->value)
+        else if(balance < -1)
         {
-            root->right = rotate_right(root->right);
+            if (get_balance(root->left) > 0)
+            {
+                root->right = rotate_right(root->right);
+                // result = rotate_left(root);
+            }
+
             result = rotate_left(root);
         }
-
     }
 
     return result;

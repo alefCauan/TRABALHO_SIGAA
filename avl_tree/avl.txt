@@ -4,6 +4,6 @@ know as balance factor
 
 rotations: 
     ROOT -> R -> R (-2) = (left rotation)
-    ROOT -> L -> L (-2) = (right rotation)
+    ROOT -> L -> L (2) = (right rotation)
     ROOT -> R -> L (-2) = (right rotation(R) and left rotation(R))
-    ROOT -> L -> R (-2) = (left rotation(L) and right rotation(L))
+    ROOT -> L -> R (2) = (left rotation(L) and right rotation(L))

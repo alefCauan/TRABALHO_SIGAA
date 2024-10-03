@@ -3,8 +3,8 @@
 #include <string.h>
 #include <time.h>
 #include "student.h"
-#include "../enrollment/enrollment.h"
 #include "../course/course.h"
+#include "../enrollment/enrollment.h"
 #include "../discipline/discipline.h"
 #include "../error.h"
 
@@ -175,7 +175,7 @@ void register_student(Student_list *list, Course *courses)
         insert_student(&list, new_student);
     }
     else
-        RAISE_ERROR("register student, no student lists or course tree");
+        RAISE_ERROR("register student, no student list or course tree");
 }
 
 void show_students_by_course(Student_list *list, int course_code)
@@ -358,7 +358,6 @@ void show_history(Student *student, Discipline *root, int period)
             show_history(student, root->right, period);
             if(root->period == period)
                 printf("[Score: %.2f, Descipline: %s]\n", show->final_grade, root->discipline_name);
-                
             show_history(student, root->left, period);
         }
     }
