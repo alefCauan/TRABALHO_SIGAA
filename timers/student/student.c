@@ -363,3 +363,21 @@ void show_history(Student *student, Discipline *root, int period)
         }
     }
 }
+Grade *search_grade_by_value(Grade *root, int discipline_code) {
+    if (root == NULL) {
+        return NULL; // Caso base: se o nó é nulo, retorna NULL
+    }
+
+    // Verifica se o nó atual é o que estamos procurando
+    if (root->discipline_code == discipline_code) {
+        return root; // Nota encontrada
+    }
+    
+    // Se a nota do nó atual for maior que a procurada, busca à esquerda
+    if (root->discipline_code > discipline_code) {
+        return search_grade_by_value(root->left, discipline_code);
+    }
+    
+    // Se a nota do nó atual for menor que a procurada, busca à direita
+    return search_grade_by_value(root->right, discipline_code);
+}
