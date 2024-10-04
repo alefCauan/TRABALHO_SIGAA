@@ -108,7 +108,7 @@ double measure_search_time(Grade *grade_tree_root, int discipline) {
     for (int i = 0; i < iterations; i++) {
         start_time = clock(); // Início da medição do tempo
 
-        Grade *found_grade = search_grade_by_value(grade_tree_root, discipline);
+        Grade *found_grade = search_grade(grade_tree_root, discipline);
 
         end_time = clock(); // Fim da medição do tempo
         double elapsed_time = ((double)(end_time - start_time)) * 1000.0 / CLOCKS_PER_SEC; // Calcula o tempo em milissegundos
