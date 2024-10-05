@@ -1,11 +1,11 @@
 #!/bin/bash
 
 # Definindo os caminhos dos arquivos .c
-SRC_COURSE="course/course.c"
-SRC_ENROLLMENT="enrollment/enrollment.c"
-SRC_STUDENT="student/student.c"
-SRC_DISC="discipline/discipline.c"
-SRC_MAIN="sigaa.c"
+SRC_COURSE="../avl_tree/course/course.c"
+SRC_ENROLLMENT="../avl_tree//enrollment/enrollment.c"
+SRC_STUDENT="../avl_tree/student/student.c"
+SRC_DISC="../avl_tree/discipline/discipline.c"
+SRC_ERROR="../avl_tree/error.c"
 
 # Nome do arquivo de saída
 OUT="sigaa_program"
@@ -31,26 +31,22 @@ if [ ! -f "$SRC_DISC" ]; then
     exit 1
 fi
 
-if [ ! -f "$SRC_MAIN" ]; then
-    echo "Erro: Arquivo $SRC_MAIN não encontrado!"
-    exit 1
-fi
-
 # Compilar os arquivos .c em .o
 gcc -g -c $SRC_ENROLLMENT -Istudent -o enrollment.o
 gcc -g -c $SRC_STUDENT -Ienrollment -Icourse -o student.o
 gcc -g -c $SRC_COURSE -Isubjetc -o course.o
 gcc -g -c $SRC_DISC -Icourse -o discipline.o
-gcc -g -c $SRC_MAIN -o sigaa.o
-gcc -g -c error.c -o error.o
+gcc -g -c $SRC_ERROR -o error.o
 
 # Linkar os arquivos .o em um executável
-gcc -g course.o enrollment.o student.o discipline.o sigaa.o error.o -o $OUT 
+gcc -g course.o enrollment.o student.o discipline.o error.o -o $OUT avl.c
 
 # Limpar os arquivos .o (opcional)
 rm *.o
 
 ./$OUT
+
+rm $OUT
 
 # valgrind --leak-check=full ./sigaa_program
 # tui enable 

@@ -121,3 +121,57 @@ double measure_search_time(Grade *grade_tree_root, int discipline) {
 
     return total_time; 
 }
+
+void measure_insertion_time(Course_tree *original_tree) {
+    int n;
+    printf("Digite o número de inserções a serem realizadas para o teste: ");
+    scanf("%d", &n);
+
+    if (n <= 0) {
+        RAISE_ERROR("O número de inserções tem que ser positivo");
+    }
+
+    // Alocar memória para o array de tempos de inserção
+    double *insertion_times = (double *)malloc(n * sizeof(double));
+    if (!insertion_times) {
+        RAISE_ERROR("Falha na alocação de memória para os tempos de inserção");
+    }
+
+    double total_time = 0.0;
+    for (int i = 0; i < n; i++) {
+        // Alocar um novo curso para cada inserção
+        Course *new_course = allocate_course();
+        if (!new_course) {
+            free(insertion_times);
+            RAISE_ERROR("Falha na alocação de memória para o curso.");
+        }
+
+        // Gera um código único para o novo curso
+        new_course->course_code = generate_sequential_course_code(50);
+        strcpy(new_course->course_name, "Curso_Teste");
+        new_course->num_periods = 8;  // Exemplo fixo
+
+        // Assegure-se de criar uma árvore de disciplinas única para cada curso
+        new_course->discipline_tree = create_discipline_tree();
+        new_course->left = NULL;
+        new_course->right = NULL;
+
+        // Medir o tempo de inserção
+        clock_t start = clock();
+        insert_course(&original_tree->root, new_course);
+        clock_t end = clock();
+
+        remove_course(original_tree->root, 241050);
+
+        // Armazenar o tempo de inserção em milissegundos
+        insertion_times[i] = ((double)(end - start)) / CLOCKS_PER_SEC * 1000;
+        total_time += insertion_times[i]; // Acumular o tempo total
+    }
+
+    // Exibir o tempo total e médio de inserção
+    printf("Tempo total de inserção de %d vezes: %f milissegundos\n", n, total_time);
+    printf("Tempo médio de inserção de cada elemento em milissegundos: %f\n", total_time / n);
+
+    // Liberar memória
+    free(insertion_times);
+}
