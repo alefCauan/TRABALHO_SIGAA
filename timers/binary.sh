@@ -6,6 +6,7 @@ SRC_ENROLLMENT="../binary_tree/enrollment/enrollment.c"
 SRC_STUDENT="../binary_tree/student/student.c"
 SRC_DISC="../binary_tree/discipline/discipline.c"
 SRC_ERROR="../binary_tree/error.c"
+SRC_BINARY="binary.c"
 
 # Nome do arquivo de saída
 OUT="sigaa_program"
@@ -37,9 +38,10 @@ gcc -g -c $SRC_STUDENT -Ienrollment -Icourse -o student.o
 gcc -g -c $SRC_COURSE -Isubjetc -o course.o
 gcc -g -c $SRC_DISC -Icourse -o discipline.o
 gcc -g -c $SRC_ERROR -o error.o
+gcc -g -c $SRC_BINARY -o binary.o
 
 # Linkar os arquivos .o em um executável
-gcc -g course.o enrollment.o student.o discipline.o error.o -o $OUT binary.c
+gcc -g course.o enrollment.o student.o discipline.o error.o binary.o -o $OUT
 
 # Limpar os arquivos .o (opcional)
 rm *.o
