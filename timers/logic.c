@@ -2,11 +2,12 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
-#include "sigaa.h"  // Certifique-se de que este cabeçalho contém a definição correta de Course, Course_tree e funções relacionadas
+#include "../binary_tree/sigaa.h"
+  // Certifique-se de que este cabeçalho contém a definição correta de Course, Course_tree e funções relacionadas
 
 // Gera códigos de curso sequenciais
 
-int main() {    
+int teste() {    
     // Inicializa a árvore de cursos
  //    Course_tree *course_tree = create_course_tree();  // Cria a árvore de cursos vazia
  //    // Pré-aloca 30 cursos fictícios e os insere na árvore em ordem

@@ -4,9 +4,10 @@
 #include "../binary_tree/discipline/discipline.h"
 #include "../binary_tree/enrollment/enrollment.h"
 #include "../binary_tree/student/student.h"
+#include "../binary_tree/error.h"
+#include "logic.c"
 
 int main()
 {
-    printf("BINARY\n");
-    return 0;
+    teste();
 }
