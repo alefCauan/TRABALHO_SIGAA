@@ -105,5 +105,4 @@ bool is_alphabetical(char __string[], char __compare[])
     return result;
 }
 
-
 int max(int a, int b) { return (a > b) ? a : b; }

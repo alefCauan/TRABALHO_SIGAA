@@ -60,13 +60,18 @@ void show_enrolled_disciplines(Enrollment *root, Discipline *disc_root);
 
 // }
 
+void remove_case_no_children(Enrollment **head, Enrollment *parent, Enrollment *current);
+
+void remove_case_one_child(Enrollment **head, Enrollment *parent, Enrollment *current);
+
+void remove_case_two_children(Enrollment *current);
+
 // xiv)Permita remover uma disciplina da árvore de matrícula de um determinado aluno.
 // {
 
 // Remove uma matrícula específica da árvore de matrículas
-void remove_enrollment(Enrollment **head, int discipline_code);
+bool remove_enrollment(Enrollment **head, int discipline_code);
 
 // }
-
 
 #endif
