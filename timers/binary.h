@@ -4,7 +4,9 @@
 #include "../binary_tree/course/course.h"
 #include "../binary_tree/student/student.h"
 
-int teste();
+void testeInsercao();
+void testeBusca();
+
 
 // Implementação da função para medir o tempo de busca
 double measure_search_time(Grade *grade_tree_root, int discipline);

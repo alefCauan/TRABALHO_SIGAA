@@ -10,7 +10,7 @@
 #include "../binary_tree/error.h"
 // #include "logic.c"
 
-int testeBusca() {    
+void testeBusca() {    
 
  int insertion_order[30] = {
         16, 8, 24, 4, 12, 20, 28,
@@ -61,10 +61,11 @@ int testeBusca() {
         grade->discipline_code = insertion_order[i];
         grade->semester = 3;
         grade->final_grade = balanced_grades[i];
+        insert_grade(&student->grade_tree->root, grade);
     }
     
     // Medir o tempo de busca de uma nota específica na disciplina
-    int discipline; // O codigo disciplina que será buscada a nota
+    int discipline = 29; // O codigo disciplina que será buscada a nota
     double total_time = measure_search_time(student->grade_tree->root, discipline);
     
 
@@ -75,14 +76,10 @@ int testeBusca() {
 
     deallocate_student(student); 
 
-    return 0;
 }
 void remove_course(Course **root, int course_code) {
     // Caso base: árvore vazia
-    if (*root == NULL) {
-        return; // O curso não foi encontrado
-    }
-
+    if (*root != NULL) {    
     // Se o curso a ser removido é menor que o curso atual, vá para a esquerda
     if (course_code < (*root)->course_code) {
         remove_course(&(*root)->left, course_code);
@@ -118,6 +115,7 @@ void remove_course(Course **root, int course_code) {
             // Remove o sucessor
             remove_course(&(*root)->right, successor->course_code);
         }
+    }
     }
 }
 
@@ -179,8 +177,8 @@ double measure_search_time(Grade *grade_tree_root, int discipline) {
         double elapsed_time = ((double)(end_time - start_time)) * 1000.0 / CLOCKS_PER_SEC; // Calcula o tempo em milissegundos
         total_time += elapsed_time; // Acumula o tempo total
 
-        if (!found_grade) {
-            printf("Nota não encontrada\n");
+        if (found_grade) {
+            printf("Nota encontrada -> %f\n", found_grade->final_grade);
         }
     }
 
