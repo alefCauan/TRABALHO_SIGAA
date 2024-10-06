@@ -307,9 +307,10 @@ void register_grade(Student **student)
             deallocate_grade(new_grade);
         }
         else 
-            remove_enrollment(&(*student)->enrol_tree->root, discipline_code);  // Remove a matrícula correspondente
-
-        printf("Grade registered for discipline [%d] with score %.2f\n", discipline_code, score);
+            if(!remove_enrollment(&(*student)->enrol_tree->root, discipline_code))
+                RAISE_ERROR("remove enrollment, student not found");
+            // else
+            //     printf("Grade registered for discipline [%d] with score %.2f\n", discipline_code, score);
     }
 }
 // Mostrar todas as notas de disciplinas de um determinado período de um determinado aluno.

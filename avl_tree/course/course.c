@@ -118,29 +118,36 @@ Course *course_rotate_left(Course *ex_root)
 Course *balance_course(Course *root)
 {
     int balance = course_get_balance(root);
-    Course *result = root;
 
-    if(balance > 1)
+    // Caso 1: Desbalanceamento para a esquerda
+    if (balance > 1)
     {
-        if (course_get_balance(root->right) < 0)
+        // Se o filho esquerdo está desbalanceado para a direita, fazer rotação dupla
+        if (course_get_balance(root->left) < 0)
             root->left = course_rotate_left(root->left);
 
-        result = course_rotate_right(root);
+        root = course_rotate_right(root);
     }
-    else if(balance < -1)
+    // Caso 2: Desbalanceamento para a direita
+    else if (balance < -1)
     {
-        if (course_get_balance(root->left) > 0)
+        // Se o filho direito está desbalanceado para a esquerda, fazer rotação dupla
+        if (course_get_balance(root->right) > 0)
             root->right = course_rotate_right(root->right);
 
-        result = course_rotate_left(root);
+        root = course_rotate_left(root);
     }
 
-    return result;
+    // Atualizar a altura após o balanceamento
+    root->height = 1 + max(course_height(root->left), course_height(root->right));
+
+    return root;
 }
+
 
 bool insert_course(Course **root, Course *new_node) 
 {
-    bool result = 1;
+    bool result = true;
 
     if ((*root) == NULL)
         (*root) = new_node;
@@ -150,12 +157,12 @@ bool insert_course(Course **root, Course *new_node)
             result = insert_course(&(*root)->left, new_node);
         else if (new_node->course_code > (*root)->course_code)
             result = insert_course(&(*root)->right, new_node);
-        
+        else
+            result = false;  
+
         (*root)->height = 1 + max(course_height((*root)->left), course_height((*root)->right));
 
-        int balance = course_get_balance((*root));
-
-        balance_course(*root);
+        *root = balance_course(*root);
     }
 
     return result;

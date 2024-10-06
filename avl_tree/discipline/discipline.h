@@ -82,12 +82,19 @@ void show_disciplines_by_period(Discipline *root, int period);
 
 // }
 
+
+void remove_discipline_no_children(Discipline **root, Discipline *current, Discipline *parent);
+
+void remove_discipline_one_child(Discipline **root, Discipline *current, Discipline *parent);
+
+void remove_discipline_two_children(Discipline **root, Discipline *current);
+
 // xiii)Remover uma disciplina de um determinado curso
 // desde que não tenha nenhum aluno matriculado na mesma.
 // {
 
 // remove a disciplina de um curso
-void remove_discipline(Discipline **root, int discipline_code);
+bool remove_discipline(Discipline **root, int discipline_code);
 
 // }
 
