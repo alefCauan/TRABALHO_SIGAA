@@ -171,20 +171,18 @@ void register_student(Student_list *list, Course *courses)
         
         int choice = true;
         printf("register in the first period (?)\n");
+        line();
 
         do {
             printf("\n0 - No\n");
             printf("1 - Yes\n-> ");
             scanf("%d", &choice); 
-            line();
         } 
         while(!valid_answer(0, 1, choice));
         
         if(choice)
-            enroll_period(&new_student->enrol_tree->root, courses->discipline_tree->root, 1); // TODO: optional
-        
+            enroll_period(&new_student->enrol_tree->root, courses->discipline_tree->root, 1);
 
-        // Use a função de inserção separada
         insert_student(&list, new_student);
     }
     else
