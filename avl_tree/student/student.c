@@ -169,9 +169,20 @@ void register_student(Student_list *list, Course *courses)
 
         new_student->registration = GET_REGISTRATION(new_student->course_code);
         
-        enroll_period(&new_student->enrol_tree->root, courses->discipline_tree->root, 1); // TODO: optional
+        int choice = true;
+        printf("register in the first period (?)\n");
+        line();
 
-        // Use a função de inserção separada
+        do {
+            printf("\n0 - No\n");
+            printf("1 - Yes\n-> ");
+            scanf("%d", &choice); 
+        } 
+        while(!valid_answer(0, 1, choice));
+        
+        if(choice)
+            enroll_period(&new_student->enrol_tree->root, courses->discipline_tree->root, 1);
+
         insert_student(&list, new_student);
     }
     else
