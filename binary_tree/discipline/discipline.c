@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+#include <stdbool.h>
 #include "discipline.h"
 #include "../error.h"
 
@@ -171,13 +172,66 @@ void register_discipline(Discipline **root, Course *course)
     }
 }
 
+void remove_discipline_no_children(Discipline **root, Discipline *current, Discipline *parent)
+{
+    if (parent == NULL) // Se é a raiz
+        *root = NULL;
+    else if (parent->right == current)
+        parent->right = NULL;
+    else
+        parent->left = NULL;
+
+    deallocate_discipline(current);
+}
+
+void remove_discipline_one_child(Discipline **root, Discipline *current, Discipline *parent)
+{
+    Discipline *child = (current->left != NULL) ? current->left : current->right;
+
+    if (parent == NULL) // Se o nó é a raiz
+        *root = child;
+    else if (parent->right == current)
+        parent->right = child;
+    else
+        parent->left = child;
+
+    deallocate_discipline(current);
+}
+
+
+void remove_discipline_two_children(Discipline **root, Discipline *current)
+{
+    // Encontrar o sucessor (menor valor na subárvore direita)
+    Discipline *successor = current->right;
+    Discipline *successor_parent = current;
+
+    while (successor->left != NULL)
+    {
+        successor_parent = successor;
+        successor = successor->left;
+    }
+
+    // Copiar os dados do sucessor para o nó atual
+    current->discipline_code = successor->discipline_code;
+
+    // Remover o sucessor da árvore
+    if (successor_parent->left == successor)
+        successor_parent->left = successor->right;
+    else
+        successor_parent->right = successor->right;
+
+    deallocate_discipline(successor);
+}
+
+
 // TODO: verificar todos os alunos e ver se eles estão matriculados nessa disciplina
-void remove_discipline(Discipline **root, int discipline_code)
+bool remove_discipline(Discipline **root, int discipline_code)
 {
     Discipline *current;
     current = *root;
     Discipline *parent;
     parent = NULL;
+    bool result = true;
 
     // Procura o nó a ser removido
     while (current != NULL && current->discipline_code != discipline_code) 
@@ -194,57 +248,18 @@ void remove_discipline(Discipline **root, int discipline_code)
     {
         // Caso 1: Nó sem filhos
         if (current->left == NULL && current->right == NULL)
-        {
-            if (parent == NULL) // Se é a raiz
-                *root = NULL;
-            else if (parent->right == current)
-                parent->right = NULL;
-            else
-                parent->left = NULL;
-
-            deallocate_discipline(current);
-        }
+            remove_discipline_no_children(root, current, parent);
         // Caso 2: Nó com dois filhos
         else if (current->left != NULL && current->right != NULL)
-        {
-            // Encontrar o sucessor (menor valor na subárvore direita)
-            Discipline *successor = current->right;
-            Discipline *successor_parent = current;
-
-            while (successor->left != NULL)
-            {
-                successor_parent = successor;
-                successor = successor->left;
-            }
-
-            // Copiar os dados do sucessor para o nó atual
-            current->discipline_code = successor->discipline_code;
-
-            // Remover o sucessor da árvore
-            if (successor_parent->left == successor)
-                successor_parent->left = successor->right;
-            else
-                successor_parent->right = successor->right;
-
-            deallocate_discipline(successor);
-        }
+            remove_discipline_one_child(root, current, parent);
         // Caso 3: Nó com um filho
         else 
-        {
-            Discipline *child = (current->left != NULL) ? current->left : current->right;
-
-            if (parent == NULL) // Se o nó é a raiz
-                *root = child;
-            else if (parent->right == current)
-                parent->right = child;
-            else
-                parent->left = child;
-
-            deallocate_discipline(current);
-        }
+            remove_discipline_two_children(root, current);
     }
     else
-        RAISE_ERROR("remove discipline, discipline code not found");
+        result = false;
+
+    return result;
 }
 
 void show_disciplines(Discipline *root)

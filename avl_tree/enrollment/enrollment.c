@@ -278,7 +278,6 @@ bool remove_enrollment(Enrollment **head, int discipline_code)
             remove_case_one_child(head, parent, current);
         
         (*head)->height = max(enrollment_height((*head)->left), enrollment_height((*head)->right));
-
         *head = balance_enroll(*head); 
     }
     else

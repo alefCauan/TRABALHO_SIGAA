@@ -366,11 +366,11 @@ void show_history(Student *student, Discipline *root, int period)
         
         if(show)
         {
-            show_history(student, root->right, period);
-            if(root->period == period)
-                printf("[Score: %.2f, Descipline: %s]\n", show->final_grade, root->discipline_name);
-                
             show_history(student, root->left, period);
+            if(root->period == period)
+                printf("[Score: %.2f | Descipline: %s | Period: %d]\n", show->final_grade, root->discipline_name, period);
+                
+            show_history(student, root->right, period);
         }
     }
 }
