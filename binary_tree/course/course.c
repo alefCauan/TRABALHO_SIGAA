@@ -107,7 +107,6 @@ bool insert_course(Course **root, Course *new_course)
     if (*root == NULL) 
     {
         *root = new_course;
-        printf("Course has been registered with code %d!\n", (*root)->course_code);
     }
     else if (new_course->course_code < (*root)->course_code) 
         result = insert_course(&(*root)->left, new_course);
