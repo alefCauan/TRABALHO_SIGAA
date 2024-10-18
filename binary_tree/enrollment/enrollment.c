@@ -193,3 +193,37 @@ void show_enrolled_disciplines(Enrollment *root, Discipline *disc_root)
         show_enrolled_disciplines(root->right, disc_root);
     }
 }
+
+int is_enrolled_in_discipline(Enrollment *root, int discipline_code) {
+    int enrolled = 0;  // Variável que indicará se a disciplina foi encontrada
+
+    // Verificação recursiva na árvore de matrículas
+    if (root != NULL) {
+        if (root->discipline_code == discipline_code) {
+            enrolled = 1;  // Marca que encontrou a disciplina
+        }
+        // Continua a busca na subárvore esquerda e direita
+        int left_result = is_enrolled_in_discipline(root->left, discipline_code);
+        int right_result = is_enrolled_in_discipline(root->right, discipline_code);
+
+        // Se encontrar em qualquer lado, marca como encontrado
+        if (left_result == 1 || right_result == 1) {
+            enrolled = 1;
+        }
+    }
+
+    return enrolled;  
+}
+
+int is_student_enrolled_in_discipline(Student_list *student_list, int discipline_code) {
+    Student *current = student_list->first;
+    int enrolled = 0;
+    // verifica todos os alunos
+    while (current != NULL) {
+        if (is_enrolled_in_discipline(current->enrol_tree->root, discipline_code)) {
+            enrolled = 1; // Se algum aluno estiver matriculado, retorna true
+        }
+        current = current->next;
+    }
+    return enrolled; // Nenhum aluno matriculado na disciplina
+}
