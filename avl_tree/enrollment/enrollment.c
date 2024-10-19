@@ -165,27 +165,6 @@ bool insert_enrol(Enrollment **root, Enrollment *new_node)
     return result;
 }
 
-// bool insert_enrol(Enrollment **root, Enrollment *new)
-// {
-//     bool result = true;
-
-//     if ((*root) == NULL)
-//         (*root) = new;  
-//     else if (new->discipline_code < (*root)->discipline_code) 
-//         result = insert_enrol(&(*root)->left, new);  
-//     else if (new->discipline_code > (*root)->discipline_code) 
-//         result = insert_enrol(&(*root)->right, new);  
-//     else 
-//         result = false;
-
-//     return root;  
-// }
-
-// bool is_node(Enrollment *node)
-// {
-//     return (bool) node != NULL;
-// }
-
 void register_enrollment(Enrollment **root, int discipline_code)
 {
     Enrollment *new = allocate_enrollment();
@@ -286,84 +265,6 @@ bool remove_enrollment(Enrollment **head, int discipline_code)
     return result;
 }
 
-
-// void remove_enrollment(Enrollment **head, int discipline_code)
-// {
-//     Enrollment *current; 
-//     current = *head;
-//     Enrollment *parent;
-//     parent = NULL;
-
-//     // Procura o nó a ser removido
-//     while (current != NULL && current->discipline_code != discipline_code) 
-//     {
-//         parent = current;
-//         if (discipline_code > current->discipline_code)
-//             current = current->right;
-//         else
-//             current = current->left;
-//     }
-
-//     // Se o nó não for encontrado
-//     if (current != NULL)
-//     {
-//         // Caso 1: Nó sem filhos
-//         if (current->left == NULL && current->right == NULL)
-//         {
-//             if (parent == NULL) // Se é a raiz
-//                 *head = NULL;
-//             else if (parent->right == current)
-//                 parent->right = NULL;
-//             else
-//                 parent->left = NULL;
-
-//             free(current);
-//         }
-//         // Caso 2: Nó com dois filhos
-//         else if (is_node(current->left) && is_node(current->right))
-//         {
-//             // Encontrar o sucessor (menor valor na subárvore direita)
-//             Enrollment *successor = current->right;
-//             Enrollment *successor_parent = current;
-
-//             while (successor->left != NULL)
-//             {
-//                 successor_parent = successor;
-//                 successor = successor->left;
-//             }
-
-//             // Copiar os dados do sucessor para o nó atual
-//             current->discipline_code = successor->discipline_code;
-
-//             // Remover o sucessor da árvore
-//             if (successor_parent->left == successor)
-//                 successor_parent->left = successor->right;
-//             else
-//                 successor_parent->right = successor->right;
-
-//             free(successor);
-//         }
-//         // Caso 3: Nó com um filho
-//         else 
-//         {
-//             Enrollment *child = (is_node(current->left)) ? 
-//                 current->left : current->right;
-
-//             if (parent == NULL) // Se o nó é a raiz
-//                 *head = child;
-//             else if (parent->right == current)
-//                 parent->right = child;
-//             else
-//                 parent->left = child;
-
-//             free(current);
-//         }
-//     }
-//     else
-//         RAISE_ERROR("remove enrol, discipline with this code has not found");
-        
-//     balance_enroll(*head);
-// }
 
 void enroll_period(Enrollment **root_enrol, Discipline *root_discipline, int period)
 {

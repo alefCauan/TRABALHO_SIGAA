@@ -61,7 +61,7 @@ void main_menu(Course_tree *course_tree, Student_list *student_list)
         switch (option) 
         {
             case 1: 
-                course_menu(course_tree, student_list); 
+                course_menu(course_tree, student_list->first); 
                 break;
             case 2: 
                 int course_code;
@@ -85,7 +85,7 @@ void main_menu(Course_tree *course_tree, Student_list *student_list)
     while(!valid_answer(1, 3, option) || option != 3);
 }
 
-void course_menu(Course_tree *course_tree, Student_list *student_list) 
+void course_menu(Course_tree *course_tree, Student *head) 
 {
     int option;
     do {
@@ -114,7 +114,7 @@ void course_menu(Course_tree *course_tree, Student_list *student_list)
                 Course *course = search_course_code(course_tree->root, course_code);
 
                 if (course) 
-                    discipline_menu(course, student_list);
+                    discipline_menu(course, head);
                 else 
                     RAISE_ERROR("input data, course not found!");
 
@@ -128,7 +128,7 @@ void course_menu(Course_tree *course_tree, Student_list *student_list)
     while(!valid_answer(1, 4, option) || option != 4);
 }
 
-void discipline_menu(Course *course, Student_list *Student_list) 
+void discipline_menu(Course *course, Student *head) 
 {
     int option;
     do {
@@ -154,11 +154,8 @@ void discipline_menu(Course *course, Student_list *Student_list)
 
                 printf("Enter discipline code to remove -> ");
                 scanf("%d", &discipline_code);
-
-                if (is_student_enrolled_in_discipline(Student_list, discipline_code))
-                    RAISE_ERROR("Has a student enrolled in this dicipline");
-                else
-                remove_discipline(&course->discipline_tree->root, discipline_code);
+                
+                remove_discipline(&course->discipline_tree->root, head, discipline_code);
 
                 break;
             case 4: 

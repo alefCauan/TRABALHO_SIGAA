@@ -205,24 +205,6 @@ int get_disc_code(Discipline *root, int course_code)
     return atoi(str); 
 }
 
-// bool insert_discipline(Discipline **root, Discipline *new_subject) 
-// {
-//     bool result = true;
-
-//     if (*root == NULL)
-//     {
-//         *root = new_subject;
-//         printf("Discipline successfully registered!\n");
-//     } 
-//     else if (new_subject->discipline_code < (*root)->discipline_code) 
-//         result = insert_discipline(&(*root)->left, new_subject);
-//     else if (new_subject->discipline_code > (*root)->discipline_code) 
-//         result = insert_discipline(&(*root)->right, new_subject);
-//     else 
-//         result = false;
-
-//     return result;
-// }
 
 void register_discipline(Discipline **root, Course *course)
 {
@@ -325,125 +307,55 @@ void remove_discipline_two_children(Discipline **root, Discipline *current)
 }
 
 // TODO: Verificar todos os alunos e ver se eles estão matriculados nessa disciplina
-bool remove_discipline(Discipline **root, int discipline_code)
+bool remove_discipline(Discipline **root, Student *head, int discipline_code)
 {
     Discipline *current = *root;
     Discipline *parent;
     parent = NULL;
     bool result = true;
 
-    // Procura o nó a ser removido
-    while (current != NULL && current->discipline_code != discipline_code) 
+    if(is_enrolled_discipline(head, discipline_code))
     {
-        parent = current;
-        if (discipline_code > current->discipline_code)
-            current = current->right;
-        else
-            current = current->left;
-    }
-
-    // Se o nó não for encontrado
-    if (current != NULL)
-    {
-        // Verifica os casos de remoção
-        if (current->left == NULL && current->right == NULL) // Caso 1: Sem filhos
-            remove_discipline_no_children(root, current, parent);
-        else if (current->left != NULL && current->right != NULL) // Caso 2: Dois filhos
-            remove_discipline_two_children(root, current);
-        else // Caso 3: Um filho
-            remove_discipline_one_child(root, current, parent);
-
-        // Atualiza a altura e balanceia a árvore
-        if (*root != NULL)
-        {
-            (*root)->height = max(discipline_height((*root)->left), discipline_height((*root)->right));
-            *root = balance_discipline(*root);
-        }
+        ///////////////
+        result = false;
     }
     else
-        result = false;
+    {
+
+        // Procura o nó a ser removido
+        while (current != NULL && current->discipline_code != discipline_code) 
+        {
+            parent = current;
+            if (discipline_code > current->discipline_code)
+                current = current->right;
+            else
+                current = current->left;
+        }
+
+        // Se o nó não for encontrado
+        if (current != NULL)
+        {
+            // Verifica os casos de remoção
+            if (current->left == NULL && current->right == NULL) // Caso 1: Sem filhos
+                remove_discipline_no_children(root, current, parent);
+            else if (current->left != NULL && current->right != NULL) // Caso 2: Dois filhos
+                remove_discipline_two_children(root, current);
+            else // Caso 3: Um filho
+                remove_discipline_one_child(root, current, parent);
+
+            // Atualiza a altura e balanceia a árvore
+            if (*root != NULL)
+            {
+                (*root)->height = max(discipline_height((*root)->left), discipline_height((*root)->right));
+                *root = balance_discipline(*root);
+            }
+        }
+        else
+            result = false;
+    }
+
+    return result;
 }
-
-// // TODO: verificar todos os alunos e ver se eles estão matriculados nessa disciplina
-// void remove_discipline(Discipline **root, int discipline_code)
-// {
-//     Discipline *current;
-//     current = *root;
-//     Discipline *parent;
-//     parent = NULL;
-
-//     // Procura o nó a ser removido
-//     while (current != NULL && current->discipline_code != discipline_code) 
-//     {
-//         parent = current;
-
-//         if (discipline_code > current->discipline_code)
-//             current = current->right;
-//         else
-//             current = current->left;
-//     }
-
-//     // Se o nó não for encontrado
-//     if (current != NULL)
-//     {
-//         // Caso 1: Nó sem filhos
-//         if (current->left == NULL && current->right == NULL)
-//         {
-//             if (parent == NULL) // Se é a raiz
-//                 *root = NULL;
-//             else if (parent->right == current)
-//                 parent->right = NULL;
-//             else
-//                 parent->left = NULL;
-
-//             deallocate_discipline(current);
-//         }
-//         // Caso 2: Nó com dois filhos
-//         else if (current->left != NULL && current->right != NULL)
-//         {
-//             // Encontrar o sucessor (menor valor na subárvore direita)
-//             Discipline *successor = current->right;
-//             Discipline *successor_parent = current;
-
-//             while (successor->left != NULL)
-//             {
-//                 successor_parent = successor;
-//                 successor = successor->left;
-//             }
-
-//             // Copiar os dados do sucessor para o nó atual
-//             current->discipline_code = successor->discipline_code;
-
-//             // Remover o sucessor da árvore
-//             if (successor_parent->left == successor)
-//                 successor_parent->left = successor->right;
-//             else
-//                 successor_parent->right = successor->right;
-
-//             deallocate_discipline(successor);
-//         }
-//         // Caso 3: Nó com um filho
-//         else 
-//         {
-//             Discipline *child = (current->left != NULL) ? current->left : current->right;
-
-//             if (parent == NULL) // Se o nó é a raiz
-//                 *root = child;
-//             else if (parent->right == current)
-//                 parent->right = child;
-//             else
-//                 parent->left = child;
-
-//             deallocate_discipline(current);
-//         }
-//     }
-//     else
-//         RAISE_ERROR("remove discipline, discipline code not found");
-
-//     (*root)->height = max(discipline_height((*root)->left), discipline_height((*root)->right));
-
-//     *root = balance_discipline(*root);
-// }
 
 void show_disciplines(Discipline *root)
 {
@@ -475,4 +387,28 @@ void show_disciplines_by_period(Discipline *root, int period)
         }
         show_disciplines_by_period(root->right, period);
     }
+}
+
+
+// Função auxiliar para verificar se algum aluno está matriculado na disciplina
+bool is_enrolled_discipline(Student *head, int discipline_code) 
+{
+    Student *current_student = head;
+    bool result = false;
+
+    // Percorre todos os alunos
+    while (current_student != NULL) 
+    {
+        // Verifica se o aluno está matriculado na disciplina (árvore de matrículas)
+        if (search_enrollment(current_student->enrol_tree->root, discipline_code)) 
+        {
+            RAISE_ERROR("remove discipline, there are students enrolled!");
+            result = true; // Aluno encontrado matriculado
+        }
+        
+        // Próximo aluno
+        current_student = current_student->next;
+    }
+    
+    return result; // Nenhum aluno encontrado matriculado na disciplina
 }
