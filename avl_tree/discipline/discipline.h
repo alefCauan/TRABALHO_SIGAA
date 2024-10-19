@@ -3,6 +3,9 @@
 
 #include <stdbool.h>
 #include "../course/course.h"
+#include "../student/student.h"
+#include "../enrollment/enrollment.h"
+
 // gera um codigo da disciplina 
 #define GET_DISCIPLINE_CODE(root, code) (get_disc_code(root, code))
 
@@ -82,6 +85,7 @@ void show_disciplines_by_period(Discipline *root, int period);
 
 // }
 
+bool is_enrolled_discipline(Student *head, int discipline_code);
 
 void remove_discipline_no_children(Discipline **root, Discipline *current, Discipline *parent);
 
@@ -94,7 +98,7 @@ void remove_discipline_two_children(Discipline **root, Discipline *current);
 // {
 
 // remove a disciplina de um curso
-bool remove_discipline(Discipline **root, int discipline_code);
+bool remove_discipline(Discipline **root, Student *head, int discipline_code);
 
 // }
 
