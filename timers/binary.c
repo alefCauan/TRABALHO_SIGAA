@@ -21,13 +21,16 @@ void shuffle_array(int *array, int size) {
 
 void search_test() {    
 
- int insertion_order[30] = {
-        16, 8, 24, 4, 12, 20, 28,
-        2, 6, 10, 14, 18, 22, 26, 30,
-        1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25, 27, 29
-    };
+    int quant = 1000;
+    int discipline; // O codigo disciplina que será buscada a nota
 
- Course_tree *course_tree = create_course_tree();  
+    int ids[1000];
+    for (int i = 0; i < 1000; i++) {
+        ids[i] = i + 1;
+    }
+    shuffle_array(ids, 1000);  // Embaralha os IDs
+    
+    Course_tree *course_tree = create_course_tree();  
     Course *new_course = allocate_course();  
     new_course->course_code = get_course_code(course_tree->root);
     sprintf(new_course->course_name, "Curso_teste");
@@ -65,16 +68,18 @@ void search_test() {
 
 
     // Adicionar as notas na árvore
-    for (int i = 0; i < 1000; i++) {
+    for (int i = 0; i < quant; i++) {
         Grade *grade = allocate_grade();
-        grade->discipline_code = i;
+        grade->discipline_code = ids[i];
         grade->semester = 2;
         grade->final_grade = rand() % 10;
         insert_grade(&student->grade_tree->root, grade);
+        printf("%d ", ids[i]);
     }
     
     // Medir o tempo de busca de uma nota específica na disciplina
-    int discipline = 1000; // O codigo disciplina que será buscada a nota
+    printf("\n Digite o codigo da disciplina que será buscada a nota");
+    scanf("%d", &discipline);
     double total_time = measure_search_time(student->grade_tree->root, discipline);
     
 
@@ -156,7 +161,7 @@ void insertion_test() {
         Course *new_course = allocate_course();  // Aloca memória para o novo curso
 
         // Atribui um código aleatório e único do array embaralhado
-        new_course->course_code = ids[i];
+        new_course->course_code = i;
         printf("%d\n", new_course->course_code);
 
         // Define um nome fictício para o curso
@@ -256,7 +261,7 @@ double measure_insertion_time(Course_tree *original_tree, int insertions_number)
 
 int main()
 {
-//    insertion_test();
-    search_test();
+   insertion_test();
+//    search_test();
     return 0;
 }
