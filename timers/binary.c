@@ -206,13 +206,11 @@ double measure_search_time(Grade *grade_tree_root, int discipline) {
         end_time = clock(); // Fim da medição do tempo
         search_times[i]  = ((double)(end_time - start_time)) * 1000000 / CLOCKS_PER_SEC; 
         total_time += search_times[i]; // Acumula o tempo total
-
+    }
         for (int i = 0; i < 30; i++)
         {
             printf("%f\n", search_times[i]);
         }
-
-    }
 
     // Liberar memória
     free(search_times);
