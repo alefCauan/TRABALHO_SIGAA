@@ -183,7 +183,6 @@ bool insert_discipline(Discipline **root, Discipline *new_node)
             result = false;
 
         (*root)->height = 1 + max(discipline_height((*root)->left), discipline_height((*root)->right));
-
         *root = balance_discipline(*root);
     }
 
