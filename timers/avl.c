@@ -9,6 +9,14 @@
 #include <time.h>
 #include <string.h>
 
+void shuffle_array(int *array, int size) {
+    for (int i = size - 1; i > 0; i--) {
+        int j = rand() % (i + 1);  // Escolhe um índice aleatório
+        int temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
+    }
+}
 
 void remove_course(Course **root, int course_code) {
     // Caso base: árvore vazia
@@ -142,11 +150,12 @@ void insertion_test(){
     int insertions_number;
     int quant = 1000;
 
-    int insertion_order[30] = {
-        16, 8, 24, 4, 12, 20, 28,
-        2, 6, 10, 14, 18, 22, 26, 30,
-        1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25, 27, 29
-    };
+    int ids[1000];
+        for (int i = 0; i < 1000; i++) {
+            ids[i] = i + 1;
+        }
+        shuffle_array(ids, 1000);  // Embaralha os IDs
+        
     // Inicializa a árvore de cursos
     Course_tree_avl *course_tree = create_course_tree();  // Cria a árvore de cursos vazia
     // Pré-aloca 30 cursos fictícios e os insere na árvore em ordem
@@ -154,7 +163,7 @@ void insertion_test(){
         Course *new_course = allocate_course();  // Aloca memória para o novo curso
 
         // Gera um código sequencial de acordo com o índice
-        new_course->course_code = i;
+        new_course->course_code = ids[i];
         printf("%d\n", new_course->course_code);
         // Define um nome fictício para o curso
         sprintf(new_course->course_name, "Curso_%d", i + 1);
@@ -180,9 +189,16 @@ void insertion_test(){
 }
 
 int search_test() {    
- int quant = 1000;
+    int quant = 1000;
+    int discipline; // O codigo disciplina que será buscada a nota
 
- Course_tree_avl *course_tree = create_course_tree();  
+    int ids[1000];
+        for (int i = 0; i < 1000; i++) {
+            ids[i] = i + 1;
+        }
+        shuffle_array(ids, 1000);  // Embaralha os IDs
+
+    Course_tree_avl *course_tree = create_course_tree();  
     Course *new_course = allocate_course();  
     new_course->course_code = get_course_code(course_tree->root);
     sprintf(new_course->course_name, "Curso_teste");
@@ -197,15 +213,16 @@ int search_test() {
     // Adicionar as notas na árvore
     for (int i = 0; i < quant; i++) {
         Grade *grade = allocate_grade();
-        grade->discipline_code = i;
+        grade->discipline_code = ids[i];
         grade->semester = 3;
         grade->final_grade = rand() % 10;
         insert_grade(&student->grade_tree->root, grade);
+        printf("%d ", ids[i]);
     }
     
-    // Medir o tempo de busca de uma nota específica na disciplina
-    int discipline = 29; // O codigo disciplina que será buscada a nota
-    double total_time = measure_search_time(student->grade_tree->root, 29);
+    printf("\nDigite o codigo da disciplina para buscar a nota: ");
+    scanf("%d", &discipline);
+    double total_time = measure_search_time(student->grade_tree->root, discipline);
     
 
     // Calcular e imprimir o tempo médio de busca
