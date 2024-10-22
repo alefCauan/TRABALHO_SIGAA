@@ -250,7 +250,7 @@ bool remove_discipline(Discipline **root, Student *head, int discipline_code)
                 current = current->left;
         }
 
-        // Se o nó não for encontrado
+        // Se o nó for encontrado
         if (current != NULL)
         {
             // Caso 1: Nó sem filhos

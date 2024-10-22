@@ -84,9 +84,9 @@ void search_test() {
     
 
     // Calcular e imprimir o tempo médio de busca
-    double average_time = total_time / 1000; // Calcula a média
-    printf("Tempo total de busca: %f milisegundos\n", total_time);
-    printf("Tempo médio de busca: %f milisegundos\n", average_time);
+    double average_time = total_time / 30; // Calcula a média
+    printf("Tempo total de busca: %f microssegundos\n", total_time);
+    printf("Tempo médio de busca: %f microssegundos\n", average_time);
 
     deallocate_student(student); 
 
@@ -179,8 +179,8 @@ void insertion_test() {
     // Chama a função para medir o tempo de inserção na árvore
     double total_time = measure_insertion_time(course_tree, insertions_number);
 
-    printf("Tempo total de inserção de 30 vezes: %f milissegundos\n", total_time);
-    printf("Tempo médio de inserção de cada elemento em milissegundos: %f\n", total_time / 30);
+    printf("Tempo total de inserção de 30 vezes: %f microssegundos\n", total_time);
+    printf("Tempo médio de inserção de cada elemento em microssegundos: %f\n", total_time / 30);
 
     // Libera a memória alocada para a árvore
     deallocate_course_tree(course_tree->root);
@@ -193,19 +193,29 @@ double measure_search_time(Grade *grade_tree_root, int discipline) {
     clock_t start_time, end_time;
     double total_time = 0.0; // Tempo total gasto em todas as buscas
 
+    // Alocar memória para o array de tempos de inserção
+    double *search_times = (double *)malloc(30 * sizeof(double));
+    if (!search_times) {
+        RAISE_ERROR("Falha na alocação de memória para os tempos de inserção");
+    }
     for (int i = 0; i < iterations; i++) {
         start_time = clock(); // Início da medição do tempo
 
         Grade *found_grade = search_grade(grade_tree_root, discipline);
 
         end_time = clock(); // Fim da medição do tempo
-        double elapsed_time = ((double)(end_time - start_time)) * 1000.0 / CLOCKS_PER_SEC; // Calcula o tempo em milissegundos
-        total_time += elapsed_time; // Acumula o tempo total
+        search_times[i]  = ((double)(end_time - start_time)) * 1000000 / CLOCKS_PER_SEC; 
+        total_time += search_times[i]; // Acumula o tempo total
 
-        if (found_grade) {
-            printf("Nota encontrada -> %f\n", found_grade->final_grade);
+        for (int i = 0; i < 30; i++)
+        {
+            printf("%f\n", search_times[i]);
         }
+
     }
+
+    // Liberar memória
+    free(search_times);
 
     return total_time; 
 }
@@ -250,9 +260,15 @@ double measure_insertion_time(Course_tree *original_tree, int insertions_number)
         remove_course(&original_tree->root, 241050);
 
         // Armazenar o tempo de inserção em milissegundos
-        insertion_times[i] = ((double)(end - start)) / CLOCKS_PER_SEC * 1000;
+        insertion_times[i] = ((double)(end - start)) / CLOCKS_PER_SEC * 1000000;
         total_time += insertion_times[i]; // Acumular o tempo total
     }
+    for (int i = 0; i < insertions_number; i++)
+    {
+        printf("%f\n", insertion_times[i]);
+    }
+    
+    
     // Liberar memória
     free(insertion_times);
 
@@ -261,7 +277,7 @@ double measure_insertion_time(Course_tree *original_tree, int insertions_number)
 
 int main()
 {
-   insertion_test();
-//    search_test();
+//   insertion_test();
+    search_test();
     return 0;
 }
