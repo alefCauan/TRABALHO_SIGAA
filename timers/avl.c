@@ -97,7 +97,7 @@ double measure_search_time(Grade *grade_tree_root, int discipline) {
     }
     for (int i = 0; i < 30; i++)
     {
-        printf("%f", search_times[i]);
+        printf("%f\n", search_times[i]);
     }
     
     free(search_times);
@@ -201,13 +201,13 @@ void insertion_test(){
 
 int search_test() {    
     int quant = 1000;
-    int discipline; // O codigo disciplina que será buscada a nota
+    int discipline; 
 
     int ids[1000];
         for (int i = 0; i < 1000; i++) {
             ids[i] = i + 1;
         }
-        shuffle_array(ids, 1000);  // Embaralha os IDs
+        shuffle_array(ids, 1000);  
 
     Course_tree_avl *course_tree = create_course_tree();  
     Course *new_course = allocate_course();  
@@ -224,11 +224,11 @@ int search_test() {
     // Adicionar as notas na árvore
     for (int i = 0; i < quant; i++) {
         Grade *grade = allocate_grade();
-        grade->discipline_code = ids[i];
+        grade->discipline_code = i;
         grade->semester = 3;
         grade->final_grade = rand() % 10;
         insert_grade(&student->grade_tree->root, grade);
-        printf("%d ", ids[i]);
+        printf("%d ", i);
     }
     
     printf("\nDigite o codigo da disciplina para buscar a nota: ");
@@ -251,3 +251,106 @@ int main()
    search_test();
     return 0;
 }
+
+//TEMPO DE BUSCA DESCRESCENTE
+// 15.000000
+// 6.000000
+// 7.000000
+// 6.000000
+// 6.000000
+// 7.000000
+// 6.000000
+// 7.000000
+// 7.000000
+// 6.000000
+// 7.000000
+// 7.000000
+// 7.000000
+// 7.000000
+// 7.000000
+// 7.000000
+// 7.000000
+// 7.000000
+// 7.000000
+// 7.000000
+// 7.000000
+// 7.000000
+// 7.000000
+// 7.000000
+// 7.000000
+// 7.000000
+// 7.000000
+// 7.000000
+// 7.000000
+// 7.000000
+// Tempo total de busca: 213.000000 microssegundos
+// Tempo médio de busca: 7.100000 microssegundos
+
+
+// TEMPO DE BUSCA CRESCENTE
+// 14.000000
+// 6.000000
+// 6.000000
+// 6.000000
+// 6.000000
+// 6.000000
+// 5.000000
+// 6.000000
+// 6.000000
+// 6.000000
+// 5.000000
+// 6.000000
+// 6.000000
+// 6.000000
+// 6.000000
+// 6.000000
+// 6.000000
+// 6.000000
+// 6.000000
+// 6.000000
+// 6.000000
+// 6.000000
+// 5.000000
+// 6.000000
+// 6.000000
+// 6.000000
+// 6.000000
+// 6.000000
+// 6.000000
+// 6.000000
+// Tempo total de busca: 185.000000 microssegundos
+// Tempo médio de busca: 6.166667 microssegundos
+
+// TEMPO DE BUSCA ALEATORIO
+// 4.000000
+// 2.000000
+// 1.000000
+// 1.000000
+// 1.000000
+// 1.000000
+// 1.000000
+// 1.000000
+// 1.000000
+// 1.000000
+// 1.000000
+// 1.000000
+// 1.000000
+// 2.000000
+// 1.000000
+// 1.000000
+// 1.000000
+// 1.000000
+// 1.000000
+// 1.000000
+// 1.000000
+// 1.000000
+// 1.000000
+// 1.000000
+// 1.000000
+// 1.000000
+// 1.000000
+// 1.000000
+// 1.000000
+// 1.000000
+// Tempo total de busca: 35.000000 microssegundos
+// Tempo médio de busca: 1.166667 microssegundos

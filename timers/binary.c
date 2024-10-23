@@ -21,14 +21,14 @@ void shuffle_array(int *array, int size) {
 
 void search_test() {    
 
-    int quant = 1000;
+    int quant = 10000;
     int discipline; // O codigo disciplina que será buscada a nota
 
-    int ids[1000];
-    for (int i = 0; i < 1000; i++) {
+    int ids[10000];
+    for (int i = 0; i < 10000; i++) {
         ids[i] = i + 1;
     }
-    shuffle_array(ids, 1000);  // Embaralha os IDs
+    shuffle_array(ids, 10000);  // Embaralha os IDs
     
     Course_tree *course_tree = create_course_tree();  
     Course *new_course = allocate_course();  
@@ -42,39 +42,14 @@ void search_test() {
     Student_list *student_list = create_student_list();
     Student *student = allocate_student();
 
-    // Discipline *discipline = allocate_discipline();
-    // int discipline_code = 240000;
-    // discipline->discipline_code = discipline_code;
-    // sprintf(discipline->discipline_name, "ED2");
-    // discipline->period = 8;
-
-    float balanced_grades[30] = {
-        0.0, 0.2, 0.4, 0.6, 0.8, 1.0, 1.2, 1.4, 1.6, 1.8,
-        2.0, 2.2, 2.4, 2.6, 2.8, 3.0, 3.2, 3.4, 3.6, 3.8,
-        4.0, 4.2, 4.4, 4.6, 4.8, 5.0, 5.2, 5.4, 5.6, 5.8
-    };
-
-/*
-                     2.8
-                   /     \
-                1.4       4.4
-               /  \      /   \
-            0.6   2.0   3.6   5.2
-           / \     \     / \    / \
-         0.2  1.0   2.4 3.4  5.0  5.4
-        /      /    /     \     \
-      0.0    2.2  3.2      4.0   5.6
-*/
-
-
     // Adicionar as notas na árvore
-    for (int i = 0; i < quant; i++) {
+for (int i = quant+1; i >= 1; i--)  {
         Grade *grade = allocate_grade();
-        grade->discipline_code = ids[i];
+        grade->discipline_code = i;
         grade->semester = 2;
         grade->final_grade = rand() % 10;
         insert_grade(&student->grade_tree->root, grade);
-        printf("%d ", ids[i]);
+        printf("%d ", i);
     }
     
     // Medir o tempo de busca de uma nota específica na disciplina
@@ -149,15 +124,15 @@ void insertion_test() {
     // Inicializa a árvore de cursos
     Course_tree *course_tree = create_course_tree();  // Cria a árvore de cursos vazia
 
-    // Preenche um array com números de 1 a 1000 e embaralha
-    int ids[1000];
-    for (int i = 0; i < 1000; i++) {
+    // Preenche um array com números de 1 a 10000 e embaralha
+    int ids[10000];
+    for (int i = 0; i < 10000; i++) {
         ids[i] = i + 1;
     }
-    shuffle_array(ids, 1000);  // Embaralha os IDs
+    shuffle_array(ids, 10000);  // Embaralha os IDs
 
     // Pré-aloca 30 cursos fictícios e os insere na árvore com IDs aleatórios
-    for (int i = 0; i < 1000; i++) {
+    for (int i = 0; i < 10000; i++) {
         Course *new_course = allocate_course();  // Aloca memória para o novo curso
 
         // Atribui um código aleatório e único do array embaralhado
@@ -206,6 +181,7 @@ double measure_search_time(Grade *grade_tree_root, int discipline) {
         end_time = clock(); // Fim da medição do tempo
         search_times[i]  = ((double)(end_time - start_time)) * 1000000 / CLOCKS_PER_SEC; 
         total_time += search_times[i]; // Acumula o tempo total
+    
     }
         for (int i = 0; i < 30; i++)
         {
@@ -257,7 +233,7 @@ double measure_insertion_time(Course_tree *original_tree, int insertions_number)
         // printf("inserindo pela %d vez\n", i);
         remove_course(&original_tree->root, 241050);
 
-        // Armazenar o tempo de inserção em milissegundos
+        // Armazenar o tempo de inserção em microssegundos
         insertion_times[i] = ((double)(end - start)) / CLOCKS_PER_SEC * 1000000;
         total_time += insertion_times[i]; // Acumular o tempo total
     }
@@ -279,3 +255,105 @@ int main()
     search_test();
     return 0;
 }
+
+// BUSCA ORDENADA CRESCENTE
+// 151.000000
+// 62.000000
+// 56.000000
+// 55.000000
+// 60.000000
+// 56.000000
+// 58.000000
+// 54.000000
+// 57.000000
+// 55.000000
+// 54.000000
+// 84.000000
+// 55.000000
+// 54.000000
+// 56.000000
+// 56.000000
+// 54.000000
+// 54.000000
+// 54.000000
+// 54.000000
+// 54.000000
+// 54.000000
+// 54.000000
+// 54.000000
+// 54.000000
+// 53.000000
+// 54.000000
+// 54.000000
+// 100.000000
+// 55.000000
+// Tempo total de busca: 1825.000000 microssegundos
+// Tempo médio de busca: 60.833333 microssegundos
+
+// BUSCA DE MANEIRA DECSRESCENTE
+// 157.000000
+// 67.000000
+// 61.000000
+// 64.000000
+// 65.000000
+// 58.000000
+// 59.000000
+// 58.000000
+// 58.000000
+// 59.000000
+// 92.000000
+// 62.000000
+// 96.000000
+// 65.000000
+// 58.000000
+// 58.000000
+// 62.000000
+// 61.000000
+// 59.000000
+// 58.000000
+// 59.000000
+// 58.000000
+// 59.000000
+// 59.000000
+// 58.000000
+// 58.000000
+// 59.000000
+// 58.000000
+// 64.000000
+// 59.000000
+// Tempo total de busca: 1998.000000 microssegundos
+// Tempo médio de busca: 66.600000 microssegundos
+
+//BUSCA DE MANEIRA ALEATORIA
+// 7.000000
+// 2.000000
+// 2.000000
+// 2.000000
+// 3.000000
+// 2.000000
+// 2.000000
+// 2.000000
+// 2.000000
+// 2.000000
+// 2.000000
+// 2.000000
+// 2.000000
+// 2.000000
+// 2.000000
+// 2.000000
+// 2.000000
+// 3.000000
+// 2.000000
+// 2.000000
+// 2.000000
+// 3.000000
+// 3.000000
+// 2.000000
+// 2.000000
+// 2.000000
+// 2.000000
+// 2.000000
+// 3.000000
+// 2.000000
+// Tempo total de busca: 70.000000 microssegundos
+// Tempo médio de busca: 2.333333 microssegundos
