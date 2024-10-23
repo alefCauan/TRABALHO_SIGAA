@@ -43,7 +43,7 @@ void search_test() {
     Student *student = allocate_student();
 
     // Adicionar as notas na árvore
-for (int i = quant+1; i >= 1; i--)  {
+for (int i = 0; i < quant; i++)  {
         Grade *grade = allocate_grade();
         grade->discipline_code = i;
         grade->semester = 2;
@@ -131,7 +131,7 @@ void insertion_test() {
     }
     shuffle_array(ids, 10000);  // Embaralha os IDs
 
-    // Pré-aloca 30 cursos fictícios e os insere na árvore com IDs aleatórios
+    // Pré-aloca 10000 cursos fictícios e os insere na árvore com IDs aleatórios
     for (int i = 0; i < 10000; i++) {
         Course *new_course = allocate_course();  // Aloca memória para o novo curso
 
@@ -251,8 +251,8 @@ double measure_insertion_time(Course_tree *original_tree, int insertions_number)
 
 int main()
 {
-//   insertion_test();
-    search_test();
+   insertion_test();
+//    search_test();
     return 0;
 }
 
@@ -325,35 +325,139 @@ int main()
 // Tempo médio de busca: 66.600000 microssegundos
 
 //BUSCA DE MANEIRA ALEATORIA
-// 7.000000
+// 5.000000
+// 2.000000
+// 1.000000
+// 1.000000
+// 1.000000
+// 1.000000
+// 1.000000
+// 1.000000
+// 1.000000
+// 1.000000
+// 1.000000
+// 2.000000
+// 1.000000
+// 1.000000
+// 1.000000
+// 1.000000
+// 1.000000
+// 1.000000
+// 1.000000
+// 1.000000
+// 1.000000
+// 1.000000
+// 1.000000
+// 1.000000
+// 1.000000
+// 1.000000
 // 2.000000
 // 2.000000
 // 2.000000
-// 3.000000
+// 1.000000
+// Tempo total de busca: 39.000000 microssegundos
+// Tempo médio de busca: 1.300000 microssegundos
+
+//////// INSERÇÃO ////////////
+
+// TEMPO DE INSERÇÃO CRESCENTE
+// 160.000000
+// 142.000000
+// 110.000000
+// 110.000000
+// 113.000000
+// 92.000000
+// 57.000000
+// 57.000000
+// 60.000000
+// 55.000000
+// 55.000000
+// 55.000000
+// 55.000000
+// 131.000000
+// 55.000000
+// 55.000000
+// 55.000000
+// 55.000000
+// 55.000000
+// 55.000000
+// 55.000000
+// 55.000000
+// 55.000000
+// 55.000000
+// 55.000000
+// 55.000000
+// 55.000000
+// 55.000000
+// 55.000000
+// 55.000000
+// Tempo total de insercao: 2132.000000 microssegundos
+// Tempo médio de insercao: 71.066667 microssegundos
+
+// TEMPO DE INSERÇÃO DECRESCENTE
+// 133.000000
+// 58.000000
+// 54.000000
+// 56.000000
+// 54.000000
+// 54.000000
+// 55.000000
+// 55.000000
+// 57.000000
+// 55.000000
+// 54.000000
+// 54.000000
+// 108.000000
+// 55.000000
+// 54.000000
+// 54.000000
+// 54.000000
+// 55.000000
+// 54.000000
+// 54.000000
+// 54.000000
+// 54.000000
+// 54.000000
+// 54.000000
+// 54.000000
+// 54.000000
+// 54.000000
+// 54.000000
+// 54.000000
+// 80.000000
+// Tempo total de insercao: 1793.000000 microssegundos
+// Tempo médio de insercao: 59.766667 microssegundos
+
+// TEMPO DE INSERÇÃO ALEATORIO
 // 2.000000
-// 2.000000
-// 2.000000
-// 2.000000
-// 2.000000
-// 2.000000
-// 2.000000
-// 2.000000
-// 2.000000
-// 2.000000
-// 2.000000
-// 2.000000
-// 3.000000
-// 2.000000
-// 2.000000
-// 2.000000
-// 3.000000
-// 3.000000
-// 2.000000
-// 2.000000
-// 2.000000
-// 2.000000
-// 2.000000
-// 3.000000
-// 2.000000
-// Tempo total de busca: 70.000000 microssegundos
-// Tempo médio de busca: 2.333333 microssegundos
+// 1.000000
+// 1.000000
+// 0.000000
+// 1.000000
+// 1.000000
+// 1.000000
+// 1.000000
+// 1.000000
+// 1.000000
+// 1.000000
+// 0.000000
+// 1.000000
+// 0.000000
+// 1.000000
+// 1.000000
+// 1.000000
+// 1.000000
+// 1.000000
+// 1.000000
+// 0.000000
+// 1.000000
+// 1.000000
+// 1.000000
+// 0.000000
+// 1.000000
+// 1.000000
+// 1.000000
+// 0.000000
+// 1.000000
+// Tempo total de inserção de 30 vezes: 25.000000 microssegundos
+// Tempo médio de inserção de cada elemento em microssegundos: 0.833333

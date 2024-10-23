@@ -145,12 +145,12 @@ double measure_insertion_time(Course_tree_avl *original_tree, int insertions_num
         remove_course(&original_tree->root, 241050);
 
         // Armazenar o tempo de inserção em milissegundos
-        insertion_times[i] = ((double)(end - start)) / CLOCKS_PER_SEC * 1000;
+        insertion_times[i] = ((double)(end - start)) / CLOCKS_PER_SEC * 1000000;
         total_time += insertion_times[i]; // Acumular o tempo total
     }
     for (int i = 0; i < insertions_number; i++)
     {
-        printf("%f", insertion_times[i]);
+        printf("%f\n", insertion_times[i]);
     }
     
     // Liberar memória
@@ -159,22 +159,22 @@ double measure_insertion_time(Course_tree_avl *original_tree, int insertions_num
 }
 void insertion_test(){
     int insertions_number;
-    int quant = 1000;
+    int quant = 10000;
 
-    int ids[1000];
-        for (int i = 0; i < 1000; i++) {
+    int ids[10000];
+        for (int i = 0; i < 10000; i++) {
             ids[i] = i + 1;
         }
-        shuffle_array(ids, 1000);  // Embaralha os IDs
+        shuffle_array(ids, 10000);  // Embaralha os IDs
         
     // Inicializa a árvore de cursos
     Course_tree_avl *course_tree = create_course_tree();  // Cria a árvore de cursos vazia
     // Pré-aloca 30 cursos fictícios e os insere na árvore em ordem
-    for (int i = 0; i < quant; i++) {
+    for (int i = quant; i >= 0; i--) {
         Course *new_course = allocate_course();  // Aloca memória para o novo curso
 
         // Gera um código sequencial de acordo com o índice
-        new_course->course_code = ids[i];
+        new_course->course_code = i;
         printf("%d\n", new_course->course_code);
         // Define um nome fictício para o curso
         sprintf(new_course->course_name, "Curso_%d", i + 1);
@@ -192,22 +192,22 @@ void insertion_test(){
 
 
     // Exibir o tempo total e médio de inserção
-    printf("Tempo total de inserção de %d vezes: %f milissegundos\n", insertions_number, total_time);
-    printf("Tempo médio de inserção de cada elemento em milissegundos: %f\n", total_time / insertions_number);
+    printf("Tempo total de inserção de %d vezes: %f microssegundos\n", insertions_number, total_time);
+    printf("Tempo médio de inserção de cada elemento em microssegundos: %f\n", total_time / insertions_number);
     
     deallocate_course_tree(course_tree->root);
     free(course_tree);
 }
 
 int search_test() {    
-    int quant = 1000;
+    int quant = 10000;
     int discipline; 
 
-    int ids[1000];
-        for (int i = 0; i < 1000; i++) {
+    int ids[quant];
+        for (int i = 0; i < quant; i++) {
             ids[i] = i + 1;
         }
-        shuffle_array(ids, 1000);  
+        shuffle_array(ids, quant);  
 
     Course_tree_avl *course_tree = create_course_tree();  
     Course *new_course = allocate_course();  
@@ -222,7 +222,7 @@ int search_test() {
     Student *student = allocate_student();
 
     // Adicionar as notas na árvore
-    for (int i = 0; i < quant; i++) {
+    for (int i = quant; i >= 0; i--) {
         Grade *grade = allocate_grade();
         grade->discipline_code = i;
         grade->semester = 3;
@@ -247,110 +247,215 @@ int search_test() {
 }
 int main()
 {
- //   insertion_test();
-   search_test();
+   insertion_test();
+//  search_test();
     return 0;
 }
 
-//TEMPO DE BUSCA DESCRESCENTE
-// 15.000000
-// 6.000000
-// 7.000000
-// 6.000000
-// 6.000000
-// 7.000000
-// 6.000000
-// 7.000000
-// 7.000000
-// 6.000000
-// 7.000000
-// 7.000000
-// 7.000000
-// 7.000000
-// 7.000000
-// 7.000000
-// 7.000000
-// 7.000000
-// 7.000000
-// 7.000000
-// 7.000000
-// 7.000000
-// 7.000000
-// 7.000000
-// 7.000000
-// 7.000000
-// 7.000000
-// 7.000000
-// 7.000000
-// 7.000000
-// Tempo total de busca: 213.000000 microssegundos
-// Tempo médio de busca: 7.100000 microssegundos
 
 
-// TEMPO DE BUSCA CRESCENTE
+
+//Cresente 2
+// 127.000000
+// 54.000000
+// 54.000000
+// 55.000000
+// 54.000000
+// 54.000000
+// 54.000000
+// 54.000000
+// 54.000000
+// 55.000000
+// 54.000000
+// 54.000000
+// 57.000000
+// 54.000000
+// 107.000000
+// 55.000000
+// 54.000000
+// 54.000000
+// 57.000000
+// 54.000000
+// 54.000000
+// 54.000000
+// 54.000000
+// 54.000000
+// 54.000000
+// 54.000000
+// 54.000000
+// 54.000000
+// 54.000000
+// 54.000000
+// Tempo total de busca: 1755.000000 microssegundos
+// Tempo médio de busca: 58.500000 microssegundos
+
+//decrescente 2
+// 151.000000
+// 60.000000
+// 59.000000
+// 58.000000
+// 58.000000
+// 63.000000
+// 63.000000
+// 62.000000
+// 58.000000
+// 58.000000
+// 65.000000
+// 59.000000
+// 59.000000
+// 59.000000
+// 78.000000
+// 63.000000
+// 59.000000
+// 59.000000
+// 59.000000
+// 58.000000
+// 58.000000
+// 59.000000
+// 59.000000
+// 59.000000
+// 58.000000
+// 59.000000
+// 59.000000
+// 58.000000
+// 58.000000
+// 59.000000
+// Tempo total de busca: 1894.000000 microssegundos
+// Tempo médio de busca: 63.133333 microssegundos
+
+//aleatorio 2
+// 84.000000
+// 59.000000
+// 59.000000
+// 59.000000
+// 58.000000
+// 58.000000
+// 59.000000
+// 59.000000
+// 58.000000
+// 59.000000
+// 58.000000
+// 58.000000
+// 59.000000
+// 59.000000
+// 58.000000
+// 59.000000
+// 59.000000
+// 140.000000
+// 59.000000
+// 59.000000
+// 59.000000
+// 59.000000
+// 59.000000
+// 59.000000
+// 59.000000
+// 58.000000
+// 59.000000
+// 59.000000
+// 59.000000
+// Tempo total de busca: 1870.000000 microssegundos
+// Tempo médio de busca: 62.333333 microssegundos
+
+///// INSERÇÃO ///////
+
+//aleatorio
+// 11.000000
+// 2.000000
+// 3.000000
+// 2.000000
+// 2.000000
+// 3.000000
+// 2.000000
+// 3.000000
+// 2.000000
+// 3.000000
+// 2.000000
+// 2.000000
+// 2.000000
+// 2.000000
+// 2.000000
+// 2.000000
+// 2.000000
+// 2.000000
+// 3.000000
+// 2.000000
+// 3.000000
+// 2.000000
+// 3.000000
+// 2.000000
+// 3.000000
+// 2.000000
+// 3.000000
+// 2.000000
+// 2.000000
+// 2.000000
+// Tempo total de inserção de 30 vezes: 78.000000 microssegundos
+// Tempo médio de inserção de cada elemento em microssegundos: 2.600000
+
+// crescente 
+// 10.000000
+// 3.000000
+// 3.000000
+// 2.000000
+// 2.000000
+// 2.000000
+// 2.000000
+// 2.000000
+// 3.000000
+// 2.000000
+// 2.000000
+// 3.000000
+// 2.000000
+// 2.000000
+// 3.000000
+// 2.000000
+// 2.000000
+// 3.000000
+// 2.000000
+// 2.000000
+// 3.000000
+// 2.000000
+// 2.000000
+// 3.000000
+// 3.000000
+// 3.000000
+// 3.000000
+// 2.000000
+// 2.000000
+// 2.000000
+// Tempo total de inserção de 30 vezes: 79.000000 microssegundos
+// Tempo médio de inserção de cada elemento em microssegundos: 2.633333
+
+//decrescente
+// 8.000000
+// 1.000000
+// 2.000000
+// 1.000000
+// 1.000000
+// 1.000000
 // 14.000000
-// 6.000000
-// 6.000000
-// 6.000000
-// 6.000000
-// 6.000000
 // 5.000000
-// 6.000000
-// 6.000000
-// 6.000000
-// 5.000000
-// 6.000000
-// 6.000000
-// 6.000000
-// 6.000000
-// 6.000000
-// 6.000000
-// 6.000000
-// 6.000000
-// 6.000000
-// 6.000000
-// 6.000000
-// 5.000000
-// 6.000000
-// 6.000000
-// 6.000000
-// 6.000000
-// 6.000000
-// 6.000000
-// 6.000000
-// Tempo total de busca: 185.000000 microssegundos
-// Tempo médio de busca: 6.166667 microssegundos
-
-// TEMPO DE BUSCA ALEATORIO
-// 4.000000
+// 3.000000
+// 3.000000
+// 3.000000
+// 3.000000
+// 3.000000
+// 3.000000
+// 3.000000
+// 3.000000
 // 2.000000
-// 1.000000
-// 1.000000
-// 1.000000
-// 1.000000
-// 1.000000
-// 1.000000
-// 1.000000
-// 1.000000
-// 1.000000
-// 1.000000
-// 1.000000
 // 2.000000
-// 1.000000
-// 1.000000
-// 1.000000
-// 1.000000
-// 1.000000
-// 1.000000
-// 1.000000
-// 1.000000
-// 1.000000
-// 1.000000
-// 1.000000
-// 1.000000
-// 1.000000
-// 1.000000
-// 1.000000
-// 1.000000
-// Tempo total de busca: 35.000000 microssegundos
-// Tempo médio de busca: 1.166667 microssegundos
+// 3.000000
+// 2.000000
+// 2.000000
+// 2.000000
+// 3.000000
+// 3.000000
+// 2.000000
+// 2.000000
+// 3.000000
+// 2.000000
+// 2.000000
+// 3.000000
+// Tempo total de inserção de 30 vezes: 90.000000 microssegundos
+// Tempo médio de inserção de cada elemento em microssegundos: 3.000000
