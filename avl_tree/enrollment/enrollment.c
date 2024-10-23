@@ -121,19 +121,19 @@ Enrollment *balance_enroll(Enrollment *root)
     if (balance > 1)
     {
         // Se o filho direito está desbalanceado para a esquerda, fazer rotação dupla
-        if (enrollment_get_balance(root->right) < 0)
-            root->right = enrollment_rotate_right(root->right);
+        if (enrollment_get_balance(root->left) < 0)
+            root->left = enrollment_rotate_left(root->left);
 
-        root = enrollment_rotate_left(root);
+        root = enrollment_rotate_right(root);
     }
     // Caso 2: Desbalanceamento para a direita
     else if (balance < -1)
     {
         // Se o filho esquerdo está desbalanceado para a direita, fazer rotação dupla
-        if (enrollment_get_balance(root->left) > 0)
-            root->left = enrollment_rotate_left(root->left);
+        if (enrollment_get_balance(root->right) > 0)
+            root->right = enrollment_rotate_right(root->right);
 
-        root = enrollment_rotate_right(root);
+        root = enrollment_rotate_left(root);
     }
 
     // Atualizar a altura após a rotação
@@ -157,9 +157,11 @@ bool insert_enrol(Enrollment **root, Enrollment *new_node)
         else
             result = false;
         
-        (*root)->height = 1 + max(enrollment_height((*root)->left), enrollment_height((*root)->right));
-        
-        *root = balance_enroll(*root);
+        if(*root != NULL)
+        {
+            (*root)->height = 1 + max(enrollment_height((*root)->left), enrollment_height((*root)->right));
+            *root = balance_enroll(*root);
+        }
     }
 
     return result;
