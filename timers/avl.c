@@ -1,242 +1,128 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#include <stdbool.h>
+#include <time.h>
+
+#include "avl.h"
 #include "../avl_tree/course/course.h"
 #include "../avl_tree/discipline/discipline.h"
 #include "../avl_tree/enrollment/enrollment.h"
 #include "../avl_tree/student/student.h"
 #include "../avl_tree/error.h"
 
-#include <time.h>
-#include <string.h>
-
-void shuffle_array(int *array, int size) {
-    for (int i = size - 1; i > 0; i--) {
-        int j = rand() % (i + 1);  // Escolhe um índice aleatório
-        int temp = array[i];
-        array[i] = array[j];
-        array[j] = temp;
-    }
+// Função para medir o tempo em microsegundos
+double get_time_micro(clock_t start, clock_t end)
+{
+    return ((double)(end - start)) / CLOCKS_PER_SEC * 1000000; // Convertendo para microsegundos
 }
 
-void remove_course(Course **root, int course_code) {
-    // Caso base: árvore vazia
-    if (*root != NULL) {    
-    // Se o curso a ser removido é menor que o curso atual, vá para a esquerda
-    if (course_code < (*root)->course_code) {
-        remove_course(&(*root)->left, course_code);
-    }
-    // Se o curso a ser removido é maior que o curso atual, vá para a direita
-    else if (course_code > (*root)->course_code) {
-        remove_course(&(*root)->right, course_code);
-    }
-    // Caso em que o curso é encontrado
-    else {
-        // Caso 1: nó com apenas um filho ou sem filhos
-        if ((*root)->left == NULL) {
-            Course *temp = (*root)->right;
-            free(*root);  // Libera a memória do curso removido
-            *root = temp; // Atualiza o ponteiro da raiz
-        } else if ((*root)->right == NULL) {
-            Course *temp = (*root)->left;
-            free(*root);
-            *root = temp; // Atualiza o ponteiro da raiz
-        } else {
-            // Caso 2: nó com dois filhos
-            // Encontra o menor curso da subárvore direita (o sucessor)
-            Course *successor = (*root)->right;
-            while (successor && successor->left != NULL) {
-                successor = successor->left;
-            }
-
-            // Copia os dados do sucessor para o nó atual
-            (*root)->course_code = successor->course_code;
-            strcpy((*root)->course_name, successor->course_name);
-            (*root)->num_periods = successor->num_periods;
-
-            // Remove o sucessor
-            remove_course(&(*root)->right, successor->course_code);
+// Função para povoar a árvore com x elementos (LIMITE)
+void povoar_tree(Enrollment **root, Type type)
+{
+    int data[LIMITE];
+    if (type == CRESCENTE)
+    {
+        for (int i = 0; i < LIMITE; i++) 
+        {
+            data[i] = i;
+            register_enrollment(root, data[i]);
         }
     }
-    if (*root != NULL) {
-    *root = balance_course(*root);
-    }
-    }
-}
-
-int generate_sequential_course_code(int index) {
-    int year_part = get_current_year() % 100;  // Obtém os dois últimos dígitos do ano
-    int base_code = 1000 + index;  // Gera um código base sequencial a partir de 1001, 1002, etc.
-
-    // Combina os dois dígitos do ano com o código fixo
-    char str[20];
-    sprintf(str, "%d%04d", year_part, base_code);
-
-    return atoi(str);  // Retorna o código gerado
-}
-
-// Implementação da função para medir o tempo de busca
-double measure_search_time(Grade *grade_tree_root, int discipline) {
-    const int iterations = 30; // Número de iterações 
-    clock_t start_time, end_time;
-    double total_time = 0.0; // Tempo total gasto em todas as buscas
-
-    for (int i = 0; i < iterations; i++) {
-        start_time = clock(); // Início da medição do tempo
-
-        Grade *found_grade = search_grade(grade_tree_root, discipline);
-
-        end_time = clock(); // Fim da medição do tempo
-        double elapsed_time = ((double)(end_time - start_time)) * 1000.0 / CLOCKS_PER_SEC; // Calcula o tempo em milissegundos
-        total_time += elapsed_time; // Acumula o tempo total
-
-        if (found_grade) {
-            printf("Nota encontrada -> %f\n", found_grade->final_grade);
+    else if (type == DESCRESCENTE)
+    {
+        for (int i = LIMITE - 1; i >= 0; i--) 
+        {
+            data[i] = i;
+            register_enrollment(root, data[i]);
         }
     }
+    else
+    {
+        for (int i = 0; i < LIMITE; i++) 
+            data[i] = i;
 
-    return total_time; 
-}
-
-double measure_insertion_time(Course_tree_avl *original_tree, int insertions_number) {
-    
-
-    if (insertions_number <= 0) {
-        RAISE_ERROR("O número de inserções tem que ser positivo");
-    }
-
-    // Alocar memória para o array de tempos de inserção
-    double *insertion_times = (double *)malloc(insertions_number * sizeof(double));
-    if (!insertion_times) {
-        RAISE_ERROR("Falha na alocação de memória para os tempos de inserção");
-    }
-
-    double total_time = 0.0;
-    for (int i = 0; i < insertions_number; i++) {
-        // Alocar um novo curso para cada inserção
-        Course *new_course = allocate_course();
-        if (!new_course) {
-            free(insertion_times);
-            RAISE_ERROR("Falha na alocação de memória para o curso.");
+        // Embaralhando os valores
+        for (int i = LIMITE - 1; i > 0; i--) 
+        {
+            int j = rand() % (i + 1);
+            int temp = data[i];
+            data[i] = data[j];
+            data[j] = temp;
         }
 
-        // Gera um código único para o novo curso
-        new_course->course_code = 241050;
-        strcpy(new_course->course_name, "Curso_Teste");
-        new_course->num_periods = 8;  // Exemplo fixo
-
-        // Assegure-se de criar uma árvore de disciplinas única para cada curso
-        new_course->discipline_tree = create_discipline_tree();
-        new_course->left = NULL;
-        new_course->right = NULL;
-
-        // Medir o tempo de inserção
-        clock_t start = clock();
-        insert_course(&original_tree->root, new_course);
-        clock_t end = clock();
-
-        // printf("inserindo pela %d vez\n", i);
-        remove_course(&original_tree->root, 241050);
-
-        // Armazenar o tempo de inserção em milissegundos
-        insertion_times[i] = ((double)(end - start)) / CLOCKS_PER_SEC * 1000;
-        total_time += insertion_times[i]; // Acumular o tempo total
-    }
-
-    // Liberar memória
-    free(insertion_times);
-    return total_time;
-}
-void insertion_test(){
-    int insertions_number;
-    int quant = 1000;
-
-    int ids[1000];
-        for (int i = 0; i < 1000; i++) {
-            ids[i] = i + 1;
+        // Inserindo valores embaralhados
+        for (int i = 0; i < LIMITE; i++) 
+        {
+            register_enrollment(root, data[i]);
         }
-        shuffle_array(ids, 1000);  // Embaralha os IDs
+    }
+}
+
+// Função para realizar as inserções adicionais (30 elementos)
+void insert_elements(Enrollment *root, int start_value, int change)
+{
+    int contagem = 0;
+    for (int i = 0; contagem < 30; i += change) 
+    {
+        contagem += 1;
+        clock_t start_insert = clock();
+        register_enrollment(&root, start_value + (contagem * change));
+        clock_t end_insert = clock();
+        double insert_time = get_time_micro(start_insert, end_insert);
         
-    // Inicializa a árvore de cursos
-    Course_tree_avl *course_tree = create_course_tree();  // Cria a árvore de cursos vazia
-    // Pré-aloca 30 cursos fictícios e os insere na árvore em ordem
-    for (int i = 0; i < quant; i++) {
-        Course *new_course = allocate_course();  // Aloca memória para o novo curso
-
-        // Gera um código sequencial de acordo com o índice
-        new_course->course_code = ids[i];
-        printf("%d\n", new_course->course_code);
-        // Define um nome fictício para o curso
-        sprintf(new_course->course_name, "Curso_%d", i + 1);
-
-        new_course->num_periods = 8;  // Exemplo fixo para os períodos
-
-        // Insere o curso na árvore (em ordem devido à sequência de códigos)
-        insert_course(&course_tree->root, new_course);
+        printf("%.1f\n",insert_time);
     }
-
-    printf("Digite o número de inserções a serem realizadas para o teste: ");
-    scanf("%d", &insertions_number);
-    // Chama a função para medir o tempo de inserção do mesmo curso na árvore
-    double total_time = measure_insertion_time(course_tree, insertions_number);
-
-
-    // Exibir o tempo total e médio de inserção
-    printf("Tempo total de inserção de %d vezes: %f milissegundos\n", insertions_number, total_time);
-    printf("Tempo médio de inserção de cada elemento em milissegundos: %f\n", total_time / insertions_number);
-    
-    deallocate_course_tree(course_tree->root);
-    free(course_tree);
 }
 
-int search_test() {    
-    int quant = 1000;
-    int discipline; // O codigo disciplina que será buscada a nota
+// Função para medir o tempo de busca de 30 elementos na árvore
+void search_elements(Enrollment *root, Type type)
+{
+    for (int i = 0; i < 30; i++) 
+    {
+        int search_code = rand() % LIMITE; // Pegando um valor aleatório para buscar
 
-    int ids[1000];
-        for (int i = 0; i < 1000; i++) {
-            ids[i] = i + 1;
-        }
-        shuffle_array(ids, 1000);  // Embaralha os IDs
+        clock_t start_search = clock();
+        search_enrollment(root, search_code); // Função de busca
+        clock_t end_search = clock();
 
-    Course_tree_avl *course_tree = create_course_tree();  
-    Course *new_course = allocate_course();  
-    new_course->course_code = get_course_code(course_tree->root);
-    sprintf(new_course->course_name, "Curso_teste");
-    new_course->num_periods = 8; 
+        double search_time = get_time_micro(start_search, end_search);
 
-    // Insere o curso na árvore
-    insert_course(&course_tree->root, new_course);
-
-    Student_list *student_list = create_student_list();
-    Student *student = allocate_student();
-
-    // Adicionar as notas na árvore
-    for (int i = 0; i < quant; i++) {
-        Grade *grade = allocate_grade();
-        grade->discipline_code = ids[i];
-        grade->semester = 3;
-        grade->final_grade = rand() % 10;
-        insert_grade(&student->grade_tree->root, grade);
-        printf("%d ", ids[i]);
+        printf("%.1f\n", search_time);
     }
-    
-    printf("\nDigite o codigo da disciplina para buscar a nota: ");
-    scanf("%d", &discipline);
-    double total_time = measure_search_time(student->grade_tree->root, discipline);
-    
-
-    // Calcular e imprimir o tempo médio de busca
-    double average_time = total_time / 30; // Calcula a média
-    printf("Tempo total de busca: %f milisegundos\n", total_time);
-    printf("Tempo médio de busca: %f milisegundos\n", average_time);
-
-    deallocate_student(student); 
-
-    return 0;
 }
+
 int main()
 {
- //   insertion_test();
-   search_test();
+    Enrollment *crescente = NULL;
+
+    // Povoando a árvore com CRESCENTE
+    printf("INSERT CRESCENTE\n");
+    povoar_tree(&crescente, CRESCENTE);
+    insert_elements(crescente, LIMITE, 1);
+    printf("SEARCH CRESCENTE\n");
+    search_elements(crescente, CRESCENTE); // Medindo o tempo de busca
+    deallocate_enrollment(crescente);
+
+    Enrollment *decrescente = NULL;
+    printf("INSERT DECRESCENTE\n");
+    // Povoando a árvore com DESCRESCENTE
+    povoar_tree(&decrescente, DESCRESCENTE);
+    insert_elements(decrescente, 0, -1);
+    printf("SEARCH DECRESCENTE\n");
+    search_elements(decrescente, DESCRESCENTE); // Medindo o tempo de busca
+    deallocate_enrollment(decrescente);
+
+    Enrollment *random = NULL;
+
+    printf("INSERT RANDOM\n");
+    // Povoando a árvore com RANDOM
+    povoar_tree(&random, RANDOM);
+    insert_elements(random, LIMITE, 1);
+    printf("SEARCH RANDOM\n");
+    search_elements(random, RANDOM); // Medindo o tempo de busca
+    deallocate_enrollment(random);
+
     return 0;
 }
+

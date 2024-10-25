@@ -11,20 +11,21 @@ typedef struct Enrollment_tree_avl Enrollment_tree_avl;
 typedef struct Grade {
     int discipline_code;
     int semester;
+    int height;
     float final_grade;
     struct Grade *left;
     struct Grade *right;
 } Grade;
 
-typedef struct Grade_Tree {
+typedef struct Grade_tree_avl {
    Grade *root;
-} Grade_Tree;
+} Grade_tree_avl;
 // struct de estudante
 typedef struct Student {
     int registration;
     char name[50];
     int course_code;
-    Grade_Tree *grade_tree;
+    Grade_tree_avl *grade_tree;
     Enrollment_tree_avl *enrol_tree;
     struct Student *next;
 } Student;
@@ -52,12 +53,27 @@ Grade *search_grade(Grade *root, int discipline_code);
 // busca estudante pela matricula
 Student *search_student_by_registration(Student *first, int registration);
 
+// gera a altura do no
+int grade_height(Grade *root);
+
+// Função para obter o fator de balanceamento de um nó na árvore de notas
+int grade_get_balance(Grade *root);
+
+// Rotação para a direita
+Grade *grade_rotate_right(Grade *ex_root);
+
+// Rotação para a esquerda
+Grade *grade_rotate_left(Grade *ex_root);
+
+// Função para balancear a árvore de notas
+Grade *balance_grade(Grade *root);
+
 // i) Cadastrar alunos a qualquer momento na lista, de forma que só possa cadastrar um código de curso que
 // já tenha sido cadastrado na árvore de curso
 // {
 
-// insere o estudante na lista de estudantes do curso
-void insert_student(Student_list **list, Student *new_student);
+// Função para inserir um novo nó na árvore de notas
+bool insert_grade(Grade **root, Grade *new_node);
 // pega os dados do novo estudante e chama a inserção 
 void register_student(Student_list *list, Course *courses);
 

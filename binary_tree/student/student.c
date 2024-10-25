@@ -22,9 +22,9 @@ Grade *allocate_grade()
     return new_grade;
 }
 
-Grade_Tree *create_grade_tree()
+Grade_tree *create_grade_tree()
 {
-    Grade_Tree *new = (Grade_Tree *)malloc(sizeof(Grade_Tree));
+    Grade_tree *new = (Grade_tree *)malloc(sizeof(Grade_tree));
     ASSERT_ALLOC(new, "create grade tree");
 
     new->root = allocate_grade();

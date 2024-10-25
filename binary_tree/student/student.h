@@ -16,15 +16,15 @@ typedef struct Grade {
     struct Grade *right;
 } Grade;
 
-typedef struct Grade_Tree {
+typedef struct Grade_tree {
    Grade *root;
-} Grade_Tree;
+} Grade_tree;
 // struct de estudante
 typedef struct Student {
     int registration;
     char name[50];
     int course_code;
-    Grade_Tree *grade_tree;
+    Grade_tree *grade_tree;
     Enrollment_Tree *enrol_tree;
     struct Student *next;
 } Student;

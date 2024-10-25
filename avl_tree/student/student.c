@@ -14,6 +14,7 @@ Grade *allocate_grade()
     ASSERT_ALLOC(new_grade, "allocate grade");
 
     new_grade->discipline_code = 0;
+    new_grade->height = 1;
     new_grade->semester = 0;
     new_grade->final_grade = 0.0;
     new_grade->left = NULL;
@@ -22,9 +23,9 @@ Grade *allocate_grade()
     return new_grade;
 }
 
-Grade_Tree *create_grade_tree()
+Grade_tree_avl *create_grade_tree()
 {
-    Grade_Tree *new = (Grade_Tree *)malloc(sizeof(Grade_Tree));
+    Grade_tree_avl *new = (Grade_tree_avl *)malloc(sizeof(Grade_tree_avl));
     ASSERT_ALLOC(new, "create grade tree");
 
     new->root = allocate_grade();
@@ -243,21 +244,124 @@ Student *search_student_by_registration(Student *first, int registration)
     return found_student;
 }
 
-bool insert_grade(Grade **root, Grade *new)
+// Função para obter a altura de um nó na árvore de notas
+int grade_height(Grade *root) 
+{
+    int result = 0;
+
+    if (root)
+        result = root->height;
+
+    return result;
+}
+
+// Função para obter o fator de balanceamento de um nó na árvore de notas
+int grade_get_balance(Grade *root) 
+{
+    int result = 0;
+
+    if (root)
+        result = grade_height(root->left) - grade_height(root->right);
+
+    return result;
+}
+
+// Rotação para a direita
+Grade *grade_rotate_right(Grade *ex_root) 
+{
+    Grade *new_root = ex_root->left;
+    Grade *leaf = new_root->right;
+
+    new_root->right = ex_root;
+    ex_root->left = leaf;
+
+    ex_root->height = 1 + max(grade_height(ex_root->left), grade_height(ex_root->right));
+    new_root->height = 1 + max(grade_height(new_root->left), grade_height(new_root->right));
+
+    return new_root;
+}
+
+// Rotação para a esquerda
+Grade *grade_rotate_left(Grade *ex_root) 
+{
+    Grade *new_root = ex_root->right;
+    Grade *leaf = new_root->left;
+
+    new_root->left = ex_root;
+    ex_root->right = leaf;
+
+    ex_root->height = 1 + max(grade_height(ex_root->left), grade_height(ex_root->right));
+    new_root->height = 1 + max(grade_height(new_root->left), grade_height(new_root->right));
+
+    return new_root;
+}
+
+// Função para balancear a árvore de notas
+Grade *balance_grade(Grade *root) 
+{
+    int balance = grade_get_balance(root);
+
+    // Caso 1: Desbalanceamento para a esquerda
+    if (balance > 1) 
+    {
+        if (grade_get_balance(root->left) < 0)
+            root->left = grade_rotate_left(root->left);
+
+        root = grade_rotate_right(root);
+    }
+    // Caso 2: Desbalanceamento para a direita
+    else if (balance < -1) 
+    {
+        if (grade_get_balance(root->right) > 0)
+            root->right = grade_rotate_right(root->right);
+
+        root = grade_rotate_left(root);
+    }
+
+    // Atualizar a altura após a rotação
+    root->height = 1 + max(grade_height(root->left), grade_height(root->right));
+
+    return root;
+}
+
+// Função para inserir um novo nó na árvore de notas
+bool insert_grade(Grade **root, Grade *new_node) 
 {
     bool result = true;
 
     if (*root == NULL)
-        *root = new;
-    else if (new->discipline_code < (*root)->discipline_code)
-        result = insert_grade(&(*root)->left, new);
-    else if (new->discipline_code > (*root)->discipline_code)
-        result = insert_grade(&(*root)->right, new);
-    else 
-        result = false;
+        *root = new_node;
+    else {
+        if (new_node->discipline_code < (*root)->discipline_code)
+            result = insert_grade(&(*root)->left, new_node);
+        else if (new_node->discipline_code > (*root)->discipline_code)
+            result = insert_grade(&(*root)->right, new_node);
+        else
+            result = false;
 
-    return result; 
+        (*root)->height = 1 + max(grade_height((*root)->left), grade_height((*root)->right));
+        *root = balance_grade(*root);
+    }
+
+    return result;
 }
+
+
+// bool insert_grade(Grade **root, Grade *new)
+// {
+//     bool result = true;
+
+//     if (*root == NULL)
+//         *root = new;
+//     else if (new->discipline_code < (*root)->discipline_code)
+//         result = insert_grade(&(*root)->left, new);
+//     else if (new->discipline_code > (*root)->discipline_code)
+//         result = insert_grade(&(*root)->right, new);
+//     else 
+//         result = false;
+
+//     return result; 
+// }
 
 void register_grade(Student **student)
 {

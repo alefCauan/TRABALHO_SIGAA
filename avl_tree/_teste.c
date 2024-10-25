@@ -2,156 +2,173 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include "error.h"
+#include "student/student.h"
 
-typedef struct Node {
-    int value;
-    int height;
-    struct Node *left;
-    struct Node *right;
-} Node;
+// typedef struct Node {
+//     int value;
+//     int height;
+//     struct Node *left;
+//     struct Node *right;
+// } Node;
 
-typedef struct AVL {
-    Node *root;
-} AVL;
+// typedef struct AVL {
+//     Node *root;
+// } AVL;
 
-int max(int a, int b) { return (a > b) ? a : b; }
+// int max(int a, int b) { return (a > b) ? a : b; }
 
-void show(Node *root)
+// void show(Node *root)
+// {
+//     if(root)
+//     {
+//         printf("Value: %d\n", root->value);
+//         show(root->left);
+//         show(root->right);
+//     }
+// }
+
+// int height(Node *root)
+// {
+//     int result = 0;
+
+//     if(root)
+//         result = root->height;
+
+//     return result;
+// }
+
+// int get_balance(Node *root)
+// {
+//     int result = 0;
+
+//     if(root)
+//         result = height(root->left) - height(root->right);
+
+//     return result;
+// }
+
+// Node *rotate_right(Node *ex_root)
+// {
+//     Node *new_root = ex_root->left;
+//     Node *leaf = new_root->right;
+
+//     // Realiza a rotação
+//     new_root->right = ex_root;
+//     ex_root->left = leaf;
+
+//     // Atualiza as alturas
+//     ex_root->height = 1 + max(height(ex_root->left), height(ex_root->right));
+//     new_root->height = 1 + max(height(new_root->left), height(new_root->right));
+
+//     // Retorna a nova raiz
+//     return new_root;
+// }
+
+// Node *rotate_left(Node *ex_root)
+// {
+//     Node *new_root = ex_root->right;
+//     Node *leaf = new_root->left;
+
+//     // Realiza a rotação
+//     new_root->left = ex_root;
+//     ex_root->right = leaf;
+
+//     // Atualiza as alturas
+//     ex_root->height = 1 + max(height(ex_root->left), height(ex_root->right));
+//     new_root->height = 1 + max(height(new_root->left), height(new_root->right));
+
+//     // Retorna a nova raiz
+//     return new_root;
+// }
+
+// Node *alloc_node()
+// {
+//     Node *new = (Node *)malloc(sizeof(Node));
+//     new->height = 1;
+//     new->left = NULL;
+//     new->right = NULL;
+
+//     return new;
+// }
+
+// Node *insertNode(Node* root, int value) 
+// {
+//     Node *result = &(*root); 
+
+//     if (root == NULL)
+//     {
+//         root = alloc_node();
+//         root->value = value;
+//         result = root;
+//     }
+//     else
+//     {
+//         if (value < root->value)
+//             root->left = insertNode(root->left, value);
+//         else if (value > root->value)
+//             root->right = insertNode(root->right, value);
+//         else 
+//             result = root;
+        
+//         root->height = 1 + max(height(root->left), height(root->right));
+
+//         int balance = get_balance(root);
+
+//         if(balance > 1)
+//         {
+//             if (get_balance(root->right) < 0)
+//             {
+//                 root->left = rotate_left(root->left);
+//                 // result = rotate_right(root);
+//             }
+
+//             result = rotate_right(root);
+//         }
+//         else if(balance < -1)
+//         {
+//             if (get_balance(root->left) > 0)
+//             {
+//                 root->right = rotate_right(root->right);
+//                 // result = rotate_left(root);
+//             }
+
+//             result = rotate_left(root);
+//         }
+//     }
+
+//     return result;
+// }
+
+void show(Grade *root)
 {
     if(root)
     {
-        printf("Value: %d\n", root->value);
+        printf("%f\n", root->final_grade);
         show(root->left);
         show(root->right);
     }
 }
 
-int height(Node *root)
-{
-    int result = 0;
-
-    if(root)
-        result = root->height;
-
-    return result;
-}
-
-int get_balance(Node *root)
-{
-    int result = 0;
-
-    if(root)
-        result = height(root->left) - height(root->right);
-
-    return result;
-}
-
-Node *rotate_right(Node *ex_root)
-{
-    Node *new_root = ex_root->left;
-    Node *leaf = new_root->right;
-
-    // Realiza a rotação
-    new_root->right = ex_root;
-    ex_root->left = leaf;
-
-    // Atualiza as alturas
-    ex_root->height = 1 + max(height(ex_root->left), height(ex_root->right));
-    new_root->height = 1 + max(height(new_root->left), height(new_root->right));
-
-    // Retorna a nova raiz
-    return new_root;
-}
-
-Node *rotate_left(Node *ex_root)
-{
-    Node *new_root = ex_root->right;
-    Node *leaf = new_root->left;
-
-    // Realiza a rotação
-    new_root->left = ex_root;
-    ex_root->right = leaf;
-
-    // Atualiza as alturas
-    ex_root->height = 1 + max(height(ex_root->left), height(ex_root->right));
-    new_root->height = 1 + max(height(new_root->left), height(new_root->right));
-
-    // Retorna a nova raiz
-    return new_root;
-}
-
-Node *alloc_node()
-{
-    Node *new = (Node *)malloc(sizeof(Node));
-    new->height = 1;
-    new->left = NULL;
-    new->right = NULL;
-
-    return new;
-}
-
-Node *insertNode(Node* root, int value) 
-{
-    Node *result = &(*root); 
-
-    if (root == NULL)
-    {
-        root = alloc_node();
-        root->value = value;
-        result = root;
-    }
-    else
-    {
-        if (value < root->value)
-            root->left = insertNode(root->left, value);
-        else if (value > root->value)
-            root->right = insertNode(root->right, value);
-        else 
-            result = root;
-        
-        root->height = 1 + max(height(root->left), height(root->right));
-
-        int balance = get_balance(root);
-
-        if(balance > 1)
-        {
-            if (get_balance(root->right) < 0)
-            {
-                root->left = rotate_left(root->left);
-                // result = rotate_right(root);
-            }
-
-            result = rotate_right(root);
-        }
-        else if(balance < -1)
-        {
-            if (get_balance(root->left) > 0)
-            {
-                root->right = rotate_right(root->right);
-                // result = rotate_left(root);
-            }
-
-            result = rotate_left(root);
-        }
-    }
-
-    return result;
-}
-
-
 int main()
 {
-    AVL *tree = (AVL *)malloc(sizeof(AVL));
+    Grade *root = allocate_grade();
 
-    int values[] = {7,5, 6, 8, 9, 10, 11, 12, 4, 20, 21};
+    int values[] = {0, 1,2, 3, 4, 5, 6, 7, 8, 9, 10};
     int size = sizeof(values)/sizeof(values[0]);
 
     for(int i = 0; i < size; i++)
-        tree->root = insertNode(tree->root, values[i]);    
-    
-    show(tree->root);
+    {
+        Grade *new = allocate_grade();
 
-    free(tree);
+        new->discipline_code = i;
+        new->final_grade = values[i];
+        insert_grade(&root, new);   
+    }
+
+
+    show(root);
+
+    deallocate_grade(root);
 
     return 0;
 }
